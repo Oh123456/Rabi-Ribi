@@ -1,0 +1,17 @@
+#pragma once
+
+
+#define AKey	0x41
+#define DKey	0x44
+#define SKey		0x53
+#define WKey	0x57
+#define RKey		0x52
+#define EKey		0x45
+#define QKey	0x51
+#define CKey		0x43
+#define VKey		0x56
+#define XKey		0x58
+#define ZKey		0x5A
+#define _1Key	0x31
+#define _2Key	0x32
+#define _3Key	0x33
