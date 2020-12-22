@@ -1,16 +1,17 @@
 #pragma once
 #include "Object.h"
 
+const SIZE SelectTile_Size = { 32 , 32 };
 // 타일 하나의 사이즈
-const SIZE tile_Size = { 32 , 32 };
+const SIZE tile_Size = { 64 , 64 };
 // 샘플 타일의 x 갯수
 const UINT sample_Tile_X = 30;//20;
 // 샘플 타일의 y 갯수
 const UINT sample_Tile_Y = 56;//9;
 
-
-const UINT tile_Render_X = 25;
-const UINT tile_Render_Y = 25;
+const UINT renderOffset = 64;
+const UINT tile_Render_X = 12;
+const UINT tile_Render_Y = 11;
 const UINT tile_Render_Max = tile_Render_X * tile_Render_Y;
 
 const UINT tileDrawX = 640;
@@ -18,6 +19,7 @@ const UINT tileDrawY = 480;
 
 const LONG defaultFrame = 100;
 const int maxAutoSave = 5;
+const UINT maxWorklist = 200;
 
 #define OK_BUTTON_DEFAULT_COLOR  ColorF(0.0f, 0.2f, 0.9f)
 #define OK_BUTTON_SELECT_COLOR  ColorF(1.0f, 0.2f, 0.9f)
@@ -40,38 +42,6 @@ enum class TERRAIN
 	END
 };
 
-enum class GeometryKinds
-{
-	None,
-	Triangle,
-	Square,
-	// 사다리꼴
-	Trapezoid,
-
-};
-
-struct GeometryInfo
-{
-	GeometryKinds geometrykind;
-	float width;
-	float height;
-	// 사다리꼴만 사용
-	float _width;
-	// 사다리꼴만 사용
-	float _height;
-	// 로테이션
-	float rotation;
-	
-	void ReSet()
-	{
-		width = 0.0f;
-		height = 0.0f;
-		_width = 0.0f;
-		_height = 0.0f;
-		rotation = 0.0f;
-		geometrykind = GeometryKinds::None;
-	}
-};
 
 
 struct TILE
@@ -85,17 +55,20 @@ struct TILE
 	// 기하학 정보(충돌처리에 사용)
 	GeometryInfo geometryinfo;
 
+	bool GetisRender()
+	{
+		if ((frameX == defaultFrame) &
+			(frameY == defaultFrame))
+			return false;
+		return true;
+	}
 };
 
-struct SaveTILE
-{
-	int size[2];
-	TILE tiles[100000];
-};
 
-struct LoadTILE
+struct Worklist
 {
-	int size[2];
+	UINT tile_X;
+	UINT tile_Y;
 	TILE* tiles;
 };
 
@@ -113,6 +86,12 @@ struct SelectTile
 	float rotation;
 };
 
+struct LayerTile
+{
+	TILE* tiles;
+	UINT tile_X;
+	UINT tile_Y;
+};
 
 class TileMapToolScene : public Object
 {
@@ -132,6 +111,8 @@ public:
 	void Render() override;
 
 private:
+	// 레이어 렌더 레이어는 1개이고 무조건 난중에 그려진다.
+	void LayerTileRender();
 	void Select(const RECT& samlpeRc);
 	void RectSelectBegin();
 	void RectSelectEnd(const RECT& samlpeRc);
@@ -161,6 +142,7 @@ private:
 	void Save();
 	void Save(const char* filename);
 	void Load();
+	void LayerLoad();
 	void Resize(UINT width, UINT height);
 	void NumberKeyInput(bool isSizex);
 	void OnceNumberKey(int key, UINT& value);
@@ -168,6 +150,12 @@ private:
 	void AutoSave();
 	void ReDrawGeometry();
 	void GeometryInfoKeyInput();
+	void TileIndexMoveUP(bool isUP);
+	void TileIndexMoveSide(bool isleft);
+
+	void Undo();
+	void WorklistAdd();
+	void DeleteLayer();
 private:
 	ID2D1Bitmap* sampleTile;
 	ImageInfo sampleTileDraw;
@@ -175,6 +163,7 @@ private:
 	ImageInfo selectDrawinfo;
 	ImageInfo saveButtoninfo;
 	ImageInfo loadButtoninfo;
+	ImageInfo layerLoadButtoninfo;
 	ImageInfo exitButtoninfo;
 	ImageInfo okButtoninfo;
 	Color okButtonColor;
@@ -193,7 +182,14 @@ private:
 	bool isRectDraw;
 	// 그리는 타일이 타일 렌더갯수보다 많다면
 	bool isTileOver;
+	// 충돌처리 영역 표시
 	bool isCollisionLayer;
+	// 파일을 한번열었는지 파일을 열면 기본  경로가 바뀌여서 넣엇다
+	bool isOpen;
+	// 격자눈 표시 
+	bool IsGridline;
+	// 레이어 표시
+	bool isLayerTileRender;
 	SizeKind sizeKind;
 	// 자리수
 	int numCount;
@@ -204,8 +200,9 @@ private:
 	RECT rectSelect;
 
 	// 세이브 로드 버튼
-	RECT rcSace;
+	RECT rcSave;
 	RECT rcLoad;
+	RECT rcLayerLoad;
 	RECT rcExit;
 
 	RECT rcOkButton;
@@ -215,6 +212,9 @@ private:
 	// 타일 갯수
 	UINT tile_X; 
 	UINT tile_Y; 
+
+	// 전방 레이어
+	LayerTile* layerTile;
 
 	UINT temptile_X;
 	UINT temptile_Y;
@@ -234,9 +234,10 @@ private:
 	GeometryInfo geometryinfo;
 	ID2D1PathGeometry** tilesgeometry;
 	//ID2D1PathGeometry* mp_path_geometry2;
-
+	deque<Worklist*> worklist;
 
 	TimerHandle autoSaveTimerHandle;
+	
 
 };
 

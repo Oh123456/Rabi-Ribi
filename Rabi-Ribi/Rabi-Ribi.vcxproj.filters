@@ -37,11 +37,23 @@
     <Filter Include="Object">
       <UniqueIdentifier>{727de105-3357-4e7a-86ca-4853349144d7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Manager\MapTool">
-      <UniqueIdentifier>{c24d1ac3-0446-4699-b1fe-c1efc7205232}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Manager\Timer">
       <UniqueIdentifier>{2905c1f8-20a0-4cf4-b7d3-0fa206bfcac5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Map">
+      <UniqueIdentifier>{062fdc76-9b0a-4b4b-9936-54d611096969}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Map\Tile">
+      <UniqueIdentifier>{dd3ca6f3-5eea-4ea6-b465-1db031531861}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\MainGame">
+      <UniqueIdentifier>{39df88dd-aaf8-482f-89a3-f1c98dfbf9f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PCH">
+      <UniqueIdentifier>{94c17c12-8e0a-4832-acd8-ceb21305ea5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapTool">
+      <UniqueIdentifier>{c24d1ac3-0446-4699-b1fe-c1efc7205232}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -69,23 +81,26 @@
     <ClCompile Include="Volume.cpp">
       <Filter>Manager\Sound</Filter>
     </ClCompile>
-    <ClCompile Include="MainGame.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="Tile.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
     <ClCompile Include="TileMapToolScene.cpp">
-      <Filter>Manager\MapTool</Filter>
+      <Filter>MapTool</Filter>
     </ClCompile>
     <ClCompile Include="TimerManager.cpp">
       <Filter>Manager\Timer</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Manager\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="TestRoom.cpp">
+      <Filter>Object\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>Object\Map\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="MainGame.cpp">
+      <Filter>Object\MainGame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -97,9 +112,6 @@
     </ClInclude>
     <ClInclude Include="Delegate.h">
       <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Singleton.h">
       <Filter>Utility</Filter>
@@ -119,29 +131,35 @@
     <ClInclude Include="Volume.h">
       <Filter>Manager\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="VKKey.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Types.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="MainGame.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Tile.h">
-      <Filter>Object</Filter>
-    </ClInclude>
     <ClInclude Include="TileMapToolScene.h">
-      <Filter>Manager\MapTool</Filter>
+      <Filter>MapTool</Filter>
     </ClInclude>
     <ClInclude Include="TimerManager.h">
       <Filter>Manager\Timer</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Manager\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="TestRoom.h">
+      <Filter>Object\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>Object\Map\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="MainGame.h">
+      <Filter>Object\MainGame</Filter>
+    </ClInclude>
+    <ClInclude Include="VKKey.h">
+      <Filter>PCH</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>PCH</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>PCH</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

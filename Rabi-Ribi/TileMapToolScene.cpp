@@ -19,7 +19,7 @@ HRESULT TileMapToolScene::Init()
 	GetClientRect(g_hWnd, &rect);
 	D2D::GetSingleton()->GetD2DRenderTarget()->Resize({ (UINT32)rect.right, (UINT32)rect.bottom });
 
-	Resize((UINT)60, (UINT)60);
+	Resize((UINT)30, (UINT)11);
 
 
 	if (tile_X * tile_Y <= tile_Render_Max)
@@ -29,7 +29,6 @@ HRESULT TileMapToolScene::Init()
 	tileCamePos = { 0,0 };
 	samlpeTileRect = { WINSIZE_TILE_MAP_X - tileDrawX ,0, WINSIZE_TILE_MAP_X  , tileDrawY };
 	ImageManager* imageManager = ImageManager::GetSingleton();
-	imageManager->LoadPng(L"샘플타일",L"Tile/tile1_a");
 	imageManager->LoadPng(L"버튼", L"Button/Button");
 	imageManager->LoadPng(L"탈출", L"Button/ExitButton");
 	sampleTile = ImageManager::GetSingleton()->FindImage(L"샘플타일");
@@ -66,8 +65,6 @@ HRESULT TileMapToolScene::Init()
 	{
 		//isSpamlpeTileOver = false;
 		//sampleTileDraw.DrawRectSetting("maptiles", { (float)samlpeTileRect.left + 640 / 2  , (float)samlpeTileRect.top + 288 / 2 }, { 640,288 });
-
-
 		//	// 오른쪽 상단에 메인 타일의 정보를 셋팅
 		//for (int i = 0; i < sample_Tile_Y; i++)
 		//{
@@ -85,23 +82,32 @@ HRESULT TileMapToolScene::Init()
 	selectTile.frameX = defaultFrame;
 	selectTile.frameY = defaultFrame;
 	// 세이브 로드 버튼
-	rcSace = { samlpeTileRect.left  , samlpeTileRect.bottom + 250 ,
+	rcSave = { samlpeTileRect.left  , samlpeTileRect.bottom + 250 ,
 				 samlpeTileRect.left + 150 ,samlpeTileRect.bottom + 320 };
 
-	rcLoad = { samlpeTileRect.left + 200, samlpeTileRect.bottom + 250 ,
-				 samlpeTileRect.left + 350 ,samlpeTileRect.bottom + 320 };
-	rcExit = { WINSIZE_TILE_MAP_X - 200, WINSIZE_TILE_MAP_Y - 120, 
-				WINSIZE_TILE_MAP_X - 59,  WINSIZE_TILE_MAP_Y - 65 };
+	rcLoad = { samlpeTileRect.left + 160, samlpeTileRect.bottom + 250 ,
+				 samlpeTileRect.left + 310 ,samlpeTileRect.bottom + 320 };
+	rcExit = { WINSIZE_TILE_MAP_X - 200, WINSIZE_TILE_MAP_Y - 100, 
+				WINSIZE_TILE_MAP_X - 59,  WINSIZE_TILE_MAP_Y - 45 };
+
+	rcLayerLoad = rcLoad;
+	rcLayerLoad.left += 160;
+	rcLayerLoad.right = rcLayerLoad.left + 150;
 
 	saveButtoninfo.imageName = L"버튼";
-	saveButtoninfo.imageLocation = { (float)rcSace.left + 143 / 2, (float)rcSace.top + 35 };
+	saveButtoninfo.imageLocation = { (float)rcSave.left + 143 / 2, (float)rcSave.top + 35 };
 	saveButtoninfo.atlasInfo.frameSize = { 143,57 };
-	saveButtoninfo.atlasInfo.frame = { 0,0 };
+	saveButtoninfo.atlasInfo.frame = { 1,0 };
 	saveButtoninfo.imageEffect = D2DIE_ATLAS;
 
 	loadButtoninfo = saveButtoninfo;
 	loadButtoninfo.imageLocation = { (float)rcLoad.left + 143 / 2, (float)rcLoad.top + 35 };
-	saveButtoninfo.atlasInfo.frame.x = 1;
+	loadButtoninfo.atlasInfo.frame.x = 0;
+
+
+	layerLoadButtoninfo = saveButtoninfo;
+	layerLoadButtoninfo.imageLocation = { (float)rcLayerLoad.left + 143 / 2, (float)rcLayerLoad.top + 35 };
+	layerLoadButtoninfo.atlasInfo.frame.x = 0;
 
 
 	exitButtoninfo.imageName = L"탈출";
@@ -126,8 +132,8 @@ HRESULT TileMapToolScene::Init()
 		for (int j = 0; (UINT)j < tile_X; j++)
 		{
 			SetRect(&tiles[i * tile_X + j].rc,
-							 j * tile_Size.cx,		 i * tile_Size.cy , 
-							(j + 1) * tile_Size.cx,	(i + 1) * tile_Size.cy);
+							 j * tile_Size.cx,		 i * tile_Size.cy + renderOffset,
+							(j + 1) * tile_Size.cx,	(i + 1) * tile_Size.cy + renderOffset);
 
 			tiles[i * tile_X + j].terrain = TERRAIN::GRASS;
 			tiles[i * tile_X + j].frameX = defaultFrame;
@@ -137,16 +143,20 @@ HRESULT TileMapToolScene::Init()
 		}
 	}
 	TilesDrawinfo.imageName = L"샘플타일";
-	TilesDrawinfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE;
-	TilesDrawinfo.atlasInfo.frameSize = { (UINT32)tile_Size.cx ,(UINT32)tile_Size.cy };
+	TilesDrawinfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE | D2DIE_SCALE;
+	TilesDrawinfo.atlasInfo.frameSize = { (UINT32)SelectTile_Size.cx ,(UINT32)SelectTile_Size.cy };
 	TilesDrawinfo.affineMatrix = Matrix3x2F::Rotation(0, {0,0});
+	TilesDrawinfo.scaleInfo.scaleCenterPoint = { (float)SelectTile_Size.cx / 2 , (float)SelectTile_Size.cy / 2 };
+	TilesDrawinfo.scaleInfo.scaleSize = { 2.0f,2.0f };
 
 	selectDrawinfo.imageName = L"샘플타일";
-	selectDrawinfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE;
+	selectDrawinfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE | D2DIE_SCALE;;
 	selectDrawinfo.imageLocation = { (float)WINSIZE_TILE_MAP_X - (sampleTileSize.width) + tile_Size.cy / 2, (sampleTileSize.height + 100) };
-	selectDrawinfo.atlasInfo.frameSize = { (UINT32)tile_Size.cx ,(UINT32)tile_Size.cy };
+	selectDrawinfo.atlasInfo.frameSize = { (UINT32)SelectTile_Size.cx ,(UINT32)SelectTile_Size.cy };
 	selectDrawinfo.atlasInfo.frame.x = selectTile.frameX;
 	selectDrawinfo.atlasInfo.frame.y = selectTile.frameY;
+	selectDrawinfo.scaleInfo.scaleCenterPoint = { (float)SelectTile_Size.cx / 2 , (float)SelectTile_Size.cy / 2 };
+	selectDrawinfo.scaleInfo.scaleSize = { 2.0f,2.0f };
 	imageManager->ImageRander(selectDrawinfo);
 	// 5분마다 자동 저장
 	TimerManager::GetSingleton()->SetTimer(autoSaveTimerHandle,this,&TileMapToolScene::AutoSave, 300.0f);
@@ -161,10 +171,10 @@ HRESULT TileMapToolScene::Init()
 	temptile_Y = tile_Y;
 	autoSaveCount = 0;
 	okButtonColor = OK_BUTTON_DEFAULT_COLOR;
-
-
-
-
+	isOpen = false;
+	IsGridline = true;
+	layerTile = nullptr;
+	isLayerTileRender = false;
 	return S_OK;
 }
 
@@ -185,16 +195,38 @@ void TileMapToolScene::Update()
 	RECT samplerc = { samlpeTileRect.left  , 0 , WINSIZE_TILE_MAP_X ,tileDrawY };
 	RECT tilerc;
 	if (isTileOver)
-		tilerc = { 0  , 0 , (LONG)tile_Render_X * tile_Size.cx , (LONG)tile_Render_Y * tile_Size.cy };
+		tilerc = { 0  , (LONG)renderOffset  , (LONG)tile_Render_X * tile_Size.cx , (LONG)tile_Render_Y * tile_Size.cy + (LONG)renderOffset };
 	else
 		tilerc = { 0  , 0 , (LONG)tile_X * tile_Size.cx , (LONG)tile_Y * tile_Size.cy };
 
 	KeyManager* key = KeyManager::GetSingleton();
 	
 
-	// 타일 이동
+
 	if ((key->IsStayKeyDown(VK_CONTROL)))
 	{
+		if (key->IsOnceKeyDown(VK_DELETE))
+			this->DeleteLayer();
+		// 레이어 토글
+		if (key->IsOnceKeyDown(_1Key))
+			isLayerTileRender = !isLayerTileRender;
+		if (key->IsOnceKeyDown(ZKey))
+			this->Undo();
+		// 격자눈 토글
+		if (key->IsOnceKeyDown(VK_TAB))
+			IsGridline = !IsGridline;
+
+		if (key->IsStayKeyDown(VK_SHIFT))
+		{
+			if (key->IsOnceKeyDown(SKey))
+			{
+				DEBUG_MASSAGE("퀵 세이브\n");
+				QuickSave();
+
+			}
+		}
+
+		// 타일 이동
 		// 세밀 조정
 		// 샘플 타일 이동
 		if (key->IsOnceKeyDown(VK_LEFT))
@@ -207,16 +239,6 @@ void TileMapToolScene::Update()
 		else if (key->IsOnceKeyDown(VK_DOWN))
 			this->SampleTileMoveUp(false);
 
-
-
-		if (key->IsStayKeyDown(VK_SHIFT))
-		{
-			if (key->IsOnceKeyDown(SKey))
-			{
-				QuickSave();
-				DEBUG_MASSAGE("퀵 세이브\n");
-			}
-		}
 		// 세밀 조정
 		// 타이틀맵 이동
 		if (key->IsOnceKeyDown(AKey))
@@ -232,29 +254,44 @@ void TileMapToolScene::Update()
 	else
 	{
 
-		if (key->IsStayKeyDown(VK_LEFT))
-			this->SampleTileMoveSide(true);
-		else if (key->IsStayKeyDown(VK_RIGHT))
-			this->SampleTileMoveSide(false);
+		if (key->IsStayKeyDown(VK_SHIFT))
+		{
+			if (key->IsOnceKeyDown(WKey))
+				this->TileIndexMoveUP(true);
+			else if (key->IsOnceKeyDown(SKey))
+				this->TileIndexMoveUP(false);
 
-		if (key->IsStayKeyDown(VK_UP))
-			this->SampleTileMoveUp(true);
-		else if (key->IsStayKeyDown(VK_DOWN))
-			this->SampleTileMoveUp(false);
+			if (key->IsOnceKeyDown(AKey))
+				this->TileIndexMoveSide(true);
+			else if (key->IsOnceKeyDown(DKey))
+				this->TileIndexMoveSide(false);
+		}
+		else
+		{
+
+			if (key->IsStayKeyDown(VK_LEFT))
+				this->SampleTileMoveSide(true);
+			else if (key->IsStayKeyDown(VK_RIGHT))
+				this->SampleTileMoveSide(false);
+
+			if (key->IsStayKeyDown(VK_UP))
+				this->SampleTileMoveUp(true);
+			else if (key->IsStayKeyDown(VK_DOWN))
+				this->SampleTileMoveUp(false);
 
 
-		// 타이틀맵 이동
-		if (key->IsStayKeyDown(AKey))
-			this->TileMoveSide(true);
-		else if (key->IsStayKeyDown(DKey))
-			this->TileMoveSide(false);
+			// 타이틀맵 이동
+			if (key->IsStayKeyDown(AKey))
+				this->TileMoveSide(true);
+			else if (key->IsStayKeyDown(DKey))
+				this->TileMoveSide(false);
 
-		if (key->IsStayKeyDown(WKey))
-			this->TileMoveUp(true);
-		else if (key->IsStayKeyDown(SKey))
-			this->TileMoveUp(false);
+			if (key->IsStayKeyDown(WKey))
+				this->TileMoveUp(true);
+			else if (key->IsStayKeyDown(SKey))
+				this->TileMoveUp(false);
+		}
 	}
-
 	// 콜리전  토글 
 	if (key->IsOnceKeyDown(VK_TAB))
 		isCollisionLayer = !isCollisionLayer;
@@ -348,7 +385,7 @@ void TileMapToolScene::Update()
 	// 기하학 정보 키입력
 	GeometryInfoKeyInput();
 	// 세이브 로드
-	if (PtInRect(&rcSace, g_ptMouse))
+	if (PtInRect(&rcSave, g_ptMouse))
 	{
 		saveButtoninfo.atlasInfo.frame.y = 1;
 		if (key->IsOnceKeyUP(VK_LBUTTON))
@@ -374,6 +411,15 @@ void TileMapToolScene::Update()
 	}
 	else
 		exitButtoninfo.atlasInfo.frame.y = 0;
+
+	if (PtInRect(&rcLayerLoad, g_ptMouse))
+	{
+		layerLoadButtoninfo.atlasInfo.frame.y = 1;
+		if (key->IsOnceKeyUP(VK_LBUTTON))
+			this->LayerLoad();
+	}
+	else
+		layerLoadButtoninfo.atlasInfo.frame.y = 0;
 	// 사이즈 조정
 	if (PtInRect(&rcSizeX, g_ptMouse))
 	{
@@ -405,10 +451,10 @@ void TileMapToolScene::Update()
 		if (key->IsOnceKeyUP(VK_LBUTTON))
 		{
 			sizeKind = SizeKind::None;
-			if (temptile_X < 25)
-				temptile_X = 25;
-			if (temptile_Y < 25)
-				temptile_Y = 25;
+			if (temptile_X < tile_Render_X)
+				temptile_X = tile_Render_X;
+			if (temptile_Y < tile_Render_Y)
+				temptile_Y = tile_Render_Y;
 			Resize(temptile_X, temptile_Y);
 		}
 	}
@@ -475,28 +521,33 @@ void TileMapToolScene::Render()
 			for (int j = 0; j < tile_Render_X; j++)
 			{
 				index = (tile_X * (i + tileCamePos.y)) + (j + tileCamePos.x);
+				if (!tiles[index].GetisRender())
+					continue;
 				tilerc = tiles[(tile_X * i) + j].rc;
 				TilesDrawinfo.imageLocation = { (float)tilerc.left + tile_Size.cx / 2,(float)tilerc.top + tile_Size.cy / 2 };
 				TilesDrawinfo.atlasInfo.frame.x = tiles[index].frameX;
 				TilesDrawinfo.atlasInfo.frame.y = tiles[index].frameY;
-				TilesDrawinfo.affineMatrix = Matrix3x2F::Rotation(tiles[index].rotation, {(float)tile_Size.cx/2, (float)tile_Size.cy / 2});
+				TilesDrawinfo.affineMatrix = Matrix3x2F::Rotation(tiles[index].rotation, {(float)SelectTile_Size.cx/2, (float)SelectTile_Size.cy / 2});
 				imageManager->ImageRander(TilesDrawinfo);
 			}
 		}
 		// 격자 선
 		brush->SetColor(D2D1::ColorF(0xffffff));
-		for (int i = 0; i < tile_Render_Y; i++)
+		if (IsGridline)
 		{
-			for (int j = 0; j < tile_Render_X; j++)
-			{	
-				index = (tile_X * i) + j;
-				tilerc = tiles[index].rc;
-				renderTarget->DrawRectangle({ (float)tilerc.left, (float)tilerc.top, (float)tilerc.right, (float)tilerc.bottom }, brush);
+			for (int i = 0; i < tile_Render_Y; i++)
+			{
+				for (int j = 0; j < tile_Render_X; j++)
+				{
+					index = (tile_X * i) + j;
+					tilerc = tiles[index].rc;
+					renderTarget->DrawRectangle({ (float)tilerc.left, (float)tilerc.top, (float)tilerc.right, (float)tilerc.bottom }, brush);
+				}
 			}
 		}
 	}
 
-
+	this->LayerTileRender();
 
 	if (isCollisionLayer)
 	{	
@@ -524,32 +575,41 @@ void TileMapToolScene::Render()
 		}
 	}
 	else
-	//if (isSelectTileRender)
+	//
 	{
-		
-		int count = 0;
-		float x, y;
-		for (int i = 0; i < selectSize.cy; i++)
+		if (isSelectTileRender)
+			selectDrawinfo.scaleInfo.scaleSize = { 2.0f,2.0f };
+		else
+			selectDrawinfo.scaleInfo.scaleSize = { 1.0f,1.0f };
+		if (selectTiles.size() != 0)
 		{
-			for (int j = 0; j < selectSize.cx; j++)
+			int count = 0;
+			float x, y;
+			for (int i = 0; i < selectSize.cy; i++)
 			{
-				x = (float)g_ptMouse.x + (j * tile_Size.cx);
-				y = (float)g_ptMouse.y + (i * tile_Size.cy);
-				if (x > (float)(tile_Size.cx * tile_X))
+				for (int j = 0; j < selectSize.cx; j++)
 				{
-					count++;
-					continue;
+					x = (float)g_ptMouse.x + (j * tile_Size.cx);
+					y = (float)g_ptMouse.y + (i * tile_Size.cy);
+					//if (x > (float)(tile_Size.cx * tile_X))
+					//{
+					//	count++;
+					//	continue;
+					//}
+					//if (x > (float)(tile_Size.cy * tile_Y))
+					//{
+					//	count++;
+					//	continue;
+					//}
+					if (isSelectTileRender)
+						selectDrawinfo.imageLocation = { (float)g_ptMouse.x + (j * tile_Size.cx), (float)g_ptMouse.y + (i * tile_Size.cy) };	
+					else
+						selectDrawinfo.imageLocation = { (float)g_ptMouse.x + (j * SelectTile_Size.cx), (float)g_ptMouse.y + (i * SelectTile_Size.cy) };
+					selectDrawinfo.atlasInfo.frame.x = selectTiles[count].frameX;
+					selectDrawinfo.atlasInfo.frame.y = selectTiles[count].frameY;
+					selectDrawinfo.affineMatrix = Matrix3x2F::Rotation(selectTiles[count++].rotation, { 16.0f,16.0f });
+					imageManager->ImageRander(selectDrawinfo);
 				}
-				if (x > (float)(tile_Size.cy * tile_Y))
-				{
-					count++;
-					continue;
-				}
-				selectDrawinfo.imageLocation = { (float)g_ptMouse.x + (j * tile_Size.cx), (float)g_ptMouse.y + (i * tile_Size.cy) };
-				selectDrawinfo.atlasInfo.frame.x = selectTiles[count].frameX;
-				selectDrawinfo.atlasInfo.frame.y = selectTiles[count].frameY;
-				selectDrawinfo.affineMatrix = Matrix3x2F::Rotation(selectTiles[count++].rotation, {16.0f,16.0f });
-				imageManager->ImageRander(selectDrawinfo);
 			}
 		}
 		
@@ -559,9 +619,19 @@ void TileMapToolScene::Render()
 	// 세이브 로드
 	imageManager->ImageRander(saveButtoninfo);
 	imageManager->ImageRander(loadButtoninfo);
+	imageManager->ImageRander(layerLoadButtoninfo);
 	imageManager->ImageRander(exitButtoninfo);
+	//layerLoadButtoninfo
 	ID2D1SolidColorBrush* fontBrush = d2d->GetTextBrush();
 	brush->SetColor(ColorF({ 1.0f,1.0f,1.0f }));
+	fontBrush->SetColor(ColorF({ 1.0f,1.0f,1.0f }));
+
+	//renderTarget->FillRectangle({ (float)rcLayerLoad.left, (float)rcLayerLoad.top - 30, (float)rcLayerLoad.right, (float)rcLayerLoad.top }, brush);
+	d2d->__DrawText(L"레이어 불러오기", { (float)rcLayerLoad.left, (float)rcLayerLoad.top - 30, (float)rcLayerLoad.right, (float)rcLayerLoad.top });
+	d2d->__DrawText(L"불러오기", { (float)rcLoad.left - 1.5f, (float)rcLoad.top - 30, (float)rcLoad.right - 1.5f, (float)rcLoad.top });
+	d2d->__DrawText(L"저장하기", { (float)rcSave.left, (float)rcSave.top - 30, (float)rcSave.right, (float)rcSave.top });
+	d2d->__DrawText(L"X", { (float)rcSizeX.left, (float)rcSizeX.top - 30, (float)rcSizeX.right, (float)rcSizeX.top });
+	d2d->__DrawText(L"Y", { (float)rcSizeY.left, (float)rcSizeY.top - 30, (float)rcSizeY.right, (float)rcSizeY.top });
 	fontBrush->SetColor(ColorF({ 0.0f,0.0f,0.0f }));
 	// 사이즈 조정 박스 
 	wstring X = to_wstring(temptile_X);
@@ -673,6 +743,38 @@ void TileMapToolScene::Render()
 #pragma endregion
 }
 
+void TileMapToolScene::LayerTileRender()
+{
+	if (isLayerTileRender)
+	{
+		if (layerTile)
+		{
+			RECT tilerc;
+			int index = 0;
+			for (int i = 0; i < tile_Render_Y; i++)
+			{
+				if (layerTile->tile_Y <= (UINT)(i + tileCamePos.y))
+					break;
+				for (int j = 0; j < tile_Render_X; j++)
+				{
+					if (layerTile->tile_X <= (UINT)(j + tileCamePos.x))
+						break;
+					index = (layerTile->tile_X * (i + tileCamePos.y)) + (j + tileCamePos.x);
+					if (!layerTile->tiles[index].GetisRender())
+						continue;
+					tilerc = tiles[(tile_X * i) + j].rc;
+					TilesDrawinfo.imageLocation = { (float)tilerc.left + tile_Size.cx / 2,(float)tilerc.top + tile_Size.cy / 2 };
+					TilesDrawinfo.atlasInfo.frame.x = layerTile->tiles[index].frameX;
+					TilesDrawinfo.atlasInfo.frame.y = layerTile->tiles[index].frameY;
+					//if (layerTile->tiles[index].rotation != 0.0f)
+					TilesDrawinfo.affineMatrix = Matrix3x2F::Rotation(layerTile->tiles[index].rotation, { (float)SelectTile_Size.cx / 2, (float)SelectTile_Size.cy / 2 });
+					IMAGEMANAGER->ImageRander(TilesDrawinfo);
+				}
+			}
+		}
+	}
+}
+
 void TileMapToolScene::Select(const RECT& samlpeRc)
 {
 	int posx = g_ptMouse.x - samlpeRc.left, posy = g_ptMouse.y - samlpeRc.top;
@@ -697,14 +799,14 @@ void TileMapToolScene::RectSelectEnd(const RECT & samlpeRc)
 	rectSelect.right = g_ptMouse.x;
 	rectSelect.bottom = g_ptMouse.y;
 	int posx = rectSelect.left - samlpeRc.left, posy = rectSelect.top - samlpeRc.top;
-	int LindexX = posx / tile_Size.cx + (samlpeTileMovepos.x / tile_Size.cx);
-	int LindexY = posy / tile_Size.cy + (samlpeTileMovepos.y / tile_Size.cy);
+	int LindexX = posx / SelectTile_Size.cx + (samlpeTileMovepos.x / SelectTile_Size.cx);
+	int LindexY = posy / SelectTile_Size.cy + (samlpeTileMovepos.y / SelectTile_Size.cy);
 
 	posx = rectSelect.right - samlpeRc.left;
 	posy = rectSelect.bottom - samlpeRc.top;
 
-	int RindexX = posx / tile_Size.cx + (samlpeTileMovepos.x / tile_Size.cx);
-	int RindexY = posy / tile_Size.cy + (samlpeTileMovepos.y / tile_Size.cy);
+	int RindexX = posx / SelectTile_Size.cx + (samlpeTileMovepos.x / SelectTile_Size.cx);
+	int RindexY = posy / SelectTile_Size.cy + (samlpeTileMovepos.y / SelectTile_Size.cy);
 
 	SelectTile buffer;
 	selectSize.cx =  RindexX - LindexX + 1;
@@ -737,15 +839,19 @@ void TileMapToolScene::Draw(const RECT& tileRc)
 		int index = 0;
 
 		index = ((indexY + tileCamePos.y) * tile_X + (indexX + tileCamePos.x));
+		if (tiles[index].geometryinfo == geometryinfo)
+			return;
+		WorklistAdd();
 		tiles[index].geometryinfo = geometryinfo;
 		if (tilesgeometry[index])
 			tilesgeometry[index]->Release();
 		D2D::GetSingleton()->GetD2DFactory()->CreatePathGeometry(&tilesgeometry[index]);
 		GetGeomrtyPoint(tilesgeometry[index], tiles[index].geometryinfo, tiles[((indexY) * tile_X + (indexX))].rc);
+		WorklistAdd();
 		return;
 	}
 
-
+	bool isWorldAdd = false;
 	if (!isTileOver)
 	{
 		int yMax = min(tile_Y, (UINT)selectSize.cy + indexY);
@@ -764,8 +870,8 @@ void TileMapToolScene::Draw(const RECT& tileRc)
 	// 드로우 타일 보정 
 	else
 	{
-		int yMax = min(tile_Render_X, selectSize.cy + indexY);
-		int xMax = min(tile_Render_Y, selectSize.cx + indexX);
+		int yMax = min(tile_Render_Y, selectSize.cy + indexY);
+		int xMax = min(tile_Render_X, selectSize.cx + indexX);
 		int count = 0;
 		int index = 0;
 		for (int i = indexY; i < yMax; i++)
@@ -773,9 +879,18 @@ void TileMapToolScene::Draw(const RECT& tileRc)
 			for (int j = indexX; j < xMax; j++)
 			{
 				index = ((i + tileCamePos.y) * tile_X + (j + tileCamePos.x));
+				if ((tiles[index].frameX != selectTiles[count].frameX) |
+					(tiles[index].frameY != selectTiles[count].frameY) |
+					(tiles[index].rotation != selectTiles[count].rotation))
+					if (!isWorldAdd)
+					{
+						isWorldAdd = true;
+						WorklistAdd();
+					}
 				tiles[index].frameX = selectTiles[count].frameX;
 				tiles[index].frameY = selectTiles[count].frameY;
 				tiles[index].rotation = selectTiles[count++].rotation;
+				
 			}
 		}
 	}
@@ -810,6 +925,7 @@ void TileMapToolScene::RectDrawEnd(const RECT & tileRc)
 
 	if (isCollisionLayer)
 	{
+		WorklistAdd();
 		for (int i = LindexY; i <= RindexY; i++)
 		{
 
@@ -825,9 +941,11 @@ void TileMapToolScene::RectDrawEnd(const RECT & tileRc)
 				GetGeomrtyPoint(tilesgeometry[index], tiles[index].geometryinfo, tiles[((i)* tile_X + (j))].rc);
 			}
 		}
+
 	}
 	else
 	{
+		WorklistAdd();
 		for (int i = LindexY; i <= RindexY; i++)
 		{
 			for (int j = LindexX; j <= RindexX; j++)
@@ -837,6 +955,7 @@ void TileMapToolScene::RectDrawEnd(const RECT & tileRc)
 				tiles[(i + tileCamePos.y) * tile_X + (j + tileCamePos.x)].rotation = selectTile.rotation;
 			}
 		}
+
 	}
 
 	//tiles[indexY * tile_X + indexX].frameX = selectTile.frameX;
@@ -880,15 +999,18 @@ void TileMapToolScene::Erase(const RECT& tileRc)
 	int index = (indexY + tileCamePos.y) * tile_X + (indexX + tileCamePos.x);
 	if (isCollisionLayer)
 	{
+		WorklistAdd();
 		tiles[index].geometryinfo.ReSet();
-		tilesgeometry[index]->Release();
-		tilesgeometry[index] = nullptr;
+		SAFE_RELEASE(tilesgeometry[index]);
+
 	}
 	else
 	{
+		WorklistAdd();
 		tiles[index].frameX = defaultFrame;
 		tiles[index].frameY = defaultFrame;
 		tiles[index].rotation = 0.0f;
+
 	}
 }
 
@@ -907,6 +1029,7 @@ void TileMapToolScene::Dropper(const RECT& tileRc)
 	{
 		selectTile.frameX = tiles[index].frameX;
 		selectTile.frameY = tiles[index].frameY;
+		selectTile.rotation = tiles[index].rotation;
 		selectSize.cx = 1;
 		selectSize.cy = 1;
 		selectTiles.push_back(selectTile);
@@ -916,6 +1039,7 @@ void TileMapToolScene::Dropper(const RECT& tileRc)
 
 void TileMapToolScene::CleanAll()
 {
+	WorklistAdd();
 	for (int i = 0; (UINT)i < tile_Y * tile_X; i++)
 	{
 		tiles[i].frameX = defaultFrame;
@@ -925,6 +1049,7 @@ void TileMapToolScene::CleanAll()
 
 		SAFE_RELEASE(tilesgeometry[i]);
 	}
+	
 }
 
 void TileMapToolScene::SampleTileMoveSide(bool isLeft)
@@ -1194,6 +1319,7 @@ void TileMapToolScene::Save()
 		string saveFileName = sfn.lpstrFile;
 		saveFileName = saveFileName + ".map";
 		Save(saveFileName.c_str());
+		isOpen = true;
 	}
 
 }
@@ -1208,14 +1334,13 @@ void TileMapToolScene::Save(const char * filename)
 	WriteFile(hFile, size, 2 * sizeof(int), &writtenByte, NULL);
 	DEBUG_MASSAGE("저장된 용량 %d byte", writtenByte);
 	WriteFile(hFile, tiles, tile_X * tile_Y * sizeof(TILE), &writtenByte, NULL);
-	DEBUG_MASSAGE("저장된 용량 %d byte", writtenByte);
+	DEBUG_MASSAGE("저장된 용량 %d byte\n", writtenByte);
 
 	CloseHandle(hFile);
 }
 
 void TileMapToolScene::Load()
 {
-
 	char szFile[256];
 	//API file dialog
 	OPENFILENAMEA ofn;
@@ -1233,6 +1358,7 @@ void TileMapToolScene::Load()
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 	BOOL ret = GetOpenFileNameA(&ofn);
 	if (ret) {
+		WorklistAdd();
 		//string loadFileName = ofn.lpstrFile;
 		//loadFileName = loadFileName + ".map";
 		// 몇바이트가 읽었는지
@@ -1248,18 +1374,59 @@ void TileMapToolScene::Load()
 		temptile_X = size[0];
 		temptile_Y = size[1];
 		ReadFile(hFile, tiles, size[0] * size[1] * sizeof(TILE), &readByte, NULL);
+		isOpen = true;
 		CloseHandle(hFile);
 	}
+}
 
+void TileMapToolScene::LayerLoad()
+{
+	char szFile[256];
+	//API file dialog
+	OPENFILENAMEA ofn;
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = NULL;
+	ofn.lpstrFile = szFile;
+	ofn.lpstrFile[0] = '\0';
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = "Map\0*.map\0";
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = NULL;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+	BOOL ret = GetOpenFileNameA(&ofn);
+	if (ret) {
+		// 몇바이트가 읽었는지
+		DWORD readByte;
+		HANDLE hFile = CreateFile(ofn.lpstrFile, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
+		// 레이어를 먼저 삭제해준다. 
+		DeleteLayer();
+		// 레이서 생성
+		layerTile = new LayerTile;
+		int size[2];
+		ReadFile(hFile, size, 2 * sizeof(int), &readByte, NULL);
+		layerTile->tile_X = size[0];
+		layerTile->tile_Y = size[1];
+		// 타일을 생성한다
+		layerTile->tiles = new TILE[size[0] * size[1]];
+		DWORD readSize = size[0] * size[1] * sizeof(TILE);
+		ZeroMemory(layerTile->tiles, readSize);
+		ReadFile(hFile, layerTile->tiles, readSize, &readByte, NULL);
+		isOpen = true;
+		CloseHandle(hFile);
+	}
 
 }
 
 void TileMapToolScene::Resize(UINT width, UINT height)
 {
+	
 	// 내가 25사이즈보다 작으면 안되서 넣어둔 조건
 	UINT tempWidth = width > tile_Render_X ? width : tile_Render_X;
-	UINT tempHeight = height > tile_Render_X ? height : tile_Render_X;
+	UINT tempHeight = height > tile_Render_Y ? height : tile_Render_Y;
 	int index = 0;
 	// 타일이 존재하지 않을경우 할당
 	if (tiles == nullptr)
@@ -1273,6 +1440,7 @@ void TileMapToolScene::Resize(UINT width, UINT height)
 	}
 	else
 	{
+		WorklistAdd();
 		// 새로운 타일생성
 		TILE* temp = new TILE[tempWidth*tempHeight];
 		ID2D1PathGeometry** tempGeometry = new ID2D1PathGeometry*[tempWidth*tempHeight];
@@ -1299,7 +1467,8 @@ void TileMapToolScene::Resize(UINT width, UINT height)
 					index = (i * tile_X) + tempWidth + k;
 					if (index == ((i + 1) * tile_X))
 						break;
-					tilesgeometry[(i * tile_X) + tempWidth + k]->Release();
+					SAFE_RELEASE(tilesgeometry[(i * tile_X) + tempWidth + k]);
+					
 				}
 			}
 		}
@@ -1367,13 +1536,20 @@ void TileMapToolScene::OnceNumberKey(int key, UINT& value)
 
 void TileMapToolScene::QuickSave()
 {
-	Save("Save/QuickSave.map");
+	if (!isOpen)
+		Save("Save/QuickSave.map");	
+	else
+		Save("QuickSave.map");
 }
 
 void TileMapToolScene::AutoSave()
 {
 	DEBUG_MASSAGE("오토 세이브 \n");
-	string autoSavestr = "Save/AutoSave" + to_string(autoSaveCount) + ".map";
+	string autoSavestr;
+	if (!isOpen)
+		autoSavestr = "Save/AutoSave" + to_string(autoSaveCount) + ".map";
+	else
+		autoSavestr = "AutoSave" + to_string(autoSaveCount) + ".map";
 
 	Save(autoSavestr.c_str());
 
@@ -1478,6 +1654,84 @@ void TileMapToolScene::GeometryInfoKeyInput()
 			else if (geometryinfo._width <= 0.0f)
 				geometryinfo._width = 0.0f;
 		}
+	}
+}
+
+void TileMapToolScene::TileIndexMoveUP(bool isUP)
+{
+	if (selectTiles.size() == 1)
+	{
+		if (isUP)
+		{
+			if (selectTiles[0].frameY > 0)
+				selectTiles[0].frameY--;
+		}
+		else
+		{
+			(selectTiles[0].frameY < sampleTile->GetSize().height / 32.0f);
+				selectTiles[0].frameY++;
+		}
+	}
+}
+
+void TileMapToolScene::TileIndexMoveSide(bool isleft)
+{
+	if (selectTiles.size() == 1)
+	{
+		if (isleft)
+		{
+			if (selectTiles[0].frameX > 0)
+				selectTiles[0].frameX--;
+		}
+		else
+		{
+			(selectTiles[0].frameX < sampleTile->GetSize().width / 32.0f);
+			selectTiles[0].frameX++;
+		}
+	}
+}
+
+void TileMapToolScene::Undo()
+{
+	if (!worklist.empty())
+	{
+		Worklist* oldWorklist = worklist.back();
+		worklist.pop_back();
+		if ( (oldWorklist->tile_X != tile_X) |
+			(oldWorklist->tile_Y != tile_Y))
+		{
+			Resize(oldWorklist->tile_X, oldWorklist->tile_Y);
+			temptile_X = oldWorklist->tile_X;
+			temptile_Y = oldWorklist->tile_Y;
+		}
+		memcpy_s(tiles, sizeof(TILE) *tile_X*tile_Y, oldWorklist->tiles, sizeof(TILE) *tile_X*tile_Y);
+	}
+}
+
+void TileMapToolScene::WorklistAdd()
+{
+	Worklist* newWorklist = new Worklist;
+	newWorklist->tiles = new TILE[tile_X*tile_Y];
+	memcpy_s(newWorklist->tiles, sizeof(TILE) *tile_X*tile_Y, tiles, sizeof(TILE) *tile_X*tile_Y);
+	newWorklist->tile_X = tile_X;
+	newWorklist->tile_Y = tile_Y;
+	worklist.push_back(newWorklist);
+	if (maxWorklist < (UINT)worklist.size())
+	{
+		Worklist* oldWorklist = worklist.front();
+		worklist.pop_front();
+		SAFE_ARR_DELETE(oldWorklist->tiles);
+		SAFE_DELETE(oldWorklist);
+	}
+}
+
+void TileMapToolScene::DeleteLayer()
+{
+	if (layerTile)
+	{
+		SAFE_ARR_DELETE(layerTile->tiles);
+		delete[] layerTile;
+		layerTile = nullptr;
 	}
 }
 

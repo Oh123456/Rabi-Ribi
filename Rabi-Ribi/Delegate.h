@@ -1,6 +1,8 @@
 #pragma once
 
+#ifndef _INTERFACE
 #define _INTERFACE struct
+#endif
 
 template <bool Const, typename Class, typename FuncType>
 struct TMemFunPtrType;
@@ -50,7 +52,8 @@ class Delegate
 
 		RetType Execute(ParamTypes... param) override
 		{
-			return (object->*methodPtr)(param...);
+			if (methodPtr)
+				return (object->*methodPtr)(param...);
 		}
 
 		MethodPtr methodPtr;
@@ -74,6 +77,11 @@ public:
 		if (Tdelegate == nullptr)
 		{
 			TDelegate<UserClass>* delegate = new TDelegate<UserClass>;
+			Tdelegate = delegate->Bind(InUserObject, InFunc);
+		}
+		else
+		{
+			TDelegate<UserClass>* delegate = dynamic_cast<TDelegate<UserClass>*>(Tdelegate);
 			Tdelegate = delegate->Bind(InUserObject, InFunc);
 		}
 	}
@@ -100,8 +108,17 @@ private:
 // ±âº»
 #define DELEGATE_BODY(delegateName,...) typedef Delegate<__VA_ARGS__> delegateName
 
-#define DELEGATE(delegateName) DELEGATE_BODY(delegateName,void)
-#define DELEGATE_OneParam(delegateName, paramType ) DELEGATE_BODY(delegateName, void , paramType)
-#define DELEGATE_TwoParam(delegateName, paramType1, paramType2 ) DELEGATE_BODY(delegateName, void , paramType1 , paramType2)
+#define DELEGATE(delegateName)																																			DELEGATE_BODY(delegateName,void)
+#define DELEGATE_OneParam(delegateName, paramType )																											DELEGATE_BODY(delegateName, void , paramType)
+#define DELEGATE_TwoParam(delegateName, paramType1, paramType2 )																							DELEGATE_BODY(delegateName, void , paramType1 , paramType2)
+#define DELEGATE_ThreeRaram(delegateName, paramType1, paramType2 , paramType3)																		DELEGATE_BODY(delegateName, void , paramType1 , paramType2 , paramType3)
+#define DELEGATE_FourRaram(delegateName, paramType1, paramType2 , paramType3 , paramType4 )													DELEGATE_BODY(delegateName, void , paramType1 , paramType2 , paramType3, paramType4 )
+#define DELEGATE_FiveRaram(delegateName, paramType1, paramType2 , paramType3 , paramType4 ,paramType5 )									DELEGATE_BODY(delegateName, void , paramType1 , paramType2 , paramType3, paramType4, paramType5 )
 
-#define DELEGATE_RetVal(retval,delegateName) DELEGATE_BODY(delegateName,retval)
+
+#define DELEGATE_RetVal(retval,delegateName)																															DELEGATE_BODY(delegateName,retval)
+#define DELEGATE_RetVal_OneParam(retval,delegateName, paramType )																							DELEGATE_BODY(delegateName, retval , paramType)
+#define DELEGATE_RetVal_TwoParam(retval,delegateName, paramType1, paramType2 )																		DELEGATE_BODY(delegateName, retval , paramType1 , paramType2)
+#define DELEGATE_RetVal_ThreeRaram(retval,delegateName, paramType1, paramType2 , paramType3)														DELEGATE_BODY(delegateName, retval , paramType1 , paramType2 , paramType3)
+#define DELEGATE_RetVal_FourRaram(retval,delegateName, paramType1, paramType2 , paramType3 , paramType4 )									DELEGATE_BODY(delegateName, retval , paramType1 , paramType2 , paramType3, paramType4 )
+#define DELEGATE_RetVal_FiveRaram(retval,delegateName, paramType1, paramType2 , paramType3 , paramType4 ,paramType5 )					DELEGATE_BODY(delegateName, retval , paramType1 , paramType2 , paramType3, paramType4, paramType5 )

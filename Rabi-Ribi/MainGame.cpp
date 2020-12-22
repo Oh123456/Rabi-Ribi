@@ -1,20 +1,24 @@
 #include "MainGame.h"
 #include "D2DGraphic.h"
 #include "TileMapToolScene.h"
+#include "TestRoom.h"
 
 HRESULT MainGame::Init()
 {
-	IMAGEMANAGER->Init();
-	IMAGEMANAGER->SetDefaultDirectory(L"Image/");
+	ImageManager* imageManager = IMAGEMANAGER;
+	imageManager->Init();
+	imageManager->SetDefaultDirectory(L"Image/");
 	KEYMANAGER->Init();
 	TIMERMANAGER->Init();
 	SOUNDMANAGER->Init();
 	SceneManager* scenManager = SCENEMANAGER;
 	scenManager->Init();
 
+	// 대부분에서 사용할 이미지를 넣어둔다
+	imageManager->LoadPng(L"샘플타일", L"Tile/tile1_a");
 	
 	scenManager->AddScene("맵툴씬", CreateScene<TileMapToolScene>());
-
+	scenManager->AddScene("테스트룸", CreateScene<TestRoom>());
 
 	scenManager->ChangeScene("맵툴씬");
 	
