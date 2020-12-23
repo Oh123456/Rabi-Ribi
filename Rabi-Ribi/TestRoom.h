@@ -14,5 +14,8 @@ public:
 	void Update() override;
 	// 프레임 단위 출력 (이미지, 텍스트)
 	void Render() override;
+
+private:
+	ImageInfo testbg;
 };
 

@@ -10,6 +10,9 @@ HWND		g_hWnd;				// 윈도우 핸들
 LPSTR		g_lpszClass = (LPSTR)(TEXT("과거의 나여 잘했다"));//const_cast<LPSTR>			// 윈도의 이름
 POINT		g_ptMouse;
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
+D2D_SIZE_U	g_defaultWindowSize;
+DEVMODE g_dmSaved;  // 현재 해상도를 저장.. 왜냐 게임 끝나면 원래대로 돌려야 하니깐
+
 
 void Loop();
 //메임함수
@@ -92,6 +95,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpsz
 // 콜백함수 : 윈도우 메시지(이벤트)를 처리하는 함수
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
+	
 	switch (iMessage)
 	{
 	case WM_MOUSEMOVE:
@@ -99,8 +103,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		g_ptMouse.y = HIWORD(lParam);
 		break;
 	case WM_CREATE:
+	{
+		// 현재 설정을 저장
+		//EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &g_dmSaved);
+
+		//DEVMODE dmSelected;// 원하는 해상도를 저장하는 변수
+		//int width = GetSystemMetrics(SM_CXSCREEN);
+		//int height = GetSystemMetrics(SM_CYSCREEN);
+
+		//memset(&dmSelected, 0, sizeof(dmSelected));
+		//dmSelected.dmSize = sizeof(dmSelected);
+		//dmSelected.dmPelsWidth = width;// 800
+		//dmSelected.dmPelsHeight = height;// 600
+		//dmSelected.dmBitsPerPel = 32;
+		//dmSelected.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+		//if (ChangeDisplaySettings(&dmSelected, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
+		//{
+		//	MessageBox(NULL, "Program Will Now Close.", "ERROR", MB_OK | MB_ICONSTOP);
+		//}
 		break;
+	}
 	case WM_DESTROY:
+		ChangeDisplaySettings(&g_dmSaved, CDS_RESET);
 		PostQuitMessage(0);
 		break;
 	case WM_PAINT:
@@ -108,6 +132,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		break;
 
 	}
+	case WM_SIZE:
+		break;
+		if (D2D::GetSingleton()->GetD2DRenderTarget())
+		{
+			RECT rc;
+			GetClientRect(g_hWnd, &rc);
+			D2D::GetSingleton()->GetD2DRenderTarget()->Resize({ (UINT)rc.right,(UINT)rc.bottom });
+			D2D::GetSingleton()->GetD2DRenderTarget();
+		}
+		break;
 	case WM_KEYDOWN:
 		break;
 	}

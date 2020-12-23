@@ -62,7 +62,6 @@ void ImageManager::ImageRander(const ImageInfo& imageInfo)
 	ID2D1Bitmap* bitmap;
 
 	D2D* d2d = d2d->GetSingleton();
-
 	if (imagekey == images.end())
 	{
 		//DEBUG_MASSAGE("이미지 렌더중 알맞는 키값의 이미지가 없습니다.\n");
@@ -101,7 +100,7 @@ void ImageManager::ImageRander(const ImageInfo& imageInfo)
 					effect->SetInputEffect(0, oldeffect);
 				UINT32 framx = imageInfo.atlasInfo.frame.x;
 				UINT32 framy = imageInfo.atlasInfo.frame.y;
-				D2D1_SIZE_U size = imageInfo.atlasInfo.frameSize;
+				D2D1_SIZE_F size = imageInfo.atlasInfo.frameSize;
 
 
 				D2D1_VECTOR_4F atlasSize;
@@ -112,9 +111,11 @@ void ImageManager::ImageRander(const ImageInfo& imageInfo)
 				else
 				{
 					atlasSize = imageInfo.atlasInfo.costumAtlasSize;
-					size = { (UINT32)(atlasSize.z - atlasSize.x) , (UINT32)(atlasSize.w - atlasSize.y) };
+					size = { (float)(atlasSize.z - atlasSize.x) , (float)(atlasSize.w - atlasSize.y) };
 				}
 				drawLocation = { imageInfo.imageLocation.x - size.width / 2 ,imageInfo.imageLocation.y - size.height / 2 };
+				atlasSize.z -= 0.5f;
+				atlasSize.w -= 0.5f;
 				d2d->AtlasEffect(effect, atlasSize);
 				oldeffect = effect;
 				effect = nullptr;

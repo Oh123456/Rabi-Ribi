@@ -60,7 +60,7 @@ struct ContrastEffectInfo
 struct AtlasInfo
 {
 	// 한프레임 사이즈
-	D2D1_SIZE_U frameSize = D2D1_SIZE_U();
+	D2D1_SIZE_F frameSize = D2D1_SIZE_F();
 	// 현 프레임
 	D2D1_POINT_2L frame = D2D1_POINT_2L();
 

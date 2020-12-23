@@ -30,11 +30,13 @@ void D2DGraphic::Init(HWND hWnd)
 	D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED);
 	// 지정한 윈도우의 클라이언트 영역에 그림을 그리기 위한 RenderTarget을 얻는다.
 	D2DFactory->CreateHwndRenderTarget(RenderTargetProperties(), HwndRenderTargetProperties(hWnd, SizeU(rect.right, rect.bottom),D2D1_PRESENT_OPTIONS_IMMEDIATELY), &D2DRenderTarget);
-	
+	D2DRenderTarget->SetAntialiasMode(D2D1_ANTIALIAS_MODE::D2D1_ANTIALIAS_MODE_ALIASED);
 	//D2DRenderTarget->CreateCompatibleRenderTarget(D2D1::SizeF(10.0f, 10.0f), &D2DbitMapRenderTarget);
 	D2DRenderTarget->QueryInterface(__uuidof(ID2D1DeviceContext), (void**)&Context);
 
 	D2DRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &brush);
+
+
 	
 }
 
@@ -161,9 +163,9 @@ ID2D1Effect* D2DGraphic::CreateAffineTransformEffect(ID2D1Effect* imageEffect)
 
 void D2DGraphic::AffineTransformEffect(ID2D1Effect* Effect, D2D1_MATRIX_3X2_F matrix)
 {
-	Effect->SetValue(D2D1_2DAFFINETRANSFORM_PROP_INTERPOLATION_MODE, D2D1_2DAFFINETRANSFORM_INTERPOLATION_MODE_MULTI_SAMPLE_LINEAR);
-	Effect->SetValue(D2D1_2DAFFINETRANSFORM_PROP_BORDER_MODE, D2D1_BORDER_MODE_SOFT);
-	Effect->SetValue(D2D1_2DAFFINETRANSFORM_PROP_SHARPNESS, 1.0f);
+	//Effect->SetValue(D2D1_2DAFFINETRANSFORM_PROP_INTERPOLATION_MODE, D2D1_2DAFFINETRANSFORM_INTERPOLATION_MODE_MULTI_SAMPLE_LINEAR);
+	//Effect->SetValue(D2D1_2DAFFINETRANSFORM_PROP_BORDER_MODE, D2D1_BORDER_MODE_HARD);
+	//Effect->SetValue(D2D1_2DAFFINETRANSFORM_PROP_SHARPNESS, 1.0f);
 	Effect->SetValue(D2D1_2DAFFINETRANSFORM_PROP_TRANSFORM_MATRIX, matrix);
 }
 
@@ -194,7 +196,7 @@ ID2D1Effect* D2DGraphic::CreateScaleEffect(ID2D1Effect * imageEffect)
 
 void D2DGraphic::ScaleEffect(ID2D1Effect * Effect, D2D1_SIZE_F scaleSize, D2D1_POINT_2F centerPoint)
 {
-	Effect->SetValue(D2D1_SCALE_PROP_INTERPOLATION_MODE, D2D1_SCALE_INTERPOLATION_MODE_MULTI_SAMPLE_LINEAR);
+	//Effect->SetValue(D2D1_SCALE_PROP_INTERPOLATION_MODE, D2D1_SCALE_INTERPOLATION_MODE_MULTI_SAMPLE_LINEAR);
 	Effect->SetValue(D2D1_SCALE_PROP_CENTER_POINT, centerPoint);
 	Effect->SetValue(D2D1_SCALE_PROP_SCALE, scaleSize);
 }

@@ -18,6 +18,7 @@ HRESULT TileMapToolScene::Init()
 	RECT rect;
 	GetClientRect(g_hWnd, &rect);
 	D2D::GetSingleton()->GetD2DRenderTarget()->Resize({ (UINT32)rect.right, (UINT32)rect.bottom });
+	D2D::GetSingleton()->GetD2DRenderTarget()->SetTransform(Matrix3x2F::Scale({ 1.0f,1.0f }));
 
 	Resize((UINT)30, (UINT)11);
 
@@ -144,7 +145,7 @@ HRESULT TileMapToolScene::Init()
 	}
 	TilesDrawinfo.imageName = L"샘플타일";
 	TilesDrawinfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE | D2DIE_SCALE;
-	TilesDrawinfo.atlasInfo.frameSize = { (UINT32)SelectTile_Size.cx ,(UINT32)SelectTile_Size.cy };
+	TilesDrawinfo.atlasInfo.frameSize = { (float)SelectTile_Size.cx ,(float)SelectTile_Size.cy };
 	TilesDrawinfo.affineMatrix = Matrix3x2F::Rotation(0, {0,0});
 	TilesDrawinfo.scaleInfo.scaleCenterPoint = { (float)SelectTile_Size.cx / 2 , (float)SelectTile_Size.cy / 2 };
 	TilesDrawinfo.scaleInfo.scaleSize = { 2.0f,2.0f };
@@ -152,7 +153,7 @@ HRESULT TileMapToolScene::Init()
 	selectDrawinfo.imageName = L"샘플타일";
 	selectDrawinfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE | D2DIE_SCALE;;
 	selectDrawinfo.imageLocation = { (float)WINSIZE_TILE_MAP_X - (sampleTileSize.width) + tile_Size.cy / 2, (sampleTileSize.height + 100) };
-	selectDrawinfo.atlasInfo.frameSize = { (UINT32)SelectTile_Size.cx ,(UINT32)SelectTile_Size.cy };
+	selectDrawinfo.atlasInfo.frameSize = { (float)SelectTile_Size.cx ,(float)SelectTile_Size.cy };
 	selectDrawinfo.atlasInfo.frame.x = selectTile.frameX;
 	selectDrawinfo.atlasInfo.frame.y = selectTile.frameY;
 	selectDrawinfo.scaleInfo.scaleCenterPoint = { (float)SelectTile_Size.cx / 2 , (float)SelectTile_Size.cy / 2 };
@@ -358,27 +359,50 @@ void TileMapToolScene::Update()
 		this->CleanAll();
 	if (key->IsOnceKeyDown(QKey))
 	{
-		for (size_t i = 0; i < selectTiles.size(); i++)
+		if (isCollisionLayer)
 		{
-			selectTiles[i].rotation -= 90.0f;
-			if (selectTiles[i].rotation < 0)
-				selectTiles[i].rotation += 360.0f;
+			geometryinfo.rotation -= 90.0f;
+			if (geometryinfo.rotation < 0)
+				geometryinfo.rotation += 360.0f;
+		}
+		else
+		{
+			for (size_t i = 0; i < selectTiles.size(); i++)
+			{
+				selectTiles[i].rotation -= 90.0f;
+				if (selectTiles[i].rotation < 0)
+					selectTiles[i].rotation += 360.0f;
+			}
 		}
 	}
 	if (key->IsOnceKeyDown(EKey))
 	{
-		for (size_t i = 0; i < selectTiles.size(); i++)
+		if (isCollisionLayer)
 		{
-			selectTiles[i].rotation += 90.0f;
-			if (selectTiles[i].rotation > 360.0f)
-				selectTiles[i].rotation -= 360.0f;
+			geometryinfo.rotation += 90.0f;
+			if (geometryinfo.rotation > 360.0f)
+				geometryinfo.rotation += 360.0f;
+		}
+		else
+		{
+			for (size_t i = 0; i < selectTiles.size(); i++)
+			{
+				selectTiles[i].rotation += 90.0f;
+				if (selectTiles[i].rotation > 360.0f)
+					selectTiles[i].rotation -= 360.0f;
+			}
 		}
 	}
 	if (key->IsOnceKeyDown(RKey))
 	{
-		for (size_t i = 0; i < selectTiles.size(); i++)
+		if (isCollisionLayer)
+			geometryinfo.isRevers = !geometryinfo.isRevers;
+		else
 		{
-			selectTiles[i].rotation += 0.0f;
+			for (size_t i = 0; i < selectTiles.size(); i++)
+			{
+				selectTiles[i].isReverse = !selectTiles[i].isReverse;
+			}
 		}
 	}
 
@@ -527,7 +551,10 @@ void TileMapToolScene::Render()
 				TilesDrawinfo.imageLocation = { (float)tilerc.left + tile_Size.cx / 2,(float)tilerc.top + tile_Size.cy / 2 };
 				TilesDrawinfo.atlasInfo.frame.x = tiles[index].frameX;
 				TilesDrawinfo.atlasInfo.frame.y = tiles[index].frameY;
-				TilesDrawinfo.affineMatrix = Matrix3x2F::Rotation(tiles[index].rotation, {(float)SelectTile_Size.cx/2, (float)SelectTile_Size.cy / 2});
+				if (tiles[index].isReverse)
+					TilesDrawinfo.affineMatrix = Matrix3x2F::Rotation(tiles[index].rotation, { (float)SelectTile_Size.cx / 2, (float)SelectTile_Size.cy / 2 }) * Matrix3x2F::Scale({ -1.0f,1.0f }, { (float)SelectTile_Size.cx / 2, (float)SelectTile_Size.cy / 2 });
+				else
+					TilesDrawinfo.affineMatrix = Matrix3x2F::Rotation(tiles[index].rotation, { (float)SelectTile_Size.cx / 2, (float)SelectTile_Size.cy / 2 });
 				imageManager->ImageRander(TilesDrawinfo);
 			}
 		}
@@ -577,6 +604,7 @@ void TileMapToolScene::Render()
 	else
 	//
 	{
+		Matrix3x2F scale;
 		if (isSelectTileRender)
 			selectDrawinfo.scaleInfo.scaleSize = { 2.0f,2.0f };
 		else
@@ -602,12 +630,17 @@ void TileMapToolScene::Render()
 					//	continue;
 					//}
 					if (isSelectTileRender)
-						selectDrawinfo.imageLocation = { (float)g_ptMouse.x + (j * tile_Size.cx), (float)g_ptMouse.y + (i * tile_Size.cy) };	
+						selectDrawinfo.imageLocation = { (float)g_ptMouse.x + (j * (tile_Size.cx-1)), (float)g_ptMouse.y + (i * (tile_Size.cy-1)) };
 					else
 						selectDrawinfo.imageLocation = { (float)g_ptMouse.x + (j * SelectTile_Size.cx), (float)g_ptMouse.y + (i * SelectTile_Size.cy) };
+
+					if (selectTiles[count].isReverse)
+						scale = Matrix3x2F::Scale({ -1.0f,1.0f }, { 16.0f,16.0f });
+					else
+						scale = Matrix3x2F::Scale({ 1.0f,1.0f });
 					selectDrawinfo.atlasInfo.frame.x = selectTiles[count].frameX;
 					selectDrawinfo.atlasInfo.frame.y = selectTiles[count].frameY;
-					selectDrawinfo.affineMatrix = Matrix3x2F::Rotation(selectTiles[count++].rotation, { 16.0f,16.0f });
+					selectDrawinfo.affineMatrix = Matrix3x2F::Rotation(selectTiles[count++].rotation, { 16.0f,16.0f }) * scale;
 					imageManager->ImageRander(selectDrawinfo);
 				}
 			}
@@ -863,7 +896,8 @@ void TileMapToolScene::Draw(const RECT& tileRc)
 			{
 				tiles[i * tile_X + j].frameX = selectTiles[count].frameX;
 				tiles[i * tile_X + j].frameY = selectTiles[count].frameX;
-				tiles[i * tile_X + j].rotation = selectTiles[count++].rotation;
+				tiles[i * tile_X + j].rotation = selectTiles[count].rotation;
+				tiles[i * tile_X + j].isReverse = selectTiles[count++].rotation;
 			}
 		}
 	}
@@ -889,7 +923,8 @@ void TileMapToolScene::Draw(const RECT& tileRc)
 					}
 				tiles[index].frameX = selectTiles[count].frameX;
 				tiles[index].frameY = selectTiles[count].frameY;
-				tiles[index].rotation = selectTiles[count++].rotation;
+				tiles[index].rotation = selectTiles[count].rotation;
+				tiles[index].isReverse = selectTiles[count++].isReverse;
 				
 			}
 		}
@@ -953,6 +988,7 @@ void TileMapToolScene::RectDrawEnd(const RECT & tileRc)
 				tiles[(i + tileCamePos.y) * tile_X + (j + tileCamePos.x)].frameX = selectTile.frameX;
 				tiles[(i + tileCamePos.y) * tile_X + (j + tileCamePos.x)].frameY = selectTile.frameY;
 				tiles[(i + tileCamePos.y) * tile_X + (j + tileCamePos.x)].rotation = selectTile.rotation;
+				tiles[(i + tileCamePos.y) * tile_X + (j + tileCamePos.x)].isReverse = selectTile.isReverse;
 			}
 		}
 
@@ -1010,6 +1046,7 @@ void TileMapToolScene::Erase(const RECT& tileRc)
 		tiles[index].frameX = defaultFrame;
 		tiles[index].frameY = defaultFrame;
 		tiles[index].rotation = 0.0f;
+		tiles[index].rotation = false ;
 
 	}
 }
@@ -1030,6 +1067,7 @@ void TileMapToolScene::Dropper(const RECT& tileRc)
 		selectTile.frameX = tiles[index].frameX;
 		selectTile.frameY = tiles[index].frameY;
 		selectTile.rotation = tiles[index].rotation;
+		selectTile.isReverse = tiles[index].isReverse;
 		selectSize.cx = 1;
 		selectSize.cy = 1;
 		selectTiles.push_back(selectTile);
@@ -1045,6 +1083,7 @@ void TileMapToolScene::CleanAll()
 		tiles[i].frameX = defaultFrame;
 		tiles[i].frameY = defaultFrame;
 		tiles[i].rotation = 0.0f;
+		tiles[i].isReverse = false;
 		tiles[i].geometryinfo.ReSet();
 
 		SAFE_RELEASE(tilesgeometry[i]);
@@ -1191,14 +1230,20 @@ void TileMapToolScene::GetGeomrtyPoint(const GeometryInfo& geomrtyinfo)
 {
 	ID2D1GeometrySink* sink = NULL;
 
+	Matrix3x2F matrix = Matrix3x2F::Rotation(geomrtyinfo.rotation, { (float)g_ptMouse.x, (float)g_ptMouse.y });
+
+	if (geomrtyinfo.isRevers)
+		matrix = matrix * Matrix3x2F::Scale({ -1.0f,1.0f }, { (float)g_ptMouse.x, (float)g_ptMouse.y });
 	HRESULT s = geometry->Open(&sink);
 	switch (geomrtyinfo.geometrykind)
 	{
 	case GeometryKinds::Triangle:
 	{
-		sink->BeginFigure(D2D1::Point2F(g_ptMouse.x - geomrtyinfo.width / 2, g_ptMouse.y - geomrtyinfo.height / 2), D2D1_FIGURE_BEGIN_FILLED);
+		sink->BeginFigure(matrix.TransformPoint(D2D1::Point2F(g_ptMouse.x - geomrtyinfo.width / 2, g_ptMouse.y - geomrtyinfo.height / 2)), D2D1_FIGURE_BEGIN_FILLED);
 		D2D1_POINT_2F point[2] = { {g_ptMouse.x - geomrtyinfo.width / 2,g_ptMouse.y + geomrtyinfo.height / 2},
 									{g_ptMouse.x + geomrtyinfo.width / 2,g_ptMouse.y + geomrtyinfo.height / 2} };
+		point[0] = matrix.TransformPoint(point[0]);
+		point[1] = matrix.TransformPoint(point[1]);
 
 		sink->AddLines(point, 2);
 		// 피겨의 끝.
@@ -1207,10 +1252,15 @@ void TileMapToolScene::GetGeomrtyPoint(const GeometryInfo& geomrtyinfo)
 	}
 	case GeometryKinds::Square:
 	{
-		sink->BeginFigure(D2D1::Point2F(g_ptMouse.x - geomrtyinfo.width / 2, g_ptMouse.y - geomrtyinfo.height / 2), D2D1_FIGURE_BEGIN_FILLED);
+		sink->BeginFigure(matrix.TransformPoint(D2D1::Point2F(g_ptMouse.x - geomrtyinfo.width / 2, g_ptMouse.y - geomrtyinfo.height / 2)), D2D1_FIGURE_BEGIN_FILLED);
 		D2D1_POINT_2F point[3] = { {g_ptMouse.x - geomrtyinfo.width / 2,g_ptMouse.y + geomrtyinfo.height / 2},
 									{g_ptMouse.x + geomrtyinfo.width / 2,g_ptMouse.y + geomrtyinfo.height / 2},
 									{g_ptMouse.x + geomrtyinfo.width / 2,g_ptMouse.y - geomrtyinfo.height / 2} };
+
+		point[0] = matrix.TransformPoint(point[0]);
+		point[1] = matrix.TransformPoint(point[1]);
+		point[2] = matrix.TransformPoint(point[2]);
+
 
 		sink->AddLines(point, 3);
 		// 피겨의 끝.
@@ -1219,14 +1269,19 @@ void TileMapToolScene::GetGeomrtyPoint(const GeometryInfo& geomrtyinfo)
 		break;
 	case GeometryKinds::Trapezoid:
 	{
+		
 		//(g_ptMouse.x - geomrtyinfo.width / 2, g_ptMouse.y + (geomrtyinfo.height /2))
-		sink->BeginFigure(D2D1::Point2F(g_ptMouse.x - geomrtyinfo.width / 2, g_ptMouse.y - geomrtyinfo.height / 2), D2D1_FIGURE_BEGIN_FILLED);
+		sink->BeginFigure(matrix.TransformPoint(D2D1::Point2F(g_ptMouse.x - geomrtyinfo.width / 2, g_ptMouse.y - geomrtyinfo.height / 2)), D2D1_FIGURE_BEGIN_FILLED);
 		D2D1_POINT_2F point[4] = { {g_ptMouse.x - geomrtyinfo.width / 2,g_ptMouse.y + geomrtyinfo.height / 2},
 									{g_ptMouse.x + geomrtyinfo.width / 2,g_ptMouse.y + geomrtyinfo.height / 2},
 									{g_ptMouse.x + geomrtyinfo.width / 2,g_ptMouse.y - geomrtyinfo.height / 2} ,
 									{g_ptMouse.x - geomrtyinfo.width / 2,g_ptMouse.y - (geomrtyinfo.height / 2 + (geomrtyinfo._height))} };
 
 
+		point[0] = matrix.TransformPoint(point[0]);
+		point[1] = matrix.TransformPoint(point[1]);
+		point[2] = matrix.TransformPoint(point[2]);
+		point[3] = matrix.TransformPoint(point[3]);
 		sink->AddLines(point, 4);
 		// 피겨의 끝.
 		sink->EndFigure(D2D1_FIGURE_END_CLOSED);
@@ -1248,14 +1303,21 @@ void TileMapToolScene::GetGeomrtyPoint(ID2D1PathGeometry* const geometry, const 
 	HRESULT s = geometry->Open(&sink);
 	if (sink == nullptr)
 		return;
+	D2D1_POINT_2F start;
+	Matrix3x2F matrix = Matrix3x2F::Rotation(geomrtyinfo.rotation, { (float)rect.left + ((float)rect.right - (float)(rect.left)) / 2,(float)rect.top + ((float)rect.right - (float)(rect.left)) / 2 });
+	if (geomrtyinfo.isRevers)
+		matrix = matrix * Matrix3x2F::Scale({ -1.0f,1.0f }, { (float)rect.left + ((float)rect.right - (float)rect.left) / 2.0f, (float)rect.bottom + ((float)rect.bottom - (float)rect.top) / 2.0f });
 	switch (geomrtyinfo.geometrykind)
 	{
 	case GeometryKinds::Triangle:
 	{
-		sink->BeginFigure(D2D1::Point2F((float)rect.left , (float)rect.bottom), D2D1_FIGURE_BEGIN_FILLED);
+		start = D2D1::Point2F((float)rect.left, (float)rect.bottom);
+		start = matrix.TransformPoint(start);
+		sink->BeginFigure(start, D2D1_FIGURE_BEGIN_FILLED);
 		D2D1_POINT_2F point[2] = { (float)rect.left + (float)geomrtyinfo.width ,(float)rect.bottom ,
 											(float)rect.left  ,rect.bottom - (float)geomrtyinfo.height };
-
+		point[0] = matrix.TransformPoint(point[0]);
+		point[1] = matrix.TransformPoint(point[1]);
 		sink->AddLines(point, 2);
 		// 피겨의 끝.
 		sink->EndFigure(D2D1_FIGURE_END_CLOSED);
@@ -1263,11 +1325,14 @@ void TileMapToolScene::GetGeomrtyPoint(ID2D1PathGeometry* const geometry, const 
 	}
 	case GeometryKinds::Square:
 	{
-		sink->BeginFigure(D2D1::Point2F((float)rect.left, (float)rect.bottom), D2D1_FIGURE_BEGIN_FILLED);
+		start = matrix.TransformPoint({ (float)rect.left, (float)rect.bottom });
+		sink->BeginFigure(start, D2D1_FIGURE_BEGIN_FILLED);
 		D2D1_POINT_2F point[3] = {	{(float)rect.left + geomrtyinfo.width,(float)rect.bottom},
 											{(float)rect.left + geomrtyinfo.width,(float)rect.bottom - geomrtyinfo.height},
 											{(float)rect.left ,(float)rect.bottom - geomrtyinfo.height} };
-
+		point[0] = matrix.TransformPoint(point[0]);
+		point[1] = matrix.TransformPoint(point[1]);
+		point[2] = matrix.TransformPoint(point[2]);
 		sink->AddLines(point, 3);
 		// 피겨의 끝.
 		sink->EndFigure(D2D1_FIGURE_END_CLOSED);
@@ -1275,12 +1340,17 @@ void TileMapToolScene::GetGeomrtyPoint(ID2D1PathGeometry* const geometry, const 
 	break;
 	case GeometryKinds::Trapezoid:
 	{	
-		sink->BeginFigure(D2D1::Point2F((float)rect.left, (float)rect.bottom), D2D1_FIGURE_BEGIN_FILLED);
+		
+		start = matrix.TransformPoint({ (float)rect.left, (float)rect.bottom });
+		sink->BeginFigure(start, D2D1_FIGURE_BEGIN_FILLED);
 		D2D1_POINT_2F point[4] = {	(float)rect.left, (float)rect.bottom - (geomrtyinfo.height + geomrtyinfo._height),
 											{(float)rect.left + geomrtyinfo.width,(float)rect.bottom - geomrtyinfo.height},
 											{(float)rect.left + geomrtyinfo.width,(float)rect.bottom},
 											{(float)rect.left ,(float)rect.bottom}};
-
+		point[0] = matrix.TransformPoint(point[0]);
+		point[1] = matrix.TransformPoint(point[1]);
+		point[2] = matrix.TransformPoint(point[2]);
+		point[3] = matrix.TransformPoint(point[3]);
 		sink->AddLines(point, 4);
 		// 피겨의 끝.
 		sink->EndFigure(D2D1_FIGURE_END_CLOSED);

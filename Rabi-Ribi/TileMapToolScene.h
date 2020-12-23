@@ -51,6 +51,7 @@ struct TILE
 	int frameY;
 	TERRAIN  terrain;
 	float rotation;
+	bool isReverse = false;
 
 	// 기하학 정보(충돌처리에 사용)
 	GeometryInfo geometryinfo;
@@ -84,6 +85,7 @@ struct SelectTile
 	int frameX;
 	int frameY;
 	float rotation;
+	bool isReverse = false;
 };
 
 struct LayerTile

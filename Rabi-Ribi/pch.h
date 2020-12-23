@@ -50,6 +50,9 @@ using namespace std;
 extern HWND g_hWnd;
 extern HINSTANCE	g_hInstance;
 extern POINT g_ptMouse;
+// 기본 윈도우 작업영역
+extern D2D_SIZE_U g_defaultWindowSize;
+extern DEVMODE g_dmSaved;
 
 struct Location
 {
@@ -79,6 +82,7 @@ struct GeometryInfo
 	float _height;
 	// 로테이션
 	float rotation;
+	bool isRevers;
 
 	void ReSet()
 	{
@@ -87,12 +91,15 @@ struct GeometryInfo
 		_width = 0.0f;
 		_height = 0.0f;
 		rotation = 0.0f;
+		isRevers = false;
 		geometrykind = GeometryKinds::None;
 	}
 
 	bool operator == (const GeometryInfo& geometry)
 	{
 		if (geometry.geometrykind != this->geometrykind)
+			return false;
+		if (geometry.isRevers != this->isRevers)
 			return false;
 		switch (geometrykind)
 		{
@@ -146,27 +153,27 @@ T Cast(U src)
 	return static_cast<T>(src);
 }
 
+#define WINSIZE_X 1280
+#define WINSIZE_Y 800
+#define WINSIZE_TILE_MAP_X		1600
+#define WINSIZE_TILE_MAP_Y		900
+
+
 inline void SetWindowSize(int startX, int startY, int sizeX, int sizeY)
 {
-
-#ifdef _DEBUG
 	// 윈도우 작업영역 지정
 	RECT rc;
 	rc.left = 0;
 	rc.top = 0;
 	rc.right = sizeX;
 	rc.bottom = sizeY;
+#ifdef _DEBUG
 #else
-	// 전체 화면
-	DEVMODE dmSaved;
-	EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dmSaved);
+	int width = GetSystemMetrics(SM_CXSCREEN);
+	int height = GetSystemMetrics(SM_CYSCREEN);
+	rc.right = width;
+	rc.bottom = height;
 
-	// 윈도우 작업영역 지정
-	RECT rc;
-	rc.left = 0;
-	rc.top = 0;
-	rc.right = dmSaved.dmPelsWidth;
-	rc.bottom = dmSaved.dmPelsHeight;
 #endif // _DEBUG
 
 
@@ -176,6 +183,9 @@ inline void SetWindowSize(int startX, int startY, int sizeX, int sizeY)
 
 	// 이동
 	MoveWindow(g_hWnd, startX, startY, rc.right - rc.left, rc.bottom - rc.top, true);
+
+	GetClientRect(g_hWnd, &rc);
+	g_defaultWindowSize = { (UINT)rc.right ,(UINT)rc.bottom };
 }
 
 
@@ -196,10 +206,7 @@ inline void SetWindowSize(int startX, int startY, int sizeX, int sizeY)
 #define SCENEMANAGER	GETMANAGER(SceneManager)
 
 
-#define WINSIZE_X 1280
-#define WINSIZE_Y 800
-#define WINSIZE_TILE_MAP_X		1600
-#define WINSIZE_TILE_MAP_Y		900
+
 
 #define SAFE_DELETE(x) \
 if (x) \
