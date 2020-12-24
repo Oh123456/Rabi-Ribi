@@ -729,17 +729,36 @@ void TileMapToolScene::Render()
 	//mp_path_geometry2->Open(&mp_sink2);
 
 	//// 피겨의 시작.(피겨의 시작점, 채우기 or 비우기)
-	//mp_sink2->BeginFigure(D2D1::Point2F(0, 0), D2D1_FIGURE_BEGIN_FILLED);
+	//mp_sink2->BeginFigure(D2D1::Point2F((float)g_ptMouse.x, (float)g_ptMouse.y), D2D1_FIGURE_BEGIN_FILLED);
 	//// 조각 추가.
-	//D2D1_POINT_2F points2[2] = { D2D1::Point2F(0 , 100), D2D1::Point2F(100 , 100) };
+	//D2D1_POINT_2F points2[2] = { D2D1::Point2F((float)g_ptMouse.x , (float)g_ptMouse.y + 110), D2D1::Point2F((float)g_ptMouse.x +80, (float)g_ptMouse.y+110 )};
 	//mp_sink2->AddLines(points2, 2);
 	//// 피겨의 끝.
 	//mp_sink2->EndFigure(D2D1_FIGURE_END_CLOSED);
 	//mp_sink2->Close();
 	//
+	//ID2D1PathGeometry* mp_path_geometry3 = NULL;
+	////mp_path_geometry->CompareWithGeometry(,,);
+	//D2D::GetSingleton()->GetD2DFactory()->CreatePathGeometry(&mp_path_geometry3);
+
+	//// 경로 기하에 조각들을 기록하기 위해서 기하 싱크를 얻음.
+	//ID2D1GeometrySink* mp_sink3 = NULL;
+	//mp_path_geometry3->Open(&mp_sink3);
+
+	//// 피겨의 시작.(피겨의 시작점, 채우기 or 비우기)
+	//mp_sink3->BeginFigure(D2D1::Point2F((float)0, (float)0), D2D1_FIGURE_BEGIN_FILLED);
+	//// 조각 추가.
+	//D2D1_POINT_2F points3[2] = { D2D1::Point2F(0,110), D2D1::Point2F((float) 80, (float)110) };
+	//mp_sink3->AddLines(points3, 2);
+	//// 피겨의 끝.
+	//mp_sink3->EndFigure(D2D1_FIGURE_END_CLOSED);
+	//mp_sink3->Close();
+
+
+
 	//D2D1_GEOMETRY_RELATION theRelation;
 	////for (int i = 0; i < 3000 ;i++)
-	//mp_path_geometry->CompareWithGeometry(mp_path_geometry2, Matrix3x2F::Translation((float)g_ptMouse.x, (float)g_ptMouse.y), &theRelation);
+	//mp_path_geometry->CompareWithGeometry(mp_path_geometry3, Matrix3x2F::Translation((float)g_ptMouse.x, (float)g_ptMouse.y), &theRelation);
 
 	//switch (theRelation)
 	//{

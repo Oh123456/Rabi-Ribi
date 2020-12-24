@@ -1,8 +1,8 @@
 #pragma once
-#include "pch.h"
+#include "ObjectBase.h"
 
 // 모든 클래스의 기본
-class Object
+class Object : public ObjectBase
 {
 	typedef multimap<ZOrder, Object*, greater<ZOrder>> Render_mapList;
 	typedef Render_mapList::const_iterator ObjectmultiMap_Const_Iterator;

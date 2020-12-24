@@ -1,8 +1,9 @@
 #include "TileMap.h"
 #include "TileMapToolScene.h"
-#include"D2DGraphic.h"
+#include "GeometryCollision.h"
+#include "D2DGraphic.h"
 
-bool TileMap::TILE_F::GetisRender()
+bool TILE_F::GetisRender()
 {
 	if ((frameX == defaultFrame) &
 		(frameY == defaultFrame))
@@ -10,7 +11,7 @@ bool TileMap::TILE_F::GetisRender()
 	return true;
 }
 
-TileMap::TILE_F& TileMap::TILE_F::operator = (TILE& tile)
+TILE_F& TILE_F::operator = (TILE& tile)
 {
 	this->rc.left = (float)tile.rc.left;
 	this->rc.top = (float)tile.rc.top;
@@ -53,6 +54,7 @@ HRESULT TileMap::Init()
 void TileMap::Release()
 {
 	SAFE_ARR_DELETE(tiles);
+
 #ifdef _DEBUG
 	for (int i = 0; (UINT)i < tile_X*tile_Y;i++)
 		SAFE_RELEASE(debug_Tilesgeometry[i]);
@@ -74,29 +76,44 @@ void TileMap::LoadTile(const char * fileName)
 	tempTile = new TILE[tile_X*tile_Y];
 #ifdef _DEBUG
 	debug_Tilesgeometry = new ID2D1PathGeometry*[tile_X*tile_Y];
-	isDebug_Render = true;
+	isDebug_Render = false;
 #endif // _DEBUG
 	ReadFile(hFile, tempTile, size[0] * size[1] * sizeof(TILE), &readByte, NULL);
+	ID2D1PathGeometry* pathGeometry;
+	ID2D1Factory* d2dFactory = D2D::GetSingleton()->GetD2DFactory();
+	int index;
 	for (int i = 0; (UINT)i < tile_Y; i++)
 	{
 		for (int j = 0; (UINT)j < tile_X; j++)
 		{
+			index = i * tile_X + j;
 			// 맵툴에서는 64 *64 사이즈엿으나  인겜에서는 32*32 사이즈로 변경
-			SetRect(&tempTile[i * tile_X + j].rc,
+			SetRect(&tempTile[index].rc,
 				j * TILESIZE , i * TILESIZE,
 				(j + 1) * TILESIZE, (i + 1) * TILESIZE);
-			tempTile[i * tile_X + j].geometryinfo.width /= 2;
-			tempTile[i * tile_X + j].geometryinfo._width /= 2;
-			tempTile[i * tile_X + j].geometryinfo.height /= 2;
-			tempTile[i * tile_X + j].geometryinfo._height /= 2;
-			tiles[i * tile_X + j] = tempTile[i * tile_X + j];
-			tiles[i * tile_X + j].rc.left -= j *	0.8f;
-			tiles[i * tile_X + j].rc.top -= i *		0.8f;
-			tiles[i * tile_X + j].rc.right -= j *	0.8f;
-			tiles[i * tile_X + j].rc.bottom -= i *	0.8f;
-
-			if (tempTile[i * tile_X + j].GetisRender())
+			tempTile[index].geometryinfo.width /= 2;
+			tempTile[index].geometryinfo._width /= 2;
+			tempTile[index].geometryinfo.height /= 2;
+			tempTile[index].geometryinfo._height /= 2;
+			tiles[index] = tempTile[index];
+			tiles[index].rc.left -= j *		0.8f;
+			tiles[index].rc.top -= i *		0.8f;
+			tiles[index].rc.right -= j *	0.8f;
+			tiles[index].rc.bottom -= i *	0.8f;
+			tiles[index].SetLocation({ tiles[index].rc.left + 16.0f, tiles[index].rc.top + 16.0f });
+			tiles[index].SetSize({32.0f,32.0f});
+			if (tempTile[index].GetisRender())
 				renderList.push_back(&tiles[i * tile_X + j]);
+			if (tempTile[index].geometryinfo.geometrykind != GeometryKinds::None)
+			{
+				pathGeometry = nullptr;
+				d2dFactory->CreatePathGeometry(&pathGeometry);
+				GetGeomrtyPoint(pathGeometry, tiles[index].geometryinfo, {0.0f,0.0f,32.0f,32.0f});
+				GeometryCollision* geometryCollision = new GeometryCollision;
+				geometryCollision->SetCollision(pathGeometry,&tiles[index]);
+				geometryCollision->info = tiles[index].geometryinfo;
+				collisionList.push_back(geometryCollision);
+			}
 
 #ifdef _DEBUG
 			debug_Tilesgeometry[i * tile_X + j] = nullptr;
@@ -121,7 +138,7 @@ void TileMap::Render()
 	ImageManager* imageManager = IMAGEMANAGER;      
 	D2D_RECT_F tilerc; 
 	// 보정값 
-	D2D_POINT_2F correctionValue = {startLocation.x + TILESIZE / 2 ,startLocation.y + TILESIZE / 2 };
+	D2D_POINT_2F correctionValue = {startLocation.x  ,startLocation.y  };
 	//for (int i = 0; (UINT)i < tile_X* tile_Y; i++)
 	//{
 	//	if (!tiles[i].GetisRender())
@@ -141,7 +158,7 @@ void TileMap::Render()
 	{
 		tile = *c_it;
 		tilerc = tile->rc;
-		TilesDrawinfo.imageLocation = { (float)tilerc.left+ correctionValue.x,(float)tilerc.top + correctionValue.y  };
+		TilesDrawinfo.imageLocation = { tile->GetLocation().x + correctionValue.x, tile->GetLocation().y + correctionValue.y  };
 		TilesDrawinfo.atlasInfo.frame.x = tile->frameX;
 		TilesDrawinfo.atlasInfo.frame.y = tile->frameY;
 		TilesDrawinfo.affineMatrix = Matrix3x2F::Rotation(tile->rotation, { TILESIZE / 2.0f,  TILESIZE / 2.0f });
@@ -178,10 +195,7 @@ void TileMap::Render()
 
 
 
-
-#ifdef _DEBUG
-
-void TileMap::GetGeomrtyPoint(ID2D1PathGeometry * const geometry, const GeometryInfo & geomrtyinfo, D2D_RECT_F rect)
+void TileMap::GetGeomrtyPoint(ID2D1PathGeometry* const geometry, const GeometryInfo & geomrtyinfo, D2D_RECT_F rect)
 {
 
 	ID2D1GeometrySink* sink = NULL;
@@ -213,9 +227,9 @@ void TileMap::GetGeomrtyPoint(ID2D1PathGeometry * const geometry, const Geometry
 	{
 		start = matrix.TransformPoint({ rect.left, rect.bottom });
 		sink->BeginFigure(start, D2D1_FIGURE_BEGIN_FILLED);
-		D2D1_POINT_2F point[3] = { {rect.left + geomrtyinfo.width,rect.bottom},
-											{rect.left + geomrtyinfo.width,rect.bottom - geomrtyinfo.height},
-											{rect.left ,rect.bottom - geomrtyinfo.height} };
+		D2D1_POINT_2F point[3] = {	{rect.left + geomrtyinfo.width,rect.bottom},
+									{rect.left + geomrtyinfo.width,rect.bottom - geomrtyinfo.height},
+									{rect.left ,rect.bottom - geomrtyinfo.height} };
 		point[0] = matrix.TransformPoint(point[0]);
 		point[1] = matrix.TransformPoint(point[1]);
 		point[2] = matrix.TransformPoint(point[2]);
@@ -254,4 +268,3 @@ void TileMap::GetGeomrtyPoint(ID2D1PathGeometry * const geometry, const Geometry
 }
 
 
-#endif // _DEBUG

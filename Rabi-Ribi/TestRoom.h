@@ -17,5 +17,7 @@ public:
 
 private:
 	ImageInfo testbg;
+	class Actor* player;
+	class TileMap* test;
 };
 

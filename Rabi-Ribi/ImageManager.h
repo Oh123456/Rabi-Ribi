@@ -111,6 +111,7 @@ public:
 	void Release();
 	ID2D1Effect* FindEffect(EFFECTKIND keyValue);
 	void ImageRander(const ImageInfo& imageInfo);
+	void ImageRander(ID2D1Bitmap* image ,const ImageInfo& imageInfo);
 	void LoadPng(LPCWSTR imageName);
 	void LoadPng(LPCWSTR keyValue ,LPCWSTR imageName);
 	ID2D1Bitmap* FindImage(LPCWSTR keyValue);

@@ -55,9 +55,6 @@ ID2D1Effect* ImageManager::FindEffect(EFFECTKIND keyValue)
 
 void ImageManager::ImageRander(const ImageInfo& imageInfo)
 {
-	UINT imageEffect = imageInfo.imageEffect;
-	ID2D1Effect* oldeffect = nullptr;
-	ID2D1Effect* effect = nullptr;
 	const_ImageMapiterator imagekey = images.find(imageInfo.imageName);
 	ID2D1Bitmap* bitmap;
 
@@ -69,13 +66,32 @@ void ImageManager::ImageRander(const ImageInfo& imageInfo)
 	}
 
 	bitmap = imagekey->second;
+
+	this->ImageRander(bitmap,imageInfo);
+
+}
+
+void ImageManager::ImageRander(ID2D1Bitmap * image, const ImageInfo & imageInfo)
+{
+	UINT imageEffect = imageInfo.imageEffect;
+	ID2D1Effect* oldeffect = nullptr;
+	ID2D1Effect* effect = nullptr;
+	ID2D1Bitmap* bitmap = image;
+
+	D2D* d2d = d2d->GetSingleton();
+	if (bitmap == nullptr)
+	{
+		//DEBUG_MASSAGE("이미지 렌더중 알맞는 키값의 이미지가 없습니다.\n");
+		return;
+	}
+
 	D2D1_SIZE_F bitmapSize = bitmap->GetSize();
 	D2D1_POINT_2F drawLocation = { imageInfo.imageLocation.x - bitmapSize.width / 2 ,imageInfo.imageLocation.y - bitmapSize.height / 2 };
 	if (imageInfo.imageEffect == 0)
 	{
-		
-		D2D1_RECT_F drawrc = {	imageInfo.imageLocation.x - bitmapSize.width / 2 ,imageInfo.imageLocation.y - bitmapSize.height / 2, 
-								imageInfo.imageLocation.x + bitmapSize.width / 2, imageInfo.imageLocation.y + bitmapSize.height / 2};
+
+		D2D1_RECT_F drawrc = { imageInfo.imageLocation.x - bitmapSize.width / 2 ,imageInfo.imageLocation.y - bitmapSize.height / 2,
+								imageInfo.imageLocation.x + bitmapSize.width / 2, imageInfo.imageLocation.y + bitmapSize.height / 2 };
 		d2d->GetDeviceContext()->DrawBitmap(bitmap, drawrc);
 		return;
 	}
@@ -104,7 +120,7 @@ void ImageManager::ImageRander(const ImageInfo& imageInfo)
 
 
 				D2D1_VECTOR_4F atlasSize;
-				
+
 				if (!imageInfo.atlasInfo.isCostumAtlas)
 					atlasSize = { (float)size.width * framx , (float)size.height *  framy,
 								  (float)size.width * (framx + 1) , (float)size.height * (framy + 1) };
@@ -162,7 +178,7 @@ void ImageManager::ImageRander(const ImageInfo& imageInfo)
 				effect = nullptr;
 			}
 			break;
-			
+
 		case EFFECTKIND::TINT:
 			if (imageEffect & D2DIE_TINT)
 			{
@@ -241,7 +257,7 @@ void ImageManager::ImageRander(const ImageInfo& imageInfo)
 					effect->SetInputEffect(0, oldeffect);
 				ID2D1Effect* alpha = this->FindEffect(EFFECTKIND::ALPHAMASK);
 				SpotLightingEffectInfo specularInfo = imageInfo.spotSpecularInfo;
-				d2d->SpotSpecularLightingEffect(effect, alpha , specularInfo.lightPoint, specularInfo.angle , specularInfo.focus, specularInfo.diffuse , specularInfo.lightColor);
+				d2d->SpotSpecularLightingEffect(effect, alpha, specularInfo.lightPoint, specularInfo.angle, specularInfo.focus, specularInfo.diffuse, specularInfo.lightColor);
 				oldeffect = alpha;
 				effect = nullptr;
 			}

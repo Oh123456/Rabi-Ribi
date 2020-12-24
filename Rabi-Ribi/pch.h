@@ -54,11 +54,13 @@ extern POINT g_ptMouse;
 extern D2D_SIZE_U g_defaultWindowSize;
 extern DEVMODE g_dmSaved;
 
-struct Location
-{
-	float x = 0.0f;
-	float y = 0.0f;
-};
+//struct Location
+//{
+//	float x = 0.0f;
+//	float y = 0.0f;
+//
+//	inline D2D_POINT_2F ToPOINT_2F() { return { x, y }; }
+//};
 
 enum class GeometryKinds
 {
@@ -146,12 +148,30 @@ T* Cast(U* src)
 	return dynamic_cast<T*>(src);
 }
 
+// 콘스트 다이나믹 캐스트
+template<typename T, typename U>
+T* Cast(const U* src)
+{
+	U* _src = const_cast<U*> (src);
+	return dynamic_cast<T*>(_src);
+}
+
 // 스타틱 캐스트
 template<typename T, typename U>
 T Cast(U src)
 {
 	return static_cast<T>(src);
 }
+
+// 콘스트 캐스트
+template<typename T, typename U>
+T Const_Cast(const U src)
+{
+	U _src = const_cast<U>(src);
+	return static_cast<T>(_src);
+}
+
+
 
 #define WINSIZE_X 1280
 #define WINSIZE_Y 800
