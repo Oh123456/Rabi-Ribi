@@ -21,6 +21,8 @@ HRESULT MainGame::Init()
 	scenManager->AddScene("Å×½ºÆ®·ë", CreateScene<TestRoom>());
 
 	scenManager->ChangeScene("¸ÊÅø¾À");
+
+
 	
 #ifdef _DEBUG
 	isFPS = true;

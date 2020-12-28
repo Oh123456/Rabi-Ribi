@@ -46,7 +46,7 @@ HRESULT TileMap::Init()
 	TilesDrawinfo.scaleInfo.scaleSize = { 1.0625f,1.0625f };
 	TilesDrawinfo.scaleInfo.scaleCenterPoint= { TILESIZE / 3.0f,  TILESIZE / 3.0f };
 	TilesDrawinfo.affineMatrix = Matrix3x2F::Rotation(0, { 0.0f,0.0f });
-	startLocation = { 0.0f,0.0f };
+	location = { 0.0f,0.0f };
 
 	return S_OK;
 }
@@ -111,8 +111,13 @@ void TileMap::LoadTile(const char * fileName)
 				GetGeomrtyPoint(pathGeometry, tiles[index].geometryinfo, {0.0f,0.0f,32.0f,32.0f});
 				GeometryCollision* geometryCollision = new GeometryCollision;
 				geometryCollision->SetCollision(pathGeometry,&tiles[index]);
-				geometryCollision->info = tiles[index].geometryinfo;
-				collisionList.push_back(geometryCollision);
+				geometryCollision->SetGeometryInfo(tiles[index].geometryinfo);
+				CollisionIndex index;
+				index.index = i * tile_X + j;
+				index.x = j;
+				index.y = i;
+				index.tileX_Size = tile_X;
+				collisionList.insert(make_pair(index, geometryCollision));
 			}
 
 #ifdef _DEBUG
@@ -138,7 +143,7 @@ void TileMap::Render()
 	ImageManager* imageManager = IMAGEMANAGER;      
 	D2D_RECT_F tilerc; 
 	// º¸Á¤°ª 
-	D2D_POINT_2F correctionValue = {startLocation.x  ,startLocation.y  };
+	D2D_POINT_2F correctionValue = {location.x  ,location.y  };
 	//for (int i = 0; (UINT)i < tile_X* tile_Y; i++)
 	//{
 	//	if (!tiles[i].GetisRender())

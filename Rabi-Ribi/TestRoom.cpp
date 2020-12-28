@@ -3,6 +3,8 @@
 #include "D2DGraphic.h"
 #include "Erina.h"
 #include "GeometryCollision.h"
+#include "CollisionManager.h"
+
 
 TestRoom::TestRoom()
 {
@@ -15,7 +17,7 @@ TestRoom::~TestRoom()
 HRESULT TestRoom::Init()
 {
 	test =CreateObject<TileMap>();
-	test->LoadTile("Save/Test1.map");
+	test->LoadTile("Save/Test2.map");
 	player = CreateObject<Erina>();
 	IMAGEMANAGER->LoadPng(L"테스트배경",L"forest3_a");
 	IMAGEMANAGER->LoadPng(L"Erina", L"Chacter/player_a");
@@ -25,6 +27,9 @@ HRESULT TestRoom::Init()
 	testbg.scaleInfo.scaleSize = { 3.0f,3.0f };
 	testbg.imageEffect = D2DIE_SCALE;
 	D2D::GetSingleton()->GetD2DRenderTarget()->SetTransform(Matrix3x2F::Scale({ 2.0f,2.2f }));
+
+	CreateObject<CollisionManager>(false)->SettingActor(this);
+
 	return S_OK;
 }
 
@@ -37,27 +42,82 @@ void TestRoom::Update()
 {
 	Super::Update();
 
-	list<GeometryCollision*> collisionlist = test->GetcollisionList();
-	list<GeometryCollision*>::const_iterator c_it;
-	ID2D1PathGeometry* playerCollision = const_cast<ID2D1PathGeometry*>(player->GetCollisionGeomtry());
-	const Location& playerLocation = player->GetLocation();
-	const SIZE_F& playerSize = player->GetSize();
+	//map<CollisionIndexInfo, GeometryCollision*> collisionlist = test->GetcollisionList();
+	//map<CollisionIndexInfo, GeometryCollision*>::const_iterator c_it;
+	//if (collisionlist.empty())
+	//	return;
 
-	// 플레이어의 LT;
-	D2D_POINT_2F playrLT = { (playerLocation.x - (playerSize.width/2)) ,(playerLocation.y - (playerSize.height/2)) };
-	GeometryCollision* tileCollision = nullptr;
-	for (c_it = collisionlist.begin(); c_it != collisionlist.end(); c_it++)
-	{
-		tileCollision = (*c_it);
-		if (tileCollision == nullptr)
-			continue;
-		if (tileCollision->CollisionHitCheck(playerCollision, playrLT))
-		{
-			player->SetLocation({ playerLocation.x, playerLocation.y - 0.98f });
-			playrLT.y = -0.98f;
-		}
+	//ID2D1PathGeometry* playerCollision = const_cast<ID2D1PathGeometry*>(player->GetCollisionGeomtry());
+	//const Location& playerLocation = player->GetLocation();
+	//const SIZE_F& playerSize = player->GetSize();
 
-	}
+	//// 플레이어의 LT;
+	//D2D_POINT_2F playrLT = { (playerLocation.x - (playerSize.width/2)) ,(playerLocation.y - (playerSize.height/2)) };
+	//GeometryCollision* tileCollision = nullptr;
+	//Character* cplayer = Cast<Character>(player);
+	////cplayer->SetFalling(true);
+	//bool ishit = false;
+	//Index_2U playerindex[4];// playerLocation.x;
+	//int LT_x = (int)playrLT.x / 32 ;
+	//int LT_y = (int)playrLT.y / 32;
+	//playerindex[0] = { LT_x , LT_y };
+	//playerindex[1] = { LT_x + 1 , LT_y };
+	//playerindex[2] = { LT_x , LT_y + 1};
+	//playerindex[3] = { LT_x + 1, LT_y + 1};
+
+	//// 상 4 좌우22 하 4
+	//GeometryCollision* topCollosion[4];
+	//GeometryCollision* SideCollosion[4];
+	//GeometryCollision* battomCollosion[4];
+
+	//c_it = collisionlist.begin();
+	//if (c_it == collisionlist.end())
+	//	return;
+	//CollisionIndexInfo begin = c_it->first;
+	//UINT tileX_Size = begin.tileX_Size;
+
+	//CollisionIndexInfo find;
+	//find.index = (LT_x - 1) + (LT_y + 2) * tileX_Size;
+	//c_it = collisionlist.find(find);
+	//battomCollosion[0] = nullptr;
+	//if (c_it != collisionlist.end())
+	//	battomCollosion[0] = c_it->second;
+
+	//find.index = (LT_x) + (LT_y + 2) * tileX_Size;
+	//c_it = collisionlist.find(find);
+	//battomCollosion[1] = nullptr;
+	//if (c_it != collisionlist.end())
+	//	battomCollosion[1] = c_it->second;
+
+
+	//find.index = (LT_x + 1) + (LT_y + 2) * tileX_Size;
+	//c_it = collisionlist.find(find);
+	//battomCollosion[2] = nullptr;
+	//if (c_it != collisionlist.end())
+	//	battomCollosion[2] = c_it->second;
+
+
+	//find.index = (LT_x + 2) + (LT_y + 2) * tileX_Size;
+	//c_it = collisionlist.find(find);
+	//battomCollosion[3] = nullptr;
+	//if (c_it != collisionlist.end())
+	//	battomCollosion[3] = c_it->second;
+
+	//cplayer->SetFalling(true);
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	if (battomCollosion[i])
+	//	{
+	//		if (battomCollosion[i]->CollisionHitCheck(playerCollision, playrLT))
+	//		{
+	//			cplayer->SetFalling(false);
+	//			
+	//		}
+	//	}
+	//}
+
+	//cplayer->MoveCharacter();
+	//collisionlist.find();
 
 
 }

@@ -23,9 +23,22 @@ public:
 	TILE_F& operator = (TILE& tile);
 };
 
+typedef struct CollisionIndexInfo
+{
+	bool operator<(const CollisionIndexInfo& src) const
+	{
+		if (this->index < src.index)
+			return true;
+		return false;
+	}
 
+	int index;
+	UINT tileX_Size;
+	int x;
+	int y;
+}CollisionIndex;
 
-class TileMap : public Object
+class TileMap : public Actor
 {
 
 public:
@@ -37,10 +50,10 @@ public:
 	void Update() override;
 
 	void LoadTile(const char* fileName);
-	void SetStartLocation(const Location& location) { this->startLocation = location; }
+	void SetStartLocation(const Location& location) { this->location = location; }
 
 	const list<TILE_F*>& GetRenderList() const { return renderList; }
-	const list<class GeometryCollision*>& GetcollisionList() const { return collisionList; }
+	const map<CollisionIndexInfo, class GeometryCollision*>& GetcollisionList() const { return collisionList; }
 private:
 	void GetGeomrtyPoint(ID2D1PathGeometry* const geometry, const GeometryInfo& geomrtyinfo, D2D_RECT_F rect);
 private:
@@ -48,9 +61,10 @@ private:
 	TILE_F* tiles;
 	UINT tile_X;
 	UINT tile_Y;
-	Location startLocation;
+	//Location startLocation;
 	list<TILE_F*> renderList;
-	list<class GeometryCollision*> collisionList;
+	//list<class GeometryCollision*> collisionList;
+	map<CollisionIndexInfo, class GeometryCollision*> collisionList;
 
 #ifdef _DEBUG
 	ID2D1PathGeometry** debug_Tilesgeometry;

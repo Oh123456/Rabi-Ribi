@@ -138,6 +138,9 @@
     <ClCompile Include="ObjectBase.cpp">
       <Filter>Object</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D2DGraphic.h">
@@ -223,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="ObjectBase.h">
       <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -34,6 +34,8 @@ HRESULT Erina::Init()
 	sink->Release();
 	//collisionGeomtry;
 
+
+	moveSpeed = 1.0f;
 	return S_OK;
 }
 
@@ -43,16 +45,32 @@ void Erina::Release()
 
 void Erina::Update()
 {
-	location.y += 0.98f;
+	
+	geomtryLocation = location;
+	if (isFalling)
+	{
+		acceleration = 0.98f ;
+		geomtryLocation.y += acceleration;
+	}
+	else
+		acceleration = 0.0f;
 	imageInfo.imageLocation = location;
+
 	if (KEYMANAGER->IsStayKeyDown(VK_UP))
-		location.y -= 1.5f;
+	{
+		isFalling = true;
+		location.y -= 12.8f;
+		geomtryLocation.y -= 12.8f;
+	}
 	if (KEYMANAGER->IsStayKeyDown(VK_DOWN))
-		location.y += 1.5f;
+		geomtryLocation.y += moveSpeed * (TIMERMANAGER->GettimeElapsed() * 100.0f);
 	if (KEYMANAGER->IsStayKeyDown(VK_LEFT))
-		location.x -= 1.5f;
+		geomtryLocation.x -= moveSpeed * (TIMERMANAGER->GettimeElapsed() * 100.0f);
 	if (KEYMANAGER->IsStayKeyDown(VK_RIGHT))
-		location.x += 1.5f;
+		geomtryLocation.x += moveSpeed * (TIMERMANAGER->GettimeElapsed() * 100.0f);
+
+
+
 }
 
 void Erina::Render()
