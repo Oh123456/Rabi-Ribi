@@ -9,7 +9,6 @@ SoundManager::SoundManager()
 
 SoundManager::~SoundManager()
 {
-	this->Release();
 }
 
 HRESULT SoundManager::Init()
@@ -35,6 +34,7 @@ void SoundManager::Release()
 
 	system->close();
 	system->release();
+	Super::ReleaseSingleton();
 }
 
 void SoundManager::Update()

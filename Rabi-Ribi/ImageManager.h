@@ -75,7 +75,7 @@ struct ImageInfo
 	// 아틀라스 사이즈
 	AtlasInfo atlasInfo;
 	// 아핀 효과 행렬
-	D2D1_MATRIX_3X2_F affineMatrix = D2D1_MATRIX_3X2_F();
+	D2D1_MATRIX_3X2_F affineMatrix = Matrix3x2F::Identity();
 	// 스케일 사이즈
 	ScaleEffectInfo scaleInfo;
 	// 틴트 효과 색
@@ -106,7 +106,7 @@ class ImageManager :public Singleton<ImageManager>
 	typedef std::map <EFFECTKIND, ID2D1Effect*> EffectMap;
 	typedef std::map <EFFECTKIND, ID2D1Effect*>::const_iterator const_EffectMapiterator;
 public:
-	~ImageManager() { this->Release(); }
+	~ImageManager() { }
 	void Init();
 	void Release();
 	ID2D1Effect* FindEffect(EFFECTKIND keyValue);

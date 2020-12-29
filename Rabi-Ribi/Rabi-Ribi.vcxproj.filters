@@ -55,14 +55,23 @@
     <Filter Include="MapTool">
       <UniqueIdentifier>{c24d1ac3-0446-4699-b1fe-c1efc7205232}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Character">
+    <Filter Include="Manager\Collision">
+      <UniqueIdentifier>{9bec61ac-3ebb-40b4-84f7-2f6f1eaa6aaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Collision">
+      <UniqueIdentifier>{23e14037-e6df-4f1b-869e-0073e82bb959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PCH\etc">
+      <UniqueIdentifier>{6ad3e93f-bf0d-4d6f-b161-8da42c75778c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Actor">
+      <UniqueIdentifier>{36df7dc0-878e-4aaa-aedd-0b0b38f68024}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Actor\Character">
       <UniqueIdentifier>{78700ca3-68bc-4c45-af56-3024a437974b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Character\Player">
+    <Filter Include="Object\Actor\Character\Player">
       <UniqueIdentifier>{5594c3ab-8b12-445e-9c51-594754a00a8c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Object\Components">
-      <UniqueIdentifier>{33edbb7b-777c-4c26-b26a-0f4897803087}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -112,19 +121,10 @@
       <Filter>Object\MainGame</Filter>
     </ClCompile>
     <ClCompile Include="Character.cpp">
-      <Filter>Object\Character</Filter>
+      <Filter>Object\Actor\Character</Filter>
     </ClCompile>
     <ClCompile Include="Erina.cpp">
-      <Filter>Object\Character\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="TexturesComponent.cpp">
-      <Filter>Object\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="GeometryCollsionComponent.cpp">
-      <Filter>Object\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Actor.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Object\Actor\Character\Player</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>소스 파일</Filter>
@@ -132,13 +132,22 @@
     <ClCompile Include="Animinstance.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GeometryCollision.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="ObjectBase.cpp">
       <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
+      <Filter>Manager\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryCollision.cpp">
+      <Filter>Object\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <Filter>Object\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerInput.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ErinaAnimInstance.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -191,29 +200,14 @@
     <ClInclude Include="MainGame.h">
       <Filter>Object\MainGame</Filter>
     </ClInclude>
-    <ClInclude Include="VKKey.h">
-      <Filter>PCH</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>PCH</Filter>
     </ClInclude>
-    <ClInclude Include="Types.h">
-      <Filter>PCH</Filter>
-    </ClInclude>
     <ClInclude Include="Character.h">
-      <Filter>Object\Character</Filter>
+      <Filter>Object\Actor\Character</Filter>
     </ClInclude>
     <ClInclude Include="Erina.h">
-      <Filter>Object\Character\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="TexturesComponent.h">
-      <Filter>Object\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="GeometryCollsionComponent.h">
-      <Filter>Object\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Actor.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Object\Actor\Character\Player</Filter>
     </ClInclude>
     <ClInclude Include="Animation.h">
       <Filter>헤더 파일</Filter>
@@ -221,13 +215,37 @@
     <ClInclude Include="Animinstance.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GeometryCollision.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="ObjectBase.h">
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="CollisionManager.h">
+      <Filter>Manager\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryCollision.h">
+      <Filter>Object\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Cast.h">
+      <Filter>PCH\etc</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryInfo.h">
+      <Filter>PCH\etc</Filter>
+    </ClInclude>
+    <ClInclude Include="SafeRelease.h">
+      <Filter>PCH\etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>PCH\etc</Filter>
+    </ClInclude>
+    <ClInclude Include="VKKey.h">
+      <Filter>PCH\etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Object\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInput.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ErinaAnimInstance.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

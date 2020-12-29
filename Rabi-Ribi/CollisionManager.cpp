@@ -36,6 +36,32 @@ void CollisionManager::Update()
 	TerrainCollisionCheck();
 }
 
+void CollisionManager::Render()
+{
+	Super::Render();
+	SideCollosion[2];
+	for (int i = 0; i < 2; i++)
+	{
+		if (SideCollosion[i])
+			D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(Cast<TILE_F>(SideCollosion[i]->GetOwner())->rc, D2D::GetSingleton()->GetBrush());
+	}
+	D2D::GetSingleton()->GetBrush()->SetColor({ 1.0f,0,0.0f ,1.0f});
+	for (int i = 0; i < 4; i++)
+	{
+		if (battomCollosion[i])
+			D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(Cast<TILE_F>(battomCollosion[i]->GetOwner())->rc, D2D::GetSingleton()->GetBrush());
+	}
+
+	D2D::GetSingleton()->GetBrush()->SetColor({ 1.0f,0.0f,1.0f,1.0f });
+	for (int i = 0; i < 3; i++)
+	{
+		if (topCollosion[i])
+			D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(Cast<TILE_F>(topCollosion[i]->GetOwner())->rc, D2D::GetSingleton()->GetBrush());
+	}
+
+	D2D::GetSingleton()->GetBrush()->SetColor({ 0,0,1.0f,1.0f });
+}
+
 void CollisionManager::SettingActor(Object * secen)
 {
 	list<Object*>* allCalss =  secen->GetChilds();
@@ -92,22 +118,10 @@ void CollisionManager::TerrainCollisionCheck()
 		D2D_POINT_2F actorLT;// = { (playerLocation.x - (playerSize.width / 2)) ,(playerLocation.y - (playerSize.height / 2)) };
 		GeometryCollision* tileCollision = nullptr;
 		Character* cplayer = Cast<Character>(actor);
-		Index_2U playerindex[4];
-
-		// 상 4 좌우22 하 4
-		GeometryCollision* topCollosion[4];
-		GeometryCollision* SideCollosion[4];
-		GeometryCollision* battomCollosion[4];
 
 
 		for (c_setier = actors.begin(); c_setier != actors.end(); c_setier++)
 		{
-			for (int i = 0; i < 4; i++)
-			{
-				topCollosion[i] = nullptr;
-				SideCollosion[i] = nullptr;
-				battomCollosion[i] = nullptr;
-			}
 			actor = (*c_setier).actor;
 			actorCollision = const_cast<ID2D1PathGeometry*>(actor->GetCollisionGeomtry());
 			actorLocation = actor->GetGeomtryLocation();
@@ -123,9 +137,8 @@ void CollisionManager::TerrainCollisionCheck()
 			cplayer = Cast<Character>(actor);
 			//D2D::GetSingleton()->BeginDraw();
 			TerrainBottomCollision(actor, tileX_Size, actorLT);
-			bool up = TerrainTopCollision(actor, tileX_Size, actorLT);
 			bool side = TerrainSideCollision(actor, tileX_Size, actorLT);
-			
+			bool up = TerrainTopCollision(actor, tileX_Size, actorLT);
 			//D2D::GetSingleton()->EndDraw();
 			if (cplayer)
 			{
@@ -161,7 +174,6 @@ void CollisionManager::TerrainBottomCollision(Actor* actor, UINT tileX_Size, Loc
 	if (c_it == collisionlist.end())
 		return;
 	CollisionIndexInfo begin = c_it->first;
-	GeometryCollision* battomCollosion[4];
 	CollisionIndexInfo find;
 	int LT_x = (int)(actor->GetLocation().x / (32.0f - 0.8f));
 	int LT_y = (int)(actor->GetLocation().y / (32.0f - 0.8f));
@@ -176,7 +188,12 @@ void CollisionManager::TerrainBottomCollision(Actor* actor, UINT tileX_Size, Loc
 		if (c_it != collisionlist.end())
 			battomCollosion[i] = c_it->second;
 	}
-
+	// 벽아래는 갈수없기에 충돌 영역제거
+	for (int i = 0; i < 2; i++)
+	{
+		if ((SideCollosion[i] != nullptr) & (battomCollosion[i * 2] != nullptr))
+			battomCollosion[i * 2] = nullptr;
+	}
 	Character* character = Cast<Character>(actor);
 	bool isFalling = true;
 	for (int i = 0; i < 4; i++)
@@ -189,15 +206,14 @@ void CollisionManager::TerrainBottomCollision(Actor* actor, UINT tileX_Size, Loc
 			
 				if (character)
 				{
-					if (((i == 1) | (i == 3)))
+					if ((character->GetFalling()))
 					{
 						isFalling = false;
-						//if ((character->GetFalling()))
-						{
-							
-							//while (battomCollosion[i]->CollisionHitCheck(Cast<ID2D1PathGeometry>(actor->GetCollisionGeomtry()), player_LTLocation))
-							//	player_LTLocation.y -= 0.1f;
-						}
+						
+						
+						while (battomCollosion[i]->CollisionHitCheck(Cast<ID2D1PathGeometry>(actor->GetCollisionGeomtry()), player_LTLocation))
+							player_LTLocation.y -= 0.1f;
+						
 						
 					}
 				}
@@ -222,7 +238,6 @@ bool CollisionManager::TerrainSideCollision(Actor * actor, UINT tileX_Size, Loca
 	if (c_it == collisionlist.end())
 		return false;
 	CollisionIndexInfo begin = c_it->first;
-	GeometryCollision* SideCollosion[2];
 	CollisionIndexInfo find;
 	int LT_x = (int)(actor->GetLocation().x / (32.0f - 0.8f));
 	int LT_y = (int)(actor->GetLocation().y / (32.0f - 0.8f));
@@ -254,10 +269,8 @@ bool CollisionManager::TerrainSideCollision(Actor * actor, UINT tileX_Size, Loca
 				}
 				else if (i == 0)
 				{
-					Location actor_LT = { (actor->GetGeomtryLocation().x - (actor->GetSize().width / 2)) ,(actor->GetGeomtryLocation().y - (actor->GetSize().height / 2)) };
 					while (SideCollosion[i]->CollisionHitCheck(Cast<ID2D1PathGeometry>(actor->GetCollisionGeomtry()), player_LTLocation))
 						player_LTLocation.y -= 0.1f;
-					//actor->SetGeomtryLocation(actor_LT, actor->GetSize());
 					Cast<Character>(actor)->SetFalling(false);
 				}
 				else
@@ -269,10 +282,8 @@ bool CollisionManager::TerrainSideCollision(Actor * actor, UINT tileX_Size, Loca
 					}
 					else
 					{
-						Location actor_LT = player_LTLocation;
 						while (SideCollosion[i]->CollisionHitCheck(Cast<ID2D1PathGeometry>(actor->GetCollisionGeomtry()), player_LTLocation))
 							player_LTLocation.y -= 0.1f;
-						//actor->SetGeomtryLocation(actor_LT, actor->GetSize());
 						Cast<Character>(actor)->SetFalling(false);
 					}
 				}
@@ -294,21 +305,24 @@ bool CollisionManager::TerrainTopCollision(class Actor* actor, UINT tileX_Size, 
 	if (c_it == collisionlist.end())
 		return false;
 	CollisionIndexInfo begin = c_it->first;
-	GeometryCollision* topCollosion[3];
 	CollisionIndexInfo find;
 	int LT_x = (int)(actor->GetLocation().x / (32.0f - 0.8f));
 	int LT_y = (int)(actor->GetLocation().y / (32.0f - 0.8f));
 	for (int i = 0; i < 3; i++)
 	{
-		//if (i == 3)
-		//	find.index = (LT_x) + (LT_y + 1)* tileX_Size;
-		//else
-			find.index = (LT_x + i - 1) + (LT_y - 1) * tileX_Size;
+		find.index = (LT_x + i - 1) + (LT_y - 1) * tileX_Size;
 		
 		c_it = collisionlist.find(find);
 		topCollosion[i] = nullptr;
 		if (c_it != collisionlist.end())
 			topCollosion[i] = c_it->second;
+	}
+
+	// 벽위는 갈수없기에 충돌 영역제거
+	for (int i = 0; i < 2; i++)
+	{
+		if ((SideCollosion[i] != nullptr) & (topCollosion[i * 2] != nullptr))
+			topCollosion[i * 2] = nullptr;
 	}
 
 	Character* character = Cast<Character>(actor);

@@ -38,6 +38,11 @@ HRESULT MainGame::Init()
 void MainGame::Release()
 {
 	Super::Release();
+	IMAGEMANAGER->Release();
+	KEYMANAGER->Release();
+	TIMERMANAGER->Release();
+	SOUNDMANAGER->Release();
+	SCENEMANAGER->Release();
 }
 
 void MainGame::Update()

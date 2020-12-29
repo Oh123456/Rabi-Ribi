@@ -10,7 +10,7 @@ class Actor : public Object
 public:
 	Actor() : collisionGeomtry(nullptr){}
 	~Actor() {}
-	inline void SetCollisionGeometry(const ID2D1PathGeometry* const collisionGeomtry)		{ this->collisionGeomtry = const_cast<ID2D1PathGeometry*>(collisionGeomtry); }
+	void SetCollisionGeometry(const ID2D1PathGeometry* const collisionGeomtry);
 	inline void SetLocation(const Location& location)													{ this->location = location; }
 	void SetGeomtryLocation(const Location& letfTopLocation, const SIZE_F& size);
 	inline void SetGeomtryLocation(const Location& location)										{ this->geomtryLocation = location; }
@@ -18,10 +18,11 @@ public:
 
 
 
-	inline const ID2D1PathGeometry* GetCollisionGeomtry()									const { return this->collisionGeomtry; }
+	const ID2D1PathGeometry* GetCollisionGeomtry();
 	inline const Location& GetLocation()															const { return this->location; }
 	inline const Location& GetGeomtryLocation()												const { return this->geomtryLocation; }
 	inline const SIZE_F& GetSize()																	const { return this->size; }
+	inline const ImageInfo* GetImageInfo_ptr()															{ return &this->imageInfo;}
 public:
 	// 콜리전 충돌
 	OnHit onHit;
@@ -30,9 +31,11 @@ protected:
 	Location location;
 	SIZE_F size;
 	// 충돌영역
-	ID2D1PathGeometry* collisionGeomtry;
+	class GeometryCollision* collisionGeomtry;
+	//ID2D1PathGeometry* collisionGeomtry;
 	Location geomtryLocation;
 
-	class TexturesComponent* body;
+	// 이미지
+	ImageInfo imageInfo;
 };
 

@@ -46,8 +46,6 @@ using namespace std;
 #define DEBUG_MASSAGE(msg ,... )
 #endif
 
-
-//#define EFFECT_CHECK(x) if( x == nullptr)
 extern HWND g_hWnd;
 extern HINSTANCE	g_hInstance;
 extern POINT g_ptMouse;
@@ -55,130 +53,10 @@ extern POINT g_ptMouse;
 extern D2D_SIZE_U g_defaultWindowSize;
 extern DEVMODE g_dmSaved;
 
-//struct Location
-//{
-//	float x = 0.0f;
-//	float y = 0.0f;
-//
-//	inline D2D_POINT_2F ToPOINT_2F() { return { x, y }; }
-//};
-
-enum class GeometryKinds
-{
-	None,
-	Triangle,
-	Square,
-	// 사다리꼴
-	Trapezoid,
-
-};
-
-
-struct GeometryInfo
-{
-	GeometryKinds geometrykind;
-	float width;
-	float height;
-	// 사다리꼴만 사용
-	float _width;
-	// 사다리꼴만 사용
-	float _height;
-	// 로테이션
-	float rotation;
-	bool isRevers;
-
-	void ReSet()
-	{
-		width = 0.0f;
-		height = 0.0f;
-		_width = 0.0f;
-		_height = 0.0f;
-		rotation = 0.0f;
-		isRevers = false;
-		geometrykind = GeometryKinds::None;
-	}
-
-	bool operator == (const GeometryInfo& geometry)
-	{
-		if (geometry.geometrykind != this->geometrykind)
-			return false;
-		if (geometry.isRevers != this->isRevers)
-			return false;
-		switch (geometrykind)
-		{
-		case  GeometryKinds::None:
-			return false;
-			break;
-		case GeometryKinds::Square:
-		case GeometryKinds::Triangle:
-			if (this->width != geometry.width)
-				return false;
-			if (this->height != geometry.height)
-				return false;
-			break;
-		case GeometryKinds::Trapezoid:
-			if (this->width != geometry.width)
-				return false;
-			if (this->height != geometry.height)
-				return false;
-			if (this->_width != geometry._width)
-				return false;
-			if (this->_height != geometry._height)
-				return false;
-		default:
-			return false;
-			break;
-		}
-		return true;
-	}
-
-	bool operator != (const GeometryInfo& geometry)
-	{
-		if (*this == geometry)
-			return false;
-		return true;
-	}
-
-};
-
-
-// 다이나믹 캐스트
-template<typename T, typename U>
-T* Cast(U* src)
-{
-	return dynamic_cast<T*>(src);
-}
-
-// 콘스트 다이나믹 캐스트
-template<typename T, typename U>
-T* Cast(const U* src)
-{
-	U* _src = const_cast<U*> (src);
-	return dynamic_cast<T*>(_src);
-}
-
-// 스타틱 캐스트
-template<typename T, typename U>
-T Cast(U src)
-{
-	return static_cast<T>(src);
-}
-
-// 콘스트 캐스트
-template<typename T, typename U>
-T Const_Cast(const U src)
-{
-	U _src = const_cast<U>(src);
-	return static_cast<T>(_src);
-}
-
-
-
 #define WINSIZE_X 1280
 #define WINSIZE_Y 800
 #define WINSIZE_TILE_MAP_X		1600
 #define WINSIZE_TILE_MAP_Y		900
-
 
 inline void SetWindowSize(int startX, int startY, int sizeX, int sizeY)
 {
@@ -194,11 +72,7 @@ inline void SetWindowSize(int startX, int startY, int sizeX, int sizeY)
 	int height = GetSystemMetrics(SM_CYSCREEN);
 	rc.right = width;
 	rc.bottom = height;
-
 #endif // _DEBUG
-
-
-
 	// 실제 윈도우 크기 받아오기
 	AdjustWindowRect(&rc, WS_POPUPWINDOW, false);
 
@@ -209,13 +83,15 @@ inline void SetWindowSize(int startX, int startY, int sizeX, int sizeY)
 	g_defaultWindowSize = { (UINT)rc.right ,(UINT)rc.bottom };
 }
 
-
 #include "ImageManager.h"
 #include "KeyManager.h"
 #include "TimerManager.h"
 #include "SoundManager.h"
 #include "SceneManager.h"
 #include "Color.h"
+#include "Cast.h"
+#include "GeometryInfo.h"
+#include "SafeRelease.h"
 
 
 #define GETMANAGER(x) x::GetSingleton()
@@ -227,26 +103,3 @@ inline void SetWindowSize(int startX, int startY, int sizeX, int sizeY)
 #define SCENEMANAGER	GETMANAGER(SceneManager)
 
 
-
-
-#define SAFE_DELETE(x) \
-if (x) \
-{\
-	delete x;\
-	x = nullptr; \
-}
-
-#define SAFE_ARR_DELETE(x) \
-if (x) \
-{\
-	delete[] x;\
-	x = nullptr; \
-}
-
-
-#define SAFE_RELEASE(x) \
- if (x)\
-{ \
- 	x->Release(); \
-	x = nullptr; \
-}

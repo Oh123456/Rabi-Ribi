@@ -1,16 +1,21 @@
 #pragma once
-#include "pch.h"
+#include "Object.h"
 
-class Animinstance
+class Animinstance : public Object
 {
 public:
 	Animinstance();
 	~Animinstance();
-
-
 	
-private:
-	_INTERFACE IAnimation* playingAnimation;
-
+	virtual HRESULT Init();
+	virtual void Release();
+	virtual void Update();
+	virtual void Render();
+	
+	void SetOwner(class Actor* owner) { this->owner = owner; }
+protected:
+	struct IAnimation* playingAnimation;
+	class Actor* owner;
+	ImageInfo* ownerimageInfo;
 };
 

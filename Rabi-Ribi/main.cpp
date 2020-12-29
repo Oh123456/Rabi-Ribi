@@ -13,6 +13,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 D2D_SIZE_U	g_defaultWindowSize;
 DEVMODE g_dmSaved;  // 현재 해상도를 저장.. 왜냐 게임 끝나면 원래대로 돌려야 하니깐
 
+MainGame mainGame;
 
 void Loop();
 //메임함수
@@ -60,13 +61,9 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpsz
 	d2d->Init(g_hWnd);
 	d2d->FontCreate(L"궁서체");
 	
+	mainGame.Init();
 	//ImageManager::GetSingleton()->LoadPng(L"player_a");
 	// 메시지 큐에 있는 메시지 처리 CallBack
-
-	MainGame mainGame;
-	mainGame.Init();
-
-
 
 	while (true)
 	{
@@ -125,6 +122,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	}
 	case WM_DESTROY:
 		ChangeDisplaySettings(&g_dmSaved, CDS_RESET);
+		mainGame.Release();
+		D2D::GetSingleton()->Release();
 		PostQuitMessage(0);
 		break;
 	case WM_PAINT:

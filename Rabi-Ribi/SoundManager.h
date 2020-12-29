@@ -18,6 +18,7 @@ using namespace FMOD;
 const UINT MaxChannels = 10;
 class SoundManager : public Singleton<SoundManager>
 {
+	SUPER(Singleton<SoundManager>)
 public:
 	SoundManager();
 	virtual ~SoundManager();

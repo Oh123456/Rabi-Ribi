@@ -1,4 +1,5 @@
 #include "Character.h"
+#include "PlayerInput.h"
 
 void Character::MoveGeomtry(Location a)
 {
@@ -24,4 +25,8 @@ void Character::MoveCancel(bool isSide, bool isUp)
 void Character::MoveToNewGeomtryLocation(const Location & newLocation)
 {
 	SetGeomtryLocation(newLocation,this->size);
+}
+
+void Character::PlayerInputSetting(PlayerInput* playerInput)
+{
 }

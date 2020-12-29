@@ -53,8 +53,9 @@ HRESULT TileMap::Init()
 
 void TileMap::Release()
 {
+	Super::Release();
 	SAFE_ARR_DELETE(tiles);
-
+	SafemapRelease(collisionList);
 #ifdef _DEBUG
 	for (int i = 0; (UINT)i < tile_X*tile_Y;i++)
 		SAFE_RELEASE(debug_Tilesgeometry[i]);

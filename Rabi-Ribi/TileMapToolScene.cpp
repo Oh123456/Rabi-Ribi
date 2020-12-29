@@ -186,8 +186,11 @@ void TileMapToolScene::Release()
 	RECT rect;
 	GetClientRect(g_hWnd, &rect);
 	D2D::GetSingleton()->GetD2DRenderTarget()->Resize({ (UINT32)rect.right, (UINT32)rect.bottom });
-	geometry->Release();
-
+	if (geometry)
+	{
+		geometry->Release();
+		geometry = nullptr;
+	}
 }
 
 void TileMapToolScene::Update()

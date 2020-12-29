@@ -40,7 +40,7 @@ typedef struct CollisionIndexInfo
 
 class TileMap : public Actor
 {
-
+	SUPER(Actor);
 public:
 	TileMap();
 	~TileMap();

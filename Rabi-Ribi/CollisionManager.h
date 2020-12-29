@@ -28,7 +28,9 @@ public:
 	void Release() override;
 	// 프레임 단위 게임 로직 실행 ( 데이터 변경)
 	void Update() override;
-	
+	// 프레임 단위 출력 (이미지, 텍스트)
+	void Render() override;
+
 	void SettingActor(Object* secen);
 
 	void TerrainCollisionCheck();
@@ -41,6 +43,11 @@ private:
 	// 충돌 검사할 액터
 	set<ActorKey_Value> actors;
 	class TileMap* tileMap;
+
+
+	class GeometryCollision* SideCollosion[2];
+	class GeometryCollision* battomCollosion[4];
+	class GeometryCollision* topCollosion[3];
 
 };
 

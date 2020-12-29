@@ -7,7 +7,6 @@ KeyManager::KeyManager()
 
 KeyManager::~KeyManager()
 {
-	this->Release();
 }
 
 HRESULT KeyManager::Init()

@@ -15,10 +15,10 @@ GeometryCollision::~GeometryCollision()
 void GeometryCollision::Release()
 {
 	SAFE_RELEASE(geometry)
-	SAFE_DELETE(owner)
+	owner = nullptr;
 }
 
-void GeometryCollision::SetCollision(ID2D1PathGeometry* geometry, const ObjectBase* object)
+void GeometryCollision::SetCollision(ID2D1PathGeometry* geometry, const Actor* object)
 {
 	this->geometry = geometry;
 	owner = object;

@@ -29,6 +29,8 @@ public:
 	void MoveCharacter();
 	void MoveCancel(bool isSide = true, bool isUp = true);
 	void MoveToNewGeomtryLocation(const Location& newLocation );
+
+	virtual void PlayerInputSetting(class PlayerInput* playerInput);
 public:
 	// 지형과의 충돌
 	OnTerrainCollion onTerrainCollion;
