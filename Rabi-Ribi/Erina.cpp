@@ -3,11 +3,15 @@
 #include "GeometryCollision.h"
 #include "PlayerInput.h"
 #include "ErinaAnimInstance.h"
+#include "Hammer.h"
 
 Erina::Erina()
 {
 	animmation = CreateObject<ErinaAnimInstance>();
 	animmation->SetOwner(this);
+
+
+	moveSpeed = 100.0f;
 }
 
 Erina::~Erina()
@@ -17,7 +21,8 @@ Erina::~Erina()
 
 HRESULT Erina::Init()
 {
-	location = { 350.0f,200.0f };                           
+	Super::Init();
+	location = { 350.0f,100.0f };                           
 	size = { 20.0f,32.0f };
 	imageInfo.imageName = L"Erina";
 	imageInfo.imageLocation = location;
@@ -43,9 +48,11 @@ HRESULT Erina::Init()
 
 	collisionGeomtry->SetCollision(collsion,this);
 	//collisionGeomtry;
+	geomtryLocation = location;
+	
 
+	pikoHammer = CreateObject<Hammer>();
 
-	moveSpeed = 1.0f;
 	return S_OK;
 }
 
@@ -58,25 +65,11 @@ void Erina::Release()
 void Erina::Update()
 {
 	Super::Update();
-	//
-	geomtryLocation = location;
-	if (isFalling)
-	{
-		acceleration = 0.98f*(TIMERMANAGER->GettimeElapsed() * 100.0f);
-		geomtryLocation.y += acceleration;
-	}
-	else
-	{
-		acceleration = 0.0f;
-		animKinds = ErinaAnimmationKinds::Idle;
-	}
-	imageInfo.imageLocation = location;
 }
 
 void Erina::Render()
 {
 	Super::Render();
-	//IMAGEMANAGER->ImageRander(imageInfo);
 }
 
 void Erina::PlayerInputSetting(PlayerInput* playerInput)
@@ -92,11 +85,18 @@ void Erina::PlayerInputSetting(PlayerInput* playerInput)
 
 void Erina::MoveUP()
 {
-	if (KEYMANAGER->GetKeyDown()[VK_UP])
+	// 점프가 끝났으면 초기화
+	if (((animKinds != AnimmationKinds::Jum) &
+		(animKinds != AnimmationKinds::Falling)) & (jumKeyDownTime >= JUM_KEYDOWN_TIME))
+		jumKeyDownTime = 0.0f;
+
+	if (KEYMANAGER->GetKeyDown()[VK_UP] & (jumKeyDownTime <= JUM_KEYDOWN_TIME))
 	{
 		this->isFalling = true;
+		animKinds = AnimmationKinds::Jum;
 		//location.y -= 12.8f;
-		this->geomtryLocation.y -= 12.8f* (TIMERMANAGER->GettimeElapsed() * 100.0f);
+		this->geomtryLocation.y -= 12.8f* 0.16f;
+		jumKeyDownTime += TIMERMANAGER->GettimeElapsed();
 	}
 	else if (KEYMANAGER->GetKeyDown()[VK_DOWN])
 		this->geomtryLocation.y += moveSpeed * (TIMERMANAGER->GettimeElapsed() * 100.0f);
@@ -106,14 +106,16 @@ void Erina::MoveSide()
 {
 	if (KEYMANAGER->GetKeyDown()[VK_LEFT])
 	{
-		this->geomtryLocation.x -= moveSpeed * (TIMERMANAGER->GettimeElapsed() * 100.0f);
-		animKinds = ErinaAnimmationKinds::Move_Left;
+		MoveSideValue(moveSpeed * -1.0f);
+		if (!isFalling)
+			animKinds = AnimmationKinds::Move_Left;
 		imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.0f,1.0f }, { 32.0f,32.0f });
 	}
 	else if (KEYMANAGER->GetKeyDown()[VK_RIGHT])
 	{
-		this->geomtryLocation.x += moveSpeed * (TIMERMANAGER->GettimeElapsed() * 100.0f);
-		animKinds = ErinaAnimmationKinds::Move_Right;
+		MoveSideValue(moveSpeed * 1.0f);
+		if (!isFalling)
+			animKinds = AnimmationKinds::Move_Right;
 		imageInfo.affineMatrix = Matrix3x2F::Scale({ -1.0f,1.0f }, { 32.0f,32.0f });
 	}
 }

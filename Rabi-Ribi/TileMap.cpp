@@ -127,6 +127,8 @@ void TileMap::LoadTile(const char * fileName)
 		}
 	}
 	CloseHandle(hFile);
+
+	CAMERA->SetMapMaxLocation({ (float)tile_X * 32.0f ,(float)tile_Y* 32.0f });
 }
 
 void TileMap::Update()
@@ -134,37 +136,25 @@ void TileMap::Update()
 #ifdef _DEBUG
 	if (KEYMANAGER->IsOnceKeyDown(VK_TAB))
 		isDebug_Render = !isDebug_Render;
-
 #endif
-}
 
+}
 
 void TileMap::Render()
 {
 	ImageManager* imageManager = IMAGEMANAGER;      
 	D2D_RECT_F tilerc; 
 	// 보정값 
-	D2D_POINT_2F correctionValue = {location.x  ,location.y  };
-	//for (int i = 0; (UINT)i < tile_X* tile_Y; i++)
-	//{
-	//	if (!tiles[i].GetisRender())
-	//		continue;
-	//	tilerc = tiles[i].rc;
-	//	TilesDrawinfo.imageLocation = { (float)tilerc.left + correctionValue.x,(float)tilerc.top + correctionValue.y };
-	//	TilesDrawinfo.atlasInfo.frame.x = tiles[i].frameX;
-	//	TilesDrawinfo.atlasInfo.frame.y = tiles[i].frameY;
-	//	TilesDrawinfo.affineMatrix = Matrix3x2F::Rotation(tiles[i].rotation, { TILESIZE / 2.0f,  TILESIZE / 2.0f })
-	//											///약간의 틈세가 있어서 그걸 매워야하는 스케일 충돌처리할때도 해야한다 기억하자
-	//										* Matrix3x2F::Scale({ 1.1f,1.1f }, { TILESIZE / 2.0f,  TILESIZE / 2.0f });
-	//	imageManager->ImageRander(TilesDrawinfo);
-	//}
+	location = CAMERA->GetLocation();
+	D2D_POINT_2F correctionValue = {location.x -16.0f ,location.y -16.0f };
 	list<TILE_F*>::const_iterator c_it;
 	TILE_F* tile;
 	for (c_it = renderList.begin();c_it != renderList.end(); c_it++)
 	{
 		tile = *c_it;
 		tilerc = tile->rc;
-		TilesDrawinfo.imageLocation = { tile->GetLocation().x + correctionValue.x, tile->GetLocation().y + correctionValue.y  };
+		TilesDrawinfo.imageLocation = { tilerc.left  - correctionValue.x,  tilerc.top - correctionValue.y  };
+		tile->SetLocation(TilesDrawinfo.imageLocation);
 		TilesDrawinfo.atlasInfo.frame.x = tile->frameX;
 		TilesDrawinfo.atlasInfo.frame.y = tile->frameY;
 		TilesDrawinfo.affineMatrix = Matrix3x2F::Rotation(tile->rotation, { TILESIZE / 2.0f,  TILESIZE / 2.0f });
@@ -173,7 +163,6 @@ void TileMap::Render()
 		imageManager->ImageRander(TilesDrawinfo);              
 
 	}
-
 #ifdef _DEBUG
 	if (isDebug_Render)
 	{
@@ -197,9 +186,6 @@ void TileMap::Render()
 
 	
 }
-
-
-
 
 void TileMap::GetGeomrtyPoint(ID2D1PathGeometry* const geometry, const GeometryInfo & geomrtyinfo, D2D_RECT_F rect)
 {

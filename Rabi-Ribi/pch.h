@@ -88,6 +88,7 @@ inline void SetWindowSize(int startX, int startY, int sizeX, int sizeY)
 #include "TimerManager.h"
 #include "SoundManager.h"
 #include "SceneManager.h"
+#include "Camera.h"
 #include "Color.h"
 #include "Cast.h"
 #include "GeometryInfo.h"
@@ -101,5 +102,6 @@ inline void SetWindowSize(int startX, int startY, int sizeX, int sizeY)
 #define TIMERMANAGER	GETMANAGER(TimerManager)
 #define SOUNDMANAGER	GETMANAGER(SoundManager)
 #define SCENEMANAGER	GETMANAGER(SceneManager)
+#define CAMERA			GETMANAGER(Camera)
 
 

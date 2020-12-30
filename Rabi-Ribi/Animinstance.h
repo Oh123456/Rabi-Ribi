@@ -1,6 +1,7 @@
 #pragma once
 #include "Object.h"
 
+struct IAnimation;
 class Animinstance : public Object
 {
 public:
@@ -12,10 +13,17 @@ public:
 	virtual void Update();
 	virtual void Render();
 	
-	void SetOwner(class Actor* owner) { this->owner = owner; }
+	void SetOwner(class Actor* owner);
+	const IAnimation* GetPlayingAnimation() const { return playingAnimation; }
+	const IAnimation* GetAnimation(string KeyValue);
+
 protected:
-	struct IAnimation* playingAnimation;
+	void ChangeAnimation(IAnimation* findAnim);
+	void PlayingAnimation(string animkeyValue);
+protected:
+	IAnimation* playingAnimation;
 	class Actor* owner;
 	ImageInfo* ownerimageInfo;
+	map<string, IAnimation*> animations;
 };
 

@@ -13,6 +13,7 @@ void Animation::Play()
 {
 	TIMERMANAGER->SetTimer(time, this, &Animation::NextIndex, speed);
 	isPlaying = true;
+	isEnd = false;
 	nowAnimIndex = startAnimIndex;
 }
 
@@ -20,6 +21,7 @@ void Animation::Stop()
 {
 	TIMERMANAGER->DeleteTimer(time);
 	isPlaying = false;
+	isEnd = true;
 }
 
 bool Animation::IsPlaying()
@@ -27,9 +29,9 @@ bool Animation::IsPlaying()
 	return isPlaying;
 }
 
-bool Animation::IsRevers()
+bool Animation::IsEnd()
 {
-	return this->isRevers;
+	return isEnd;
 }
 
 void Animation::Release()
@@ -44,13 +46,20 @@ void Animation::Render(ImageInfo* imageInfo)
 	IMAGEMANAGER->ImageRander(*imageInfo);
 }
 
-void Animation::Setting(const Index_2U & startAnimIndex, const Index_2U & endAnimIndex, float speed, bool isLoop , bool isRevers)
+void Animation::Setting(const Index_2U & startAnimIndex, const Index_2U & endAnimIndex, float speed, bool isLoop)
 {
 	this->startAnimIndex = startAnimIndex;
 	this->endAnimIndex = endAnimIndex;
+	this->loopAnimIndex = startAnimIndex;
+	this->loopendAnimIndex = endAnimIndex;
 	this->speed = speed;
 	this->isLoop = isLoop;
-	this->isRevers = isRevers;
+}
+
+void Animation::SettingLoopIndex(const Index_2U & startAnimIndex, const Index_2U & endAnimIndex)
+{
+	loopAnimIndex = startAnimIndex;
+	loopendAnimIndex = endAnimIndex;
 }
 
 void Animation::NextIndex()
@@ -63,11 +72,16 @@ void Animation::NextIndex()
 		if (nowAnimIndex.y > endAnimIndex.y)
 		{
 			if (isLoop)
-				nowAnimIndex.y = startAnimIndex.y;
+			{
+				nowAnimIndex = loopAnimIndex;
+				endAnimIndex = loopendAnimIndex;
+			}
 			else
 			{
+				nowAnimIndex = endAnimIndex;
 				TIMERMANAGER->DeleteTimer(time);
-				isPlaying = false;
+				isEnd = true;
+				//isPlaying = false;
 			}
 		}
 	}

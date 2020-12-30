@@ -61,7 +61,7 @@ public:
 			if (timerHandle.timerNum == 0)
 			{
 				Timer* newTimer = new Timer();
-				newTimer->Init(isNotDetailedTime);
+				newTimer->Init(!isNotDetailedTime);
 				timerHandle.timerNum = ++timerCount;
 				newTimer->SetTimer(object, fun, delay);
 				if (timers.find(timerHandle) != timers.end())
@@ -71,7 +71,7 @@ public:
 			else
 			{
 				Timer* newTimer = new Timer();
-				newTimer->Init(isNotDetailedTime);
+				newTimer->Init(!isNotDetailedTime);
 				newTimer->SetTimer(object, fun, delay);
 				timers.insert(make_pair(timerHandle, newTimer));
 			}

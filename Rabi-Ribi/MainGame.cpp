@@ -47,9 +47,9 @@ void MainGame::Release()
 
 void MainGame::Update()
 {
+	//CAMERA->Update();
 	Super::Update();
 	TIMERMANAGER->Update();
-
 	if (KEYMANAGER->IsOnceKeyUP(VK_F1))
 		isFPS = !isFPS;
 #ifdef _DEBUG

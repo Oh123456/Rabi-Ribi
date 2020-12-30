@@ -3,14 +3,27 @@
 
 DELEGATE(OnTerrainCollion);
 
+enum class AnimmationKinds
+{
+	Idle,
+	Move_Right,
+	Move_Left,
+	Jum,
+	Falling
+};
 
 class Character :public Actor
 {
 	SUPER(Actor);
 public:
-	Character()  : isFalling(true) , hp(0), maxHP(0) , damage(0) , moveSpeed(0){  };
+	Character()  :
+		isFalling(true) , hp(0), maxHP(0) , damage(0) , moveSpeed(0.0f) , jumSpeed(0.0f) ,
+		moveSideValue(0.0f), moveUpValue(0.0f), delayTime(0.0f) , animKinds(AnimmationKinds::Idle){ };
 	~Character() override {};
 
+	HRESULT Init()	override;
+	void Release()	override;
+	void Update()	override;
 
 	inline void SetMaxHP(int value)														{ this->maxHP = value;}
 	inline void SetHP(int value)														{ this->hp = value;}
@@ -31,6 +44,14 @@ public:
 	void MoveToNewGeomtryLocation(const Location& newLocation );
 
 	virtual void PlayerInputSetting(class PlayerInput* playerInput);
+
+	void SetAnimKinds(AnimmationKinds animKinds) { this->animKinds = animKinds; }
+	AnimmationKinds GetAnimKinds() { return animKinds; }
+protected:
+	void MoveSideValue(float value) { moveSideValue = value; }
+	void MoveUpValue(float value) { moveUpValue = value; }
+private:
+	void CharaterMove();
 public:
 	// 지형과의 충돌
 	OnTerrainCollion onTerrainCollion;
@@ -39,8 +60,16 @@ protected:
 	int maxHP;
 	int damage;
 	float moveSpeed;
+	float jumSpeed;
 	bool isFalling;
 	float acceleration;
-
-
+	float delayTime;
+	class Animinstance* animmation;
+	AnimmationKinds animKinds;
+private:
+	float moveSideValue;
+	float moveUpValue;
+private:
+	TimerHandle movementTimer;
+	float timerInterval;
 };

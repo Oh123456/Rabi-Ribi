@@ -39,27 +39,46 @@ void CollisionManager::Update()
 void CollisionManager::Render()
 {
 	Super::Render();
-	SideCollosion[2];
+#ifdef _DEBUG
+
 	for (int i = 0; i < 2; i++)
 	{
 		if (SideCollosion[i])
-			D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(Cast<TILE_F>(SideCollosion[i]->GetOwner())->rc, D2D::GetSingleton()->GetBrush());
+		{
+			TILE_F* tilef = Cast<TILE_F>(SideCollosion[i]->GetOwner());
+			D2D1_RECT_F debug_rc = { tilef->GetLocation().x - 16.0f,tilef->GetLocation().y - 16.0f,
+												tilef->GetLocation().x + 16.0f ,tilef->GetLocation().y + 16.0f };
+			D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(debug_rc, D2D::GetSingleton()->GetBrush());
+		}
 	}
-	D2D::GetSingleton()->GetBrush()->SetColor({ 1.0f,0,0.0f ,1.0f});
+	D2D::GetSingleton()->GetBrush()->SetColor({ 1.0f,0,0.0f ,1.0f });
 	for (int i = 0; i < 4; i++)
 	{
 		if (battomCollosion[i])
-			D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(Cast<TILE_F>(battomCollosion[i]->GetOwner())->rc, D2D::GetSingleton()->GetBrush());
+		{
+			TILE_F* tilef = Cast<TILE_F>(battomCollosion[i]->GetOwner());
+			D2D1_RECT_F debug_rc = { tilef->GetLocation().x - 16.0f,tilef->GetLocation().y - 16.0f,
+												tilef->GetLocation().x + 16.0f ,tilef->GetLocation().y + 16.0f };
+			D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(debug_rc, D2D::GetSingleton()->GetBrush());
+		}
 	}
 
 	D2D::GetSingleton()->GetBrush()->SetColor({ 1.0f,0.0f,1.0f,1.0f });
 	for (int i = 0; i < 3; i++)
 	{
 		if (topCollosion[i])
-			D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(Cast<TILE_F>(topCollosion[i]->GetOwner())->rc, D2D::GetSingleton()->GetBrush());
+		{
+			TILE_F* tilef = Cast<TILE_F>(topCollosion[i]->GetOwner());
+			D2D1_RECT_F debug_rc = { tilef->GetLocation().x - 16.0f,tilef->GetLocation().y - 16.0f,
+												tilef->GetLocation().x + 16.0f ,tilef->GetLocation().y + 16.0f };
+			D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(debug_rc, D2D::GetSingleton()->GetBrush());
+		}
 	}
 
 	D2D::GetSingleton()->GetBrush()->SetColor({ 0,0,1.0f,1.0f });
+#endif // _DEBUG
+
+	
 }
 
 void CollisionManager::SettingActor(Object * secen)
@@ -175,8 +194,8 @@ void CollisionManager::TerrainBottomCollision(Actor* actor, UINT tileX_Size, Loc
 		return;
 	CollisionIndexInfo begin = c_it->first;
 	CollisionIndexInfo find;
-	int LT_x = (int)(actor->GetLocation().x / (32.0f - 0.8f));
-	int LT_y = (int)(actor->GetLocation().y / (32.0f - 0.8f));
+	int LT_x = (int)((actor->GetLocation().x + CAMERA->GetLocation().x)/ (32.0f - 0.8f));
+	int LT_y = (int)((actor->GetLocation().y + CAMERA->GetLocation().y)/ (32.0f - 0.8f));
 	for (int i = 0; i < 4; i++)
 	{
 		if (i == 3)
@@ -200,25 +219,18 @@ void CollisionManager::TerrainBottomCollision(Actor* actor, UINT tileX_Size, Loc
 	{
 		if (battomCollosion[i])
 		{
-			//D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(Cast<TILE_F>(battomCollosion[i]->GetOwner())->rc, D2D::GetSingleton()->GetBrush());
 			if (battomCollosion[i]->CollisionHitCheck(Cast<ID2D1PathGeometry>(actor->GetCollisionGeomtry()), player_LTLocation))
 			{
 			
 				if (character)
 				{
-					if ((character->GetFalling()))
+					//if ((character->GetFalling()))
 					{
 						isFalling = false;
-						
-						
 						while (battomCollosion[i]->CollisionHitCheck(Cast<ID2D1PathGeometry>(actor->GetCollisionGeomtry()), player_LTLocation))
 							player_LTLocation.y -= 0.1f;
-						
-						
 					}
 				}
-				Object* onwer = Cast<Object>(battomCollosion[i]->GetOwner());
-				//actor->onHit.Execute(onwer);
 			}
 		}
 	}
@@ -239,8 +251,8 @@ bool CollisionManager::TerrainSideCollision(Actor * actor, UINT tileX_Size, Loca
 		return false;
 	CollisionIndexInfo begin = c_it->first;
 	CollisionIndexInfo find;
-	int LT_x = (int)(actor->GetLocation().x / (32.0f - 0.8f));
-	int LT_y = (int)(actor->GetLocation().y / (32.0f - 0.8f));
+	int LT_x = (int)((actor->GetLocation().x + CAMERA->GetLocation().x) / (32.0f - 0.8f));
+	int LT_y = (int)((actor->GetLocation().y + CAMERA->GetLocation().y) / (32.0f - 0.8f));
 	for (int i = 0; i < 2; i++)
 	{
 
@@ -306,8 +318,8 @@ bool CollisionManager::TerrainTopCollision(class Actor* actor, UINT tileX_Size, 
 		return false;
 	CollisionIndexInfo begin = c_it->first;
 	CollisionIndexInfo find;
-	int LT_x = (int)(actor->GetLocation().x / (32.0f - 0.8f));
-	int LT_y = (int)(actor->GetLocation().y / (32.0f - 0.8f));
+	int LT_x = (int)((actor->GetLocation().x + CAMERA->GetLocation().x) / (32.0f - 0.8f));
+	int LT_y = (int)((actor->GetLocation().y + CAMERA->GetLocation().y) / (32.0f - 0.8f));
 	for (int i = 0; i < 3; i++)
 	{
 		find.index = (LT_x + i - 1) + (LT_y - 1) * tileX_Size;

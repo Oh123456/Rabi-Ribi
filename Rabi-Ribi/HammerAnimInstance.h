@@ -1,19 +1,16 @@
 #pragma once
 #include "Animinstance.h"
-
-class ErinaAnimInstance : public Animinstance
+class HammerAnimInstance : public Animinstance
 {
 	SUPER(Animinstance);
 public:
-	ErinaAnimInstance();
-	~ErinaAnimInstance();
-
+	HammerAnimInstance();
+	~HammerAnimInstance();
 
 	HRESULT Init()	override;
 	void Release()	override;
 	void Update()	override;
 	void Render()	override;
-
 
 };
 

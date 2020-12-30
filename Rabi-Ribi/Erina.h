@@ -2,14 +2,10 @@
 #include "Character.h"
 
 //player
-enum class ErinaAnimmationKinds
-{
-	Idle,
-	Move_Right,
-	Move_Left,
-};
 
 
+
+#define JUM_KEYDOWN_TIME 0.10f
 class Erina : public Character
 {
 	SUPER(Character);
@@ -25,14 +21,11 @@ public:
 
 	void PlayerInputSetting(class PlayerInput* playerInput) override;
 
-	ErinaAnimmationKinds GetAnimKinds() { return animKinds; }
 private:
 	void MoveUP();
 	void MoveSide();
-
 private:
-	class Animinstance* animmation;
-
-	ErinaAnimmationKinds animKinds;
+	float jumKeyDownTime;
+	class Hammer* pikoHammer;
 };
 

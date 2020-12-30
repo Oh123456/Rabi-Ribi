@@ -18,7 +18,7 @@ TestRoom::~TestRoom()
 HRESULT TestRoom::Init()
 {
 	test =CreateObject<TileMap>();
-	test->LoadTile("Save/Test2.map");
+	test->LoadTile("Save/CameTest.map");
 	player = CreateObject<Erina>();
 	IMAGEMANAGER->LoadPng(L"테스트배경",L"forest3_a");
 	IMAGEMANAGER->LoadPng(L"Erina", L"Chacter/player_a");
@@ -27,10 +27,12 @@ HRESULT TestRoom::Init()
 	testbg.imageLocation = { 0.0f,0.0f };
 	testbg.scaleInfo.scaleSize = { 3.0f,3.0f };
 	testbg.imageEffect = D2DIE_SCALE;
-	D2D::GetSingleton()->GetD2DRenderTarget()->SetTransform(Matrix3x2F::Scale({ 2.0f,2.2f }));
+	CAMERA->SetZoom({ 2.0f,2.2f });
+	//D2D::GetSingleton()->GetD2DRenderTarget()->SetTransform(Matrix3x2F::Scale({ 2.0f,2.2f }));
 	Cast<Character>(player)->PlayerInputSetting(CreateObject<PlayerInput>(false));
 	CreateObject<CollisionManager>(true)->SettingActor(this);
 	
+	CAMERA->SetFocusActor(player);
 	return S_OK;
 }
 

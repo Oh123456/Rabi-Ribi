@@ -73,6 +73,15 @@
     <Filter Include="Object\Actor\Character\Player">
       <UniqueIdentifier>{5594c3ab-8b12-445e-9c51-594754a00a8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Actor\Weapone">
+      <UniqueIdentifier>{2b98ef58-8b5c-440d-866a-c4e214c3aa9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{7fdaf7c8-95d5-43d0-bc68-49d1e70f087f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{c0a35c7c-b021-4893-81db-10e2a8595984}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -126,12 +135,6 @@
     <ClCompile Include="Erina.cpp">
       <Filter>Object\Actor\Character\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Animation.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Animinstance.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="ObjectBase.cpp">
       <Filter>Object</Filter>
     </ClCompile>
@@ -148,6 +151,24 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ErinaAnimInstance.cpp">
+      <Filter>Object\Actor\Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Animinstance.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Object\Actor\Weapone</Filter>
+    </ClCompile>
+    <ClCompile Include="Hammer.cpp">
+      <Filter>Object\Actor\Weapone</Filter>
+    </ClCompile>
+    <ClCompile Include="HammerAnimInstance.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -209,12 +230,6 @@
     <ClInclude Include="Erina.h">
       <Filter>Object\Actor\Character\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Animinstance.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="ObjectBase.h">
       <Filter>Object</Filter>
     </ClInclude>
@@ -246,6 +261,24 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="ErinaAnimInstance.h">
+      <Filter>Object\Actor\Character\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Animinstance.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Object\Actor\Weapone</Filter>
+    </ClInclude>
+    <ClInclude Include="Hammer.h">
+      <Filter>Object\Actor\Weapone</Filter>
+    </ClInclude>
+    <ClInclude Include="HammerAnimInstance.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

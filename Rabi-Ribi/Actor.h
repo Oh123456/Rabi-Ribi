@@ -8,7 +8,7 @@ class Actor : public Object
 {
 	SUPER(Object);
 public:
-	Actor() : collisionGeomtry(nullptr){}
+	Actor() : collisionGeomtry(nullptr), IgnoreTerrain(false){}
 	~Actor() {}
 	void SetCollisionGeometry(const ID2D1PathGeometry* const collisionGeomtry);
 	inline void SetLocation(const Location& location)													{ this->location = location; }
@@ -23,6 +23,7 @@ public:
 	inline const Location& GetGeomtryLocation()												const { return this->geomtryLocation; }
 	inline const SIZE_F& GetSize()																	const { return this->size; }
 	inline const ImageInfo* GetImageInfo_ptr()															{ return &this->imageInfo;}
+	inline bool GetIgnoreTerrain()																	const { return  IgnoreTerrain; }
 public:
 	// 콜리전 충돌
 	OnHit onHit;
@@ -37,5 +38,6 @@ protected:
 
 	// 이미지
 	ImageInfo imageInfo;
+	bool IgnoreTerrain;
 };
 

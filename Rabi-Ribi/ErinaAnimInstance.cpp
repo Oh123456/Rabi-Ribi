@@ -14,8 +14,17 @@ ErinaAnimInstance::ErinaAnimInstance()
 	animations.insert(make_pair("Left", LeftAnim));
 
 	Animation* RightAnim = new Animation;
-	RightAnim->Setting({ 0,1 }, { 5,1 }, 0.10f, true , true);
+	RightAnim->Setting({ 0,1 }, { 5,1 }, 0.10f, true);
 	animations.insert(make_pair("Right", RightAnim));
+
+	Animation* JumAnim = new Animation;
+	JumAnim->Setting({ 0,2 }, { 3,2 }, 0.10f,false);
+	animations.insert(make_pair("Jum", JumAnim));
+
+	Animation* FallingAnim = new Animation;
+	FallingAnim->Setting({ 0,4 }, { 3,4 }, 0.10f);
+	FallingAnim->SettingLoopIndex({ 1,4 }, { 3,4 });
+	animations.insert(make_pair("Falling", FallingAnim));
 }
 
 ErinaAnimInstance::~ErinaAnimInstance()
@@ -36,51 +45,33 @@ void ErinaAnimInstance::Update()
 {
 	if (owner == nullptr)
 		return;
-	if (ownerimageInfo == nullptr)
-		ownerimageInfo = Cast<ImageInfo>(owner->GetImageInfo_ptr());
 	Erina* erina = Cast<Erina>(owner);
 
 	
 	switch (erina->GetAnimKinds())
 	{
 	default:
-	case ErinaAnimmationKinds::Idle:
+	case AnimmationKinds::Idle:
 		PlayingAnimation("Idle");
 		break;
-	case ErinaAnimmationKinds::Move_Right:
+	case AnimmationKinds::Move_Right:
 		PlayingAnimation("Right");
 		break;
-	case ErinaAnimmationKinds::Move_Left:
+	case AnimmationKinds::Move_Left:
 		PlayingAnimation("Left");
 		break;
+	case AnimmationKinds::Jum:
+		PlayingAnimation("Jum");
+		if (playingAnimation->IsEnd())
+			erina->SetAnimKinds(AnimmationKinds::Falling);
+		break;
+	case AnimmationKinds::Falling:
+		PlayingAnimation("Falling");
+		break;
 	}
-
-
-
 }
 
 void ErinaAnimInstance::Render()
 {
 	Super::Render();
-}
-
-void ErinaAnimInstance::ChangeAnimation(IAnimation* findAnim)
-{
-	map<string, struct IAnimation*>::const_iterator c_it;
-	for (c_it = animations.begin(); c_it != animations.end(); c_it++)
-	{
-		if (c_it->second != findAnim)
-			c_it->second->Stop();
-	}
-}
-
-void ErinaAnimInstance::PlayingAnimation(string animkeyValue)
-{
-	IAnimation* anim = animations.find(animkeyValue)->second;
-	ChangeAnimation(anim);
-	if (!anim->IsPlaying())
-	{
-		anim->Play();
-		playingAnimation = anim;
-	}
 }
