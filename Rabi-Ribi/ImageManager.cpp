@@ -309,6 +309,8 @@ void ImageManager::LoadPng(LPCWSTR imageName)
 
 void ImageManager::LoadPng(LPCWSTR keyValue, LPCWSTR imageName)
 {
+	if (images.find(keyValue) != images.end())
+		return;
 	wstring png = L".png";
 	wstring imageFullName = imageName + png;
 	imageFullName = defaultDirectory + imageFullName;

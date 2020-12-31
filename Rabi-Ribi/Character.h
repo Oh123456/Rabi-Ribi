@@ -9,7 +9,12 @@ enum class AnimmationKinds
 	Move_Right,
 	Move_Left,
 	Jum,
-	Falling
+	Falling,
+	Hit,
+	Attack1,
+	Attack2,
+	Attack3,
+	Attack4,
 };
 
 class Character :public Actor
@@ -18,7 +23,7 @@ class Character :public Actor
 public:
 	Character()  :
 		isFalling(true) , hp(0), maxHP(0) , damage(0) , moveSpeed(0.0f) , jumSpeed(0.0f) ,
-		moveSideValue(0.0f), moveUpValue(0.0f), delayTime(0.0f) , animKinds(AnimmationKinds::Idle){ };
+		moveSideValue(0.0f), moveUpValue(0.0f), delayTime(0.0f) , moveLock(false),animKinds(AnimmationKinds::Idle){ };
 	~Character() override {};
 
 	HRESULT Init()	override;
@@ -39,7 +44,7 @@ public:
 	inline bool GetFalling() { return this->isFalling; }
 
 	void MoveGeomtry(Location a);
-	void MoveCharacter();
+	virtual void MoveCharacter();
 	void MoveCancel(bool isSide = true, bool isUp = true);
 	void MoveToNewGeomtryLocation(const Location& newLocation );
 
@@ -47,6 +52,10 @@ public:
 
 	void SetAnimKinds(AnimmationKinds animKinds) { this->animKinds = animKinds; }
 	AnimmationKinds GetAnimKinds() { return animKinds; }
+
+	void SetMoveLock(bool value) { moveLock = value; }
+	bool GetMoveLocl() const { return moveLock; }
+
 protected:
 	void MoveSideValue(float value) { moveSideValue = value; }
 	void MoveUpValue(float value) { moveUpValue = value; }
@@ -62,9 +71,9 @@ protected:
 	float moveSpeed;
 	float jumSpeed;
 	bool isFalling;
+	bool moveLock;
 	float acceleration;
 	float delayTime;
-	class Animinstance* animmation;
 	AnimmationKinds animKinds;
 private:
 	float moveSideValue;

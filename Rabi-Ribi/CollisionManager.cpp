@@ -41,7 +41,34 @@ void CollisionManager::Render()
 	Super::Render();
 #ifdef _DEBUG
 
-	for (int i = 0; i < 2; i++)
+	list<GeometryCollision*>::const_iterator c_it;
+	ID2D1SolidColorBrush* brush = D2D::GetSingleton()->GetBrush();
+	int count = 0;
+	GeometryCollision* collision = nullptr;
+	for (c_it = debug_collisionBoxlist.begin(); c_it != debug_collisionBoxlist.end(); c_it++)
+	{
+		count++;
+		if (count <= 4)
+			brush->SetColor({ 1.0f,0,0.0f ,1.0f });
+		else if (count <= 6)
+			brush->SetColor({ 0,0,1.0f,1.0f });
+		else
+			brush->SetColor({ 1.0f,0.0f,1.0f,1.0f });
+
+		collision = *c_it;
+		if (collision)
+		{
+			TILE_F* tilef = Cast<TILE_F>(collision->GetOwner());
+			D2D1_RECT_F debug_rc = { tilef->GetLocation().x - 16.0f,tilef->GetLocation().y - 16.0f,
+												tilef->GetLocation().x + 16.0f ,tilef->GetLocation().y + 16.0f };
+			D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(debug_rc, brush);
+		}
+		if (count == 9)
+			count = 0;
+	}
+	brush->SetColor({ 0,0,1.0f,1.0f });
+
+	/*for (int i = 0; i < 2; i++)
 	{
 		if (SideCollosion[i])
 		{
@@ -75,7 +102,7 @@ void CollisionManager::Render()
 		}
 	}
 
-	D2D::GetSingleton()->GetBrush()->SetColor({ 0,0,1.0f,1.0f });
+	D2D::GetSingleton()->GetBrush()->SetColor({ 0,0,1.0f,1.0f });*/
 #endif // _DEBUG
 
 	
@@ -121,6 +148,10 @@ void CollisionManager::SettingActor(Object * secen)
 
 void CollisionManager::TerrainCollisionCheck()
 {
+#ifdef _DEBUG
+	debug_collisionBoxlist.clear();
+#endif // _DEBUG
+
 	if (tileMap)
 	{
 		map<CollisionIndexInfo, GeometryCollision*> collisionlist = tileMap->GetcollisionList();
@@ -141,6 +172,9 @@ void CollisionManager::TerrainCollisionCheck()
 
 		for (c_setier = actors.begin(); c_setier != actors.end(); c_setier++)
 		{
+			ZeroMemory(SideCollosion, sizeof(GeometryCollision*) * 2);
+			ZeroMemory(battomCollosion, sizeof(GeometryCollision*) * 4);
+			ZeroMemory(topCollosion, sizeof(GeometryCollision*) * 3);
 			actor = (*c_setier).actor;
 			actorCollision = const_cast<ID2D1PathGeometry*>(actor->GetCollisionGeomtry());
 			actorLocation = actor->GetGeomtryLocation();
@@ -236,6 +270,13 @@ void CollisionManager::TerrainBottomCollision(Actor* actor, UINT tileX_Size, Loc
 	}
 	if (character)
 		character->SetFalling(isFalling);
+
+
+#ifdef _DEBUG
+	for (int i =0; i<4 ;i++)
+		debug_collisionBoxlist.push_back(battomCollosion[i]);
+#endif // _DEBUG
+
 	
 }
 
@@ -262,6 +303,11 @@ bool CollisionManager::TerrainSideCollision(Actor * actor, UINT tileX_Size, Loca
 		if (c_it != collisionlist.end())
 			SideCollosion[i] = c_it->second;
 	}
+
+#ifdef _DEBUG
+	for (int i = 0; i < 2; i++)
+		debug_collisionBoxlist.push_back(SideCollosion[i]);
+#endif // _DEBUG
 
 	Character* character = Cast<Character>(actor);
 	for (int i = 0; i < 2; i++)
@@ -336,6 +382,11 @@ bool CollisionManager::TerrainTopCollision(class Actor* actor, UINT tileX_Size, 
 		if ((SideCollosion[i] != nullptr) & (topCollosion[i * 2] != nullptr))
 			topCollosion[i * 2] = nullptr;
 	}
+
+#ifdef _DEBUG
+	for (int i = 0; i < 3; i++)
+		debug_collisionBoxlist.push_back(topCollosion[i]);
+#endif // _DEBUG
 
 	Character* character = Cast<Character>(actor);
 	bool isFalling = true;

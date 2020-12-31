@@ -1,5 +1,6 @@
 #include "Character.h"
 #include "PlayerInput.h"
+#include "GeometryCollision.h"
 
 HRESULT Character::Init()
 {
@@ -10,6 +11,7 @@ HRESULT Character::Init()
 
 void Character::Release()
 {
+	Super::Release();
 	TIMERMANAGER->DeleteTimer(movementTimer);
 }
 
@@ -33,7 +35,8 @@ void Character::Update()
 	{
 		delayTime = 0.0f;
 		acceleration = 0.0f;
-		animKinds = AnimmationKinds::Idle;
+		if (!moveLock)
+			animKinds = AnimmationKinds::Idle;
 	}
 
 }

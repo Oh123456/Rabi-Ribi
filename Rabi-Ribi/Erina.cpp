@@ -23,11 +23,12 @@ HRESULT Erina::Init()
 {
 	Super::Init();
 	location = { 350.0f,100.0f };                           
-	size = { 20.0f,32.0f };
+	size = { 20.0f ,32.0f  };
 	imageInfo.imageName = L"Erina";
 	imageInfo.imageLocation = location;
 	imageInfo.atlasInfo.frameSize = { 64.0f,64.0f };
 	imageInfo.atlasInfo.frame = {0,0};
+	imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.0f,1.0f }, { 32.0f,32.0f });
 	imageInfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE;
 
 	ID2D1PathGeometry* collsion;
@@ -52,6 +53,7 @@ HRESULT Erina::Init()
 	
 
 	pikoHammer = CreateObject<Hammer>();
+	pikoHammer->SetOwner(this);
 
 	return S_OK;
 }
@@ -59,7 +61,7 @@ HRESULT Erina::Init()
 void Erina::Release()
 {
 	Super::Release();
-	SAFE_RELEASE(collisionGeomtry)
+	
 }
 
 void Erina::Update()
@@ -81,10 +83,14 @@ void Erina::PlayerInputSetting(PlayerInput* playerInput)
 
 	playerInput->BindInputKey(VK_LEFT, KeyInputKinds::StayKey_Down, this, &Erina::MoveSide);
 	playerInput->BindInputKey(VK_RIGHT, KeyInputKinds::StayKey_Down, this, &Erina::MoveSide);
+
+	playerInput->BindInputKey(ZKey, KeyInputKinds::Key_Down, this, &Erina::AttackPikoHammer);
 }
 
 void Erina::MoveUP()
 {
+	if (moveLock)
+		return;
 	// 점프가 끝났으면 초기화
 	if (((animKinds != AnimmationKinds::Jum) &
 		(animKinds != AnimmationKinds::Falling)) & (jumKeyDownTime >= JUM_KEYDOWN_TIME))
@@ -95,7 +101,7 @@ void Erina::MoveUP()
 		this->isFalling = true;
 		animKinds = AnimmationKinds::Jum;
 		//location.y -= 12.8f;
-		this->geomtryLocation.y -= 12.8f* 0.16f;
+		this->geomtryLocation.y -= 9.8f* 0.16f;
 		jumKeyDownTime += TIMERMANAGER->GettimeElapsed();
 	}
 	else if (KEYMANAGER->GetKeyDown()[VK_DOWN])
@@ -104,6 +110,8 @@ void Erina::MoveUP()
 
 void Erina::MoveSide()
 {
+	if (moveLock)
+		return;
 	if (KEYMANAGER->GetKeyDown()[VK_LEFT])
 	{
 		MoveSideValue(moveSpeed * -1.0f);
@@ -117,5 +125,29 @@ void Erina::MoveSide()
 		if (!isFalling)
 			animKinds = AnimmationKinds::Move_Right;
 		imageInfo.affineMatrix = Matrix3x2F::Scale({ -1.0f,1.0f }, { 32.0f,32.0f });
+	}
+}
+
+void Erina::AttackPikoHammer()
+{
+	if (!moveLock)
+	{
+		animKinds = AnimmationKinds::Attack1;
+		moveLock = true;
+	}
+	else
+	{
+		isNextAttack = false;
+		switch (animKinds)
+		{
+		case AnimmationKinds::Attack1:
+		case AnimmationKinds::Attack2:
+		case AnimmationKinds::Attack3:
+			isNextAttack = true;
+			break;
+		case AnimmationKinds::Attack4:
+			isNextAttack = false;
+			break;
+		}
 	}
 }

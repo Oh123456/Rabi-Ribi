@@ -5,7 +5,7 @@
 
 
 
-#define JUM_KEYDOWN_TIME 0.10f
+#define JUM_KEYDOWN_TIME 0.20f
 class Erina : public Character
 {
 	SUPER(Character);
@@ -21,11 +21,18 @@ public:
 
 	void PlayerInputSetting(class PlayerInput* playerInput) override;
 
+	void SetNextAttack(bool value) { isNextAttack = value; }
+	bool GetNextAttack() const { return isNextAttack; }
+
+	class Hammer* GetPikoHammer() { return pikoHammer; }
 private:
 	void MoveUP();
 	void MoveSide();
+
+	void AttackPikoHammer();
 private:
 	float jumKeyDownTime;
 	class Hammer* pikoHammer;
+	bool isNextAttack;
 };
 

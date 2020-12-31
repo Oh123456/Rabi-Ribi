@@ -48,6 +48,8 @@ private:
 	class GeometryCollision* SideCollosion[2];
 	class GeometryCollision* battomCollosion[4];
 	class GeometryCollision* topCollosion[3];
-
+#ifdef _DEBUG
+	list<GeometryCollision*> debug_collisionBoxlist;
+#endif // _DEBUG
 };
 

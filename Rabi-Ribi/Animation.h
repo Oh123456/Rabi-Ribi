@@ -8,6 +8,7 @@ _INTERFACE IAnimation
 	virtual void Stop() = 0;
 	virtual bool IsPlaying () = 0;
 	virtual bool IsEnd() = 0;
+	virtual const Index_2U& GetNowIndex() = 0;
 	virtual void Release() = 0;
 	virtual void Render(ImageInfo* imageInfo) = 0;
 };
@@ -22,6 +23,7 @@ public:
 	void Stop()		override;
 	bool IsPlaying()	override;
 	bool IsEnd()		override;
+	const Index_2U& GetNowIndex() override;
 	void Release()	override;
 	void Render(ImageInfo* imageInfo) override;
 	void Setting(const Index_2U& startAnimIndex, const Index_2U& endAnimIndex, float speed = 1.0f, bool isLoop = true);

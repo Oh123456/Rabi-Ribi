@@ -131,6 +131,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="D2DGraphic.cpp" />
+    <ClCompile Include="Eenemy.cpp" />
     <ClCompile Include="Erina.cpp" />
     <ClCompile Include="ErinaAnimInstance.cpp" />
     <ClCompile Include="GeometryCollision.cpp" />
@@ -143,6 +144,8 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectBase.cpp" />
     <ClCompile Include="PlayerInput.cpp" />
+    <ClCompile Include="Rabbit.cpp" />
+    <ClCompile Include="RabbitAnimInstance.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="TestRoom.cpp" />
@@ -164,6 +167,7 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="D2DGraphic.h" />
     <ClInclude Include="Delegate.h" />
+    <ClInclude Include="Eenemy.h" />
     <ClInclude Include="Erina.h" />
     <ClInclude Include="ErinaAnimInstance.h" />
     <ClInclude Include="GeometryCollision.h" />
@@ -177,6 +181,8 @@
     <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlayerInput.h" />
+    <ClInclude Include="Rabbit.h" />
+    <ClInclude Include="RabbitAnimInstance.h" />
     <ClInclude Include="SafeRelease.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Singleton.h" />

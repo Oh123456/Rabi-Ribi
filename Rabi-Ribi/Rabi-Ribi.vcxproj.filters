@@ -82,6 +82,12 @@
     <Filter Include="Camera">
       <UniqueIdentifier>{c0a35c7c-b021-4893-81db-10e2a8595984}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Actor\Weapone\pikoHammer">
+      <UniqueIdentifier>{c3770e8e-9f5d-45c9-a281-5e413c7c8f94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Actor\Character\Enemy">
+      <UniqueIdentifier>{a9591ebe-21ce-45f8-a4fc-df5cc9c05d56}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -166,9 +172,18 @@
       <Filter>Object\Actor\Weapone</Filter>
     </ClCompile>
     <ClCompile Include="Hammer.cpp">
-      <Filter>Object\Actor\Weapone</Filter>
+      <Filter>Object\Actor\Weapone\pikoHammer</Filter>
     </ClCompile>
     <ClCompile Include="HammerAnimInstance.cpp">
+      <Filter>Object\Actor\Weapone\pikoHammer</Filter>
+    </ClCompile>
+    <ClCompile Include="Eenemy.cpp">
+      <Filter>Object\Actor\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Rabbit.cpp">
+      <Filter>Object\Actor\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="RabbitAnimInstance.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -275,10 +290,19 @@
     <ClInclude Include="Weapon.h">
       <Filter>Object\Actor\Weapone</Filter>
     </ClInclude>
-    <ClInclude Include="Hammer.h">
-      <Filter>Object\Actor\Weapone</Filter>
-    </ClInclude>
     <ClInclude Include="HammerAnimInstance.h">
+      <Filter>Object\Actor\Weapone\pikoHammer</Filter>
+    </ClInclude>
+    <ClInclude Include="Hammer.h">
+      <Filter>Object\Actor\Weapone\pikoHammer</Filter>
+    </ClInclude>
+    <ClInclude Include="Eenemy.h">
+      <Filter>Object\Actor\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Rabbit.h">
+      <Filter>Object\Actor\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="RabbitAnimInstance.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

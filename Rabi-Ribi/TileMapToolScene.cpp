@@ -136,7 +136,7 @@ HRESULT TileMapToolScene::Init()
 							 j * tile_Size.cx,		 i * tile_Size.cy + renderOffset,
 							(j + 1) * tile_Size.cx,	(i + 1) * tile_Size.cy + renderOffset);
 
-			tiles[i * tile_X + j].terrain = TERRAIN::GRASS;
+			tiles[i * tile_X + j].terrain = TERRAIN::NOAML;
 			tiles[i * tile_X + j].frameX = defaultFrame;
 			tiles[i * tile_X + j].frameY = defaultFrame;
 			tiles[i * tile_X + j].rotation = 0.0f;
@@ -176,6 +176,7 @@ HRESULT TileMapToolScene::Init()
 	IsGridline = true;
 	layerTile = nullptr;
 	isLayerTileRender = false;
+	isTerraimLayer = false;
 	return S_OK;
 }
 
@@ -205,10 +206,32 @@ void TileMapToolScene::Update()
 
 	KeyManager* key = KeyManager::GetSingleton();
 	
+	if (isTerraimLayer)
+	{
+		if (key->IsOnceKeyDown(_1Key))
+			selectTile.terrain = TERRAIN::NOAML;
+		if (key->IsOnceKeyDown(_2Key))
+			selectTile.terrain = TERRAIN::BREAKING;
+		if (key->IsOnceKeyDown(_3Key))
+			selectTile.terrain = TERRAIN::SPAWN;
+	}
 
 
 	if ((key->IsStayKeyDown(VK_CONTROL)))
 	{
+		if (key->IsOnceKeyDown(VK_TAB))
+			isTerraimLayer = !isTerraimLayer;
+		if (key->IsStayKeyDown(VK_SHIFT))
+		{
+			if (key->IsOnceKeyDown(SKey))
+			{
+				DEBUG_MASSAGE("퀵 세이브\n");
+				QuickSave();
+
+			}
+		}
+
+
 		if (key->IsOnceKeyDown(VK_DELETE))
 			this->DeleteLayer();
 		// 레이어 토글
@@ -220,15 +243,6 @@ void TileMapToolScene::Update()
 		if (key->IsOnceKeyDown(VK_TAB))
 			IsGridline = !IsGridline;
 
-		if (key->IsStayKeyDown(VK_SHIFT))
-		{
-			if (key->IsOnceKeyDown(SKey))
-			{
-				DEBUG_MASSAGE("퀵 세이브\n");
-				QuickSave();
-
-			}
-		}
 
 		// 타일 이동
 		// 세밀 조정
@@ -562,21 +576,42 @@ void TileMapToolScene::Render()
 			}
 		}
 		// 격자 선
-		brush->SetColor(D2D1::ColorF(0xffffff));
+		
 		if (IsGridline)
 		{
+			float rectWidth = 1.0f;
+			int index = 0;
+			int index2 = 0;
 			for (int i = 0; i < tile_Render_Y; i++)
 			{
 				for (int j = 0; j < tile_Render_X; j++)
 				{
+					index2 = (tile_X * (i + tileCamePos.y)) + (j + tileCamePos.x);
 					index = (tile_X * i) + j;
 					tilerc = tiles[index].rc;
-					renderTarget->DrawRectangle({ (float)tilerc.left, (float)tilerc.top, (float)tilerc.right, (float)tilerc.bottom }, brush);
+					switch (tiles[index2].terrain)
+					{
+					default:
+					case TERRAIN::NOAML:
+						brush->SetColor(D2D1::ColorF(0xffffff));
+						rectWidth = 1.0f;
+						break;
+					case TERRAIN::BREAKING:
+						brush->SetColor(D2D1::ColorF(0xff0000));
+						rectWidth = 3.0f;
+						break;
+					case TERRAIN::SPAWN:
+						brush->SetColor(D2D1::ColorF(0xf0f00f));
+						rectWidth = 3.0f;
+						break;
+					}
+					;
+					renderTarget->DrawRectangle({ (float)tilerc.left, (float)tilerc.top, (float)tilerc.right, (float)tilerc.bottom }, brush, rectWidth);
 				}
 			}
 		}
 	}
-
+	brush->SetColor(D2D1::ColorF(0xffffff));
 	this->LayerTileRender();
 
 	if (isCollisionLayer)
@@ -607,44 +642,65 @@ void TileMapToolScene::Render()
 	else
 	//
 	{
-		Matrix3x2F scale;
-		if (isSelectTileRender)
-			selectDrawinfo.scaleInfo.scaleSize = { 2.0f,2.0f };
-		else
-			selectDrawinfo.scaleInfo.scaleSize = { 1.0f,1.0f };
-		if (selectTiles.size() != 0)
+		if (isTerraimLayer)
 		{
-			int count = 0;
-			float x, y;
-			for (int i = 0; i < selectSize.cy; i++)
+			switch (selectTile.terrain)
 			{
-				for (int j = 0; j < selectSize.cx; j++)
+			default:
+			case TERRAIN::NOAML:
+				brush->SetColor(D2D1::ColorF(0xffffff));
+				break;
+			case TERRAIN::BREAKING:
+				brush->SetColor(D2D1::ColorF(0xff0000));
+				break;
+			case TERRAIN::SPAWN:
+				brush->SetColor(D2D1::ColorF(0xf0f00f));
+				break;
+			}
+			renderTarget->DrawRectangle({(float)g_ptMouse.x - 32.0f , (float)g_ptMouse.y - 32.0f, 
+												(float)g_ptMouse.x + 32.0f , (float)g_ptMouse.y + 32.0f }, brush);
+		}
+		else
+		{
+			Matrix3x2F scale;
+			if (isSelectTileRender)
+				selectDrawinfo.scaleInfo.scaleSize = { 2.0f,2.0f };
+			else
+				selectDrawinfo.scaleInfo.scaleSize = { 1.0f,1.0f };
+			if (selectTiles.size() != 0)
+			{
+				int count = 0;
+				float x, y;
+				for (int i = 0; i < selectSize.cy; i++)
 				{
-					x = (float)g_ptMouse.x + (j * tile_Size.cx);
-					y = (float)g_ptMouse.y + (i * tile_Size.cy);
-					//if (x > (float)(tile_Size.cx * tile_X))
-					//{
-					//	count++;
-					//	continue;
-					//}
-					//if (x > (float)(tile_Size.cy * tile_Y))
-					//{
-					//	count++;
-					//	continue;
-					//}
-					if (isSelectTileRender)
-						selectDrawinfo.imageLocation = { (float)g_ptMouse.x + (j * (tile_Size.cx-1)), (float)g_ptMouse.y + (i * (tile_Size.cy-1)) };
-					else
-						selectDrawinfo.imageLocation = { (float)g_ptMouse.x + (j * SelectTile_Size.cx), (float)g_ptMouse.y + (i * SelectTile_Size.cy) };
+					for (int j = 0; j < selectSize.cx; j++)
+					{
+						x = (float)g_ptMouse.x + (j * tile_Size.cx);
+						y = (float)g_ptMouse.y + (i * tile_Size.cy);
+						//if (x > (float)(tile_Size.cx * tile_X))
+						//{
+						//	count++;
+						//	continue;
+						//}
+						//if (x > (float)(tile_Size.cy * tile_Y))
+						//{
+						//	count++;
+						//	continue;
+						//}
+						if (isSelectTileRender)
+							selectDrawinfo.imageLocation = { (float)g_ptMouse.x + (j * (tile_Size.cx - 1)), (float)g_ptMouse.y + (i * (tile_Size.cy - 1)) };
+						else
+							selectDrawinfo.imageLocation = { (float)g_ptMouse.x + (j * SelectTile_Size.cx), (float)g_ptMouse.y + (i * SelectTile_Size.cy) };
 
-					if (selectTiles[count].isReverse)
-						scale = Matrix3x2F::Scale({ -1.0f,1.0f }, { 16.0f,16.0f });
-					else
-						scale = Matrix3x2F::Scale({ 1.0f,1.0f });
-					selectDrawinfo.atlasInfo.frame.x = selectTiles[count].frameX;
-					selectDrawinfo.atlasInfo.frame.y = selectTiles[count].frameY;
-					selectDrawinfo.affineMatrix = Matrix3x2F::Rotation(selectTiles[count++].rotation, { 16.0f,16.0f }) * scale;
-					imageManager->ImageRander(selectDrawinfo);
+						if (selectTiles[count].isReverse)
+							scale = Matrix3x2F::Scale({ -1.0f,1.0f }, { 16.0f,16.0f });
+						else
+							scale = Matrix3x2F::Scale({ 1.0f,1.0f });
+						selectDrawinfo.atlasInfo.frame.x = selectTiles[count].frameX;
+						selectDrawinfo.atlasInfo.frame.y = selectTiles[count].frameY;
+						selectDrawinfo.affineMatrix = Matrix3x2F::Rotation(selectTiles[count++].rotation, { 16.0f,16.0f }) * scale;
+						imageManager->ImageRander(selectDrawinfo);
+					}
 				}
 			}
 		}
@@ -906,6 +962,22 @@ void TileMapToolScene::Draw(const RECT& tileRc)
 		return;
 	}
 
+	if (isTerraimLayer)
+	{
+		int yMax = min(tile_Render_X, selectSize.cy + indexY);
+		int xMax = min(tile_Render_Y, selectSize.cx + indexX);
+		int count = 0;
+		int index = 0;
+
+		index = ((indexY + tileCamePos.y) * tile_X + (indexX + tileCamePos.x));
+		if (tiles[index].terrain == selectTile.terrain)
+			return;
+		WorklistAdd();
+		tiles[index].terrain = selectTile.terrain;
+		WorklistAdd();
+		return;
+	}
+
 	bool isWorldAdd = false;
 	if (!isTileOver)
 	{
@@ -1069,6 +1141,7 @@ void TileMapToolScene::Erase(const RECT& tileRc)
 		tiles[index].frameY = defaultFrame;
 		tiles[index].rotation = 0.0f;
 		tiles[index].rotation = false ;
+		tiles[index].terrain = TERRAIN::NOAML;
 
 	}
 }
@@ -1107,6 +1180,7 @@ void TileMapToolScene::CleanAll()
 		tiles[i].rotation = 0.0f;
 		tiles[i].isReverse = false;
 		tiles[i].geometryinfo.ReSet();
+		tiles[i].terrain = TERRAIN::NOAML;
 
 		SAFE_RELEASE(tilesgeometry[i]);
 	}
@@ -1409,7 +1483,8 @@ void TileMapToolScene::Save()
 		// load map and enter training mode
 
 		string saveFileName = sfn.lpstrFile;
-		saveFileName = saveFileName + ".map";
+		if (saveFileName.find(".map") == string::npos)
+			saveFileName = saveFileName + ".map";
 		Save(saveFileName.c_str());
 		isOpen = true;
 	}

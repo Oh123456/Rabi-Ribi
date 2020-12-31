@@ -34,6 +34,11 @@ bool Animation::IsEnd()
 	return isEnd;
 }
 
+const Index_2U & Animation::GetNowIndex()
+{
+	return nowAnimIndex;
+}
+
 void Animation::Release()
 {
 	TIMERMANAGER->DeleteTimer(time);

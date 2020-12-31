@@ -34,11 +34,9 @@ enum class SizeKind
 
 enum class TERRAIN
 {
-	WALL,
-	GRASS,
-	EARTH,
-	WATER,
-	CEMENT,
+	NOAML,
+	BREAKING,
+	SPAWN,
 	END
 };
 
@@ -85,6 +83,7 @@ struct SelectTile
 	int frameX;
 	int frameY;
 	float rotation;
+	TERRAIN  terrain = TERRAIN::NOAML;
 	bool isReverse = false;
 };
 
@@ -186,6 +185,7 @@ private:
 	bool isTileOver;
 	// 충돌처리 영역 표시
 	bool isCollisionLayer;
+	bool isTerraimLayer; 
 	// 파일을 한번열었는지 파일을 열면 기본  경로가 바뀌여서 넣엇다
 	bool isOpen;
 	// 격자눈 표시 

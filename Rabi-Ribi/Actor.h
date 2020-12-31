@@ -10,6 +10,9 @@ class Actor : public Object
 public:
 	Actor() : collisionGeomtry(nullptr), IgnoreTerrain(false){}
 	~Actor() {}
+
+	void Release() override;
+
 	void SetCollisionGeometry(const ID2D1PathGeometry* const collisionGeomtry);
 	inline void SetLocation(const Location& location)													{ this->location = location; }
 	void SetGeomtryLocation(const Location& letfTopLocation, const SIZE_F& size);
@@ -23,7 +26,10 @@ public:
 	inline const Location& GetGeomtryLocation()												const { return this->geomtryLocation; }
 	inline const SIZE_F& GetSize()																	const { return this->size; }
 	inline const ImageInfo* GetImageInfo_ptr()															{ return &this->imageInfo;}
-	inline bool GetIgnoreTerrain()																	const { return  IgnoreTerrain; }
+	inline bool GetIgnoreTerrain()																	const { return IgnoreTerrain; }
+	inline class Animinstance* GetAnimInstance()												const { return animmation; }
+protected:
+	void SetGeomtryCollsion();
 public:
 	// 콜리전 충돌
 	OnHit onHit;
@@ -38,6 +44,7 @@ protected:
 
 	// 이미지
 	ImageInfo imageInfo;
+	class Animinstance* animmation;
 	bool IgnoreTerrain;
 };
 

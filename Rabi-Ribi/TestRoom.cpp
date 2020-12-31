@@ -5,6 +5,7 @@
 #include "GeometryCollision.h"
 #include "CollisionManager.h"
 #include "PlayerInput.h"
+#include "Rabbit.h"
 
 
 TestRoom::TestRoom()
@@ -20,6 +21,7 @@ HRESULT TestRoom::Init()
 	test =CreateObject<TileMap>();
 	test->LoadTile("Save/CameTest.map");
 	player = CreateObject<Erina>();
+	CreateObject<Rabbit>();
 	IMAGEMANAGER->LoadPng(L"테스트배경",L"forest3_a");
 	IMAGEMANAGER->LoadPng(L"Erina", L"Chacter/player_a");
 

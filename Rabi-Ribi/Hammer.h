@@ -3,6 +3,7 @@
 
 enum class HammerAnimationKinds
 {
+	None,
 	Attack_1,
 	Attack_2,
 	Attack_3,
@@ -26,7 +27,6 @@ public:
 	inline void SetAnimationKinds(HammerAnimationKinds animKinds) { this->animKinds = animKinds; }
 	inline HammerAnimationKinds GetAnimationKinds() const { return animKinds; }
 private:
-	class Animinstance* animmation;
 	HammerAnimationKinds animKinds;
 };
 
