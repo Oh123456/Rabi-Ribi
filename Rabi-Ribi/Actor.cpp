@@ -19,7 +19,7 @@ void Actor::SetGeomtryLocation(const Location & letfTopLocation, const SIZE_F & 
 	this->geomtryLocation.y = letfTopLocation.y + (size.height / 2.0f);
 }
 
-const ID2D1PathGeometry* Actor::GetCollisionGeomtry()
+const ID2D1PathGeometry* Actor::GetCollisionPathGeomtry()
 {
 	return this->collisionGeomtry->GetGeometry();
 }

@@ -12,6 +12,8 @@ Erina::Erina()
 
 
 	moveSpeed = 100.0f;
+
+	onHit.BindObject(this,&Erina::OnHit);
 }
 
 Erina::~Erina()
@@ -150,4 +152,9 @@ void Erina::AttackPikoHammer()
 			break;
 		}
 	}
+}
+
+void Erina::OnHit(Object* object)
+{
+	DEBUG_MASSAGE("面倒贸府 眉农 \n");
 }

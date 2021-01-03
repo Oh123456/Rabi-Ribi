@@ -39,6 +39,8 @@ private:
 	void TerrainBottomCollision(class Actor* actor, UINT tileX_Size, Location& player_LTLocation);
 	bool TerrainSideCollision(class Actor* actor, UINT tileX_Size, Location& player_LTLocation);
 	bool TerrainTopCollision(class Actor* actor, UINT tileX_Size, const Location& player_LTLocation);
+
+	void ActorCollision();
 private:
 	// 충돌 검사할 액터
 	set<ActorKey_Value> actors;

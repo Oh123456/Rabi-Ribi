@@ -30,6 +30,8 @@ private:
 	void MoveSide();
 
 	void AttackPikoHammer();
+
+	void OnHit(Object* object);
 private:
 	float jumKeyDownTime;
 	class Hammer* pikoHammer;

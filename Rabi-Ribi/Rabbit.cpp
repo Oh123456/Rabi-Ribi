@@ -44,6 +44,7 @@ void Rabbit::Update()
 	Super::Update();
 	imageInfo.imageLocation = { location.x ,location.y - 10.0f };
 	geomtryLocation.x += 0.11f;
+	imageInfo.affineMatrix = Matrix3x2F::Scale({ -1.0f,1.0f }, { 24.0f,24.0f });
 }
 
 void Rabbit::Render()

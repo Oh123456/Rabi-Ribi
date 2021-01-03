@@ -20,8 +20,8 @@ public:
 	inline void SetSize(const SIZE_F& size)																{ this->size = size; }
 
 
-
-	const ID2D1PathGeometry* GetCollisionGeomtry();
+	inline class GeometryCollision* GetCollisionGeomtry()										const { return this->collisionGeomtry; }
+	const ID2D1PathGeometry* GetCollisionPathGeomtry();
 	inline const Location& GetLocation()															const { return this->location; }
 	inline const Location& GetGeomtryLocation()												const { return this->geomtryLocation; }
 	inline const SIZE_F& GetSize()																	const { return this->size; }
