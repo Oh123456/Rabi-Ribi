@@ -2,6 +2,7 @@
 #include "Character.h"
 #include "Actor.h"
 #include "Erina.h"
+#include "Enemy.h"
 #include "TileMap.h"
 #include "GeometryCollision.h"
 #include "D2DGraphic.h"
@@ -34,7 +35,9 @@ void CollisionManager::Update()
 {
 	Super::Update();
 	TerrainCollisionCheck();
-	ActorCollision();
+	SplitScreen();
+	for (int i = 0; i < 4; i++)
+		ActorCollision(collision[i]);
 }
 
 void CollisionManager::Render()
@@ -51,7 +54,7 @@ void CollisionManager::Render()
 		count++;
 		if (count <= 2)
 			brush->SetColor({ 0,0,1.0f,1.0f });
-		else if (count <= 5)
+		else if (count <= 6)
 			brush->SetColor({ 1.0f,0.0f,1.0f,1.0f });
 		else
 			brush->SetColor({ 1.0f,0,0.0f ,1.0f });
@@ -68,42 +71,6 @@ void CollisionManager::Render()
 			count = 0;
 	}
 	brush->SetColor({ 0,0,1.0f,1.0f });
-
-	/*for (int i = 0; i < 2; i++)
-	{
-		if (SideCollosion[i])
-		{
-			TILE_F* tilef = Cast<TILE_F>(SideCollosion[i]->GetOwner());
-			D2D1_RECT_F debug_rc = { tilef->GetLocation().x - 16.0f,tilef->GetLocation().y - 16.0f,
-												tilef->GetLocation().x + 16.0f ,tilef->GetLocation().y + 16.0f };
-			D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(debug_rc, D2D::GetSingleton()->GetBrush());
-		}
-	}
-	D2D::GetSingleton()->GetBrush()->SetColor({ 1.0f,0,0.0f ,1.0f });
-	for (int i = 0; i < 4; i++)
-	{
-		if (battomCollosion[i])
-		{
-			TILE_F* tilef = Cast<TILE_F>(battomCollosion[i]->GetOwner());
-			D2D1_RECT_F debug_rc = { tilef->GetLocation().x - 16.0f,tilef->GetLocation().y - 16.0f,
-												tilef->GetLocation().x + 16.0f ,tilef->GetLocation().y + 16.0f };
-			D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(debug_rc, D2D::GetSingleton()->GetBrush());
-		}
-	}
-
-	D2D::GetSingleton()->GetBrush()->SetColor({ 1.0f,0.0f,1.0f,1.0f });
-	for (int i = 0; i < 3; i++)
-	{
-		if (topCollosion[i])
-		{
-			TILE_F* tilef = Cast<TILE_F>(topCollosion[i]->GetOwner());
-			D2D1_RECT_F debug_rc = { tilef->GetLocation().x - 16.0f,tilef->GetLocation().y - 16.0f,
-												tilef->GetLocation().x + 16.0f ,tilef->GetLocation().y + 16.0f };
-			D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(debug_rc, D2D::GetSingleton()->GetBrush());
-		}
-	}
-
-	D2D::GetSingleton()->GetBrush()->SetColor({ 0,0,1.0f,1.0f });*/
 #endif // _DEBUG
 
 	
@@ -130,6 +97,7 @@ void CollisionManager::SettingActor(Object * secen)
 		{
 			actor_Value.actor = player;
 			actors.insert(actor_Value);
+			SettingActor(player);
 			continue;
 		}
 		tileMap = Cast<TileMap>(object);
@@ -143,6 +111,7 @@ void CollisionManager::SettingActor(Object * secen)
 		{
 			actor_Value.actor = actor;
 			actors.insert(actor_Value);
+			SettingActor(actor);
 		}
 	}
 }
@@ -177,6 +146,8 @@ void CollisionManager::TerrainCollisionCheck()
 			ZeroMemory(battomCollosion, sizeof(GeometryCollision*) * 4);
 			ZeroMemory(topCollosion, sizeof(GeometryCollision*) * 3);
 			actor = (*c_setier).actor;
+			if (actor->GetIgnoreTerrain())
+				continue;
 			actorCollision = const_cast<ID2D1PathGeometry*>(actor->GetCollisionPathGeomtry());
 			actorLocation = actor->GetGeomtryLocation();
 			actorSize = actor->GetSize();
@@ -190,9 +161,9 @@ void CollisionManager::TerrainCollisionCheck()
 			UINT tileX_Size = begin.tileX_Size;
 			cplayer = Cast<Character>(actor);
 			//D2D::GetSingleton()->BeginDraw();
+			TerrainBottomCollision(actor, tileX_Size, actorLT);
 			bool side = TerrainSideCollision(actor, tileX_Size, actorLT);
 			bool up = TerrainTopCollision(actor, tileX_Size, actorLT);
-			TerrainBottomCollision(actor, tileX_Size, actorLT);
 			//D2D::GetSingleton()->EndDraw();
 			if (cplayer)
 			{
@@ -242,12 +213,7 @@ void CollisionManager::TerrainBottomCollision(Actor* actor, UINT tileX_Size, Loc
 		if (c_it != collisionlist.end())
 			battomCollosion[i] = c_it->second;
 	}
-	// 벽아래는 갈수없기에 충돌 영역제거
-	for (int i = 0; i < 2; i++)
-	{
-		if ((SideCollosion[i] != nullptr) & (battomCollosion[i * 2] != nullptr))
-			battomCollosion[i * 2] = nullptr;
-	}
+
 	Character* character = Cast<Character>(actor);
 	bool isFalling = true;
 	for (int i = 0; i < 4; i++)
@@ -273,10 +239,6 @@ void CollisionManager::TerrainBottomCollision(Actor* actor, UINT tileX_Size, Loc
 		character->SetFalling(isFalling);
 
 
-#ifdef _DEBUG
-	for (int i =0; i<4 ;i++)
-		debug_collisionBoxlist.push_back(battomCollosion[i]);
-#endif // _DEBUG
 
 	
 }
@@ -304,10 +266,18 @@ bool CollisionManager::TerrainSideCollision(Actor * actor, UINT tileX_Size, Loca
 		if (c_it != collisionlist.end())
 			SideCollosion[i] = c_it->second;
 	}
-
+	// 벽아래는 갈수없기에 충돌 영역제거
+	for (int i = 0; i < 2; i++)
+	{
+		if ((SideCollosion[i] != nullptr) & (battomCollosion[i * 2] != nullptr))
+			battomCollosion[i * 2] = nullptr;
+	}
 #ifdef _DEBUG
 	for (int i = 0; i < 2; i++)
 		debug_collisionBoxlist.push_back(SideCollosion[i]);
+	for (int i = 0; i < 4; i++)
+		debug_collisionBoxlist.push_back(battomCollosion[i]);
+
 #endif // _DEBUG
 
 	Character* character = Cast<Character>(actor);
@@ -421,6 +391,7 @@ void CollisionManager::ActorCollision()
 	if ((!actors.empty()) | (actors.size() > (size_t)(1)))
 	{
 		set<ActorKey_Value>::const_iterator c_it;
+		set<ActorKey_Value>::const_iterator c_nowit;
 		Actor* nowActor = nullptr;
 		Actor* nextActor = nullptr;
 
@@ -439,7 +410,10 @@ void CollisionManager::ActorCollision()
 					return;
 			}
 			else
+			{
+				c_nowit = c_it;
 				break;
+			}
 		}
 
 		nowGeimetryCollision = nowActor->GetCollisionGeomtry();
@@ -447,7 +421,13 @@ void CollisionManager::ActorCollision()
 		{
 			c_it++;
 			if (c_it == actors.end())
-				return;
+			{
+				c_nowit++;
+				if (c_nowit == actors.end())
+					return;
+				nowActor = c_nowit->actor;
+				c_it = c_nowit;
+			}
 			nextActor = c_it->actor;
 			if (nextActor == nullptr)
 				continue;
@@ -461,3 +441,149 @@ void CollisionManager::ActorCollision()
 		}
 	}
 }
+
+void CollisionManager::ActorCollision(list<Actor*>& splitCollision)
+{
+	if ((!splitCollision.empty()) | (splitCollision.size() > (size_t)(1)))
+	{
+		list<Actor*>::const_iterator c_it;
+		list<Actor*>::const_iterator c_nowit;
+		Actor* nowActor = nullptr;
+		Actor* nextActor = nullptr;
+		Enemy* enemy = nullptr;
+
+		GeometryCollision* nowGeimetryCollision = nullptr;
+		GeometryCollision* nextGeimetryCollision = nullptr;
+		GeometryCollision* seeAreaGeimetryCollision = nullptr;
+
+
+		c_it = splitCollision.begin();
+
+
+		for (c_nowit = splitCollision.begin(); c_nowit != splitCollision.end();)
+		{
+			nowActor = *c_nowit;
+			nowGeimetryCollision = nowActor->GetCollisionGeomtry();
+			c_nowit++;
+			if (nowActor == nullptr)
+				continue;
+			for (c_it = c_nowit; c_it != splitCollision.end(); c_it++)
+			{
+				nextActor = *c_it;
+				if (nextActor == nullptr)
+					continue;
+
+				nextGeimetryCollision = nextActor->GetCollisionGeomtry();
+				bool isHit = nowGeimetryCollision->CollisionHitCheck(nextGeimetryCollision->GetGeometry(), nextActor->GetLTLocation());
+				if (isHit)
+				{
+					nowActor->onHit.Execute(nextActor);
+					nextActor->onHit.Execute(nowActor);
+				}
+
+				enemy = Cast<Enemy>(nowActor);
+				if (enemy)
+				{
+					seeAreaGeimetryCollision = enemy->GetSeeArea();
+					if (seeAreaGeimetryCollision)
+					{
+						bool isSee = seeAreaGeimetryCollision->CollisionHitCheck(nextGeimetryCollision->GetGeometry(), nextActor->GetLTLocation());
+						if (isSee)
+							enemy->onSee.Execute(nowActor);
+					}
+				}
+
+				enemy = Cast<Enemy>(nextActor);
+				if (enemy)
+				{
+					seeAreaGeimetryCollision = enemy->GetSeeArea();
+					if (seeAreaGeimetryCollision)
+					{
+						bool isSee = seeAreaGeimetryCollision->CollisionHitCheck(nowGeimetryCollision->GetGeometry(), nowActor->GetLTLocation());
+						if (isSee)
+							enemy->onSee.Execute(nowActor);
+					}
+				}
+			}
+		}
+	}
+}
+
+void CollisionManager::SplitScreen()
+{
+	Location centerPoint = { WINSIZE_X / (2.0f * CAMERA->GetZoom().x) , WINSIZE_Y / (2.0f * CAMERA->GetZoom().y) };
+	bool quadrant[4];
+	Location actorlocation;
+	D2D1_RECT_F actorRc;
+	SIZE_F actorCollisionSize;
+	Actor* actor = nullptr;
+	set<ActorKey_Value>::const_iterator c_it;
+	for (int i = 0; i < 4; i++)
+		collision[i].clear();
+	
+	for (c_it = actors.begin(); c_it != actors.end(); c_it++)
+	{
+		ZeroMemory(&actorlocation,sizeof(Location));
+		ZeroMemory(&actorCollisionSize, sizeof(SIZE_F));
+		ZeroMemory(&actorRc, sizeof(D2D1_RECT_F));
+		ZeroMemory(&quadrant, sizeof(bool) * 4);
+		actor = nullptr;
+		actor = c_it->actor;
+		if ((actor == nullptr) | (!actor->GetIsValid()))
+			continue;
+		actorlocation = actor->GetLocation();
+		actorCollisionSize = actor->GetSize();
+
+		actorRc = { actorlocation.x - (actorCollisionSize.width / 2) , actorlocation.y - (actorCollisionSize.height / 2) ,
+						actorlocation.x + (actorCollisionSize.width / 2) ,actorlocation.y + (actorCollisionSize.height / 2) };
+		
+		// 화면 밖에 있을경우 충돌 처리에서 제외한다
+		if (	(actorRc.left > (float)WINSIZE_X) |
+			(actorRc.right < 0.0f) |
+			(actorRc.top > (float)WINSIZE_Y) |
+			(actorRc.bottom < 0.0f))
+			continue;
+
+
+		if (actorRc.left < centerPoint.x)
+		{
+			if (actorRc.top < centerPoint.y)
+			{
+				quadrant[0] = true;
+				if (actorRc.bottom > centerPoint.y)
+					quadrant[2] = true;
+			}
+			else
+				quadrant[2] = true;
+
+			if (actorRc.right > centerPoint.x)
+			{
+				if (quadrant[0])
+					quadrant[1] = true;
+				if (quadrant[2])
+					quadrant[3] = true;
+			}
+		}
+		else
+		{
+			if (actorRc.top < centerPoint.y)
+			{
+				quadrant[1] = true;
+				if (actorRc.bottom > centerPoint.y)
+					quadrant[3] = true;
+			}
+			else
+				quadrant[3] = true;
+		}
+
+		for (int i = 0; i < 4 ; i++)
+		{
+			if (quadrant[i])
+				collision[i].push_back(actor);
+		}
+
+	}
+
+
+
+}							

@@ -27,6 +27,8 @@ public:
 	inline void SetAnimationKinds(HammerAnimationKinds animKinds) { this->animKinds = animKinds; }
 	inline HammerAnimationKinds GetAnimationKinds() const { return animKinds; }
 private:
+	void OnHit(Object* object);
+private:
 	HammerAnimationKinds animKinds;
 };
 

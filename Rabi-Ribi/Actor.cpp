@@ -2,6 +2,7 @@
 #include "GeometryCollision.h"
 #include "D2DGraphic.h"
 
+
 void Actor::Release()
 {
 	Super::Release();
@@ -22,6 +23,11 @@ void Actor::SetGeomtryLocation(const Location & letfTopLocation, const SIZE_F & 
 const ID2D1PathGeometry* Actor::GetCollisionPathGeomtry()
 {
 	return this->collisionGeomtry->GetGeometry();
+}
+
+Location Actor::GetLTLocation()
+{
+	return { location.x - (size.width / 2) , location.y - (size.height / 2) };
 }
 
 void Actor::SetGeomtryCollsion()

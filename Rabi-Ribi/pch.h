@@ -83,6 +83,8 @@ inline void SetWindowSize(int startX, int startY, int sizeX, int sizeY)
 	g_defaultWindowSize = { (UINT)rc.right ,(UINT)rc.bottom };
 }
 
+
+#include "Vector2F.h"
 #include "ImageManager.h"
 #include "KeyManager.h"
 #include "TimerManager.h"

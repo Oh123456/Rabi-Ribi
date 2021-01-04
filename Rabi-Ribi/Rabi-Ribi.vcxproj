@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="AIBase.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Animinstance.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -131,7 +132,8 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="D2DGraphic.cpp" />
-    <ClCompile Include="Eenemy.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyAIController.cpp" />
     <ClCompile Include="Erina.cpp" />
     <ClCompile Include="ErinaAnimInstance.cpp" />
     <ClCompile Include="GeometryCollision.cpp" />
@@ -153,11 +155,14 @@
     <ClCompile Include="TileMapToolScene.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TimerManager.cpp" />
+    <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="Vector2F.cpp" />
     <ClCompile Include="Volume.cpp" />
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="AIBase.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Animinstance.h" />
     <ClInclude Include="Camera.h" />
@@ -167,7 +172,8 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="D2DGraphic.h" />
     <ClInclude Include="Delegate.h" />
-    <ClInclude Include="Eenemy.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyAIController.h" />
     <ClInclude Include="Erina.h" />
     <ClInclude Include="ErinaAnimInstance.h" />
     <ClInclude Include="GeometryCollision.h" />
@@ -193,6 +199,8 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TimerManager.h" />
     <ClInclude Include="Types.h" />
+    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Vector2F.h" />
     <ClInclude Include="VKKey.h" />
     <ClInclude Include="Volume.h" />
     <ClInclude Include="Weapon.h" />

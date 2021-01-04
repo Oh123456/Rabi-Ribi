@@ -85,7 +85,7 @@ void ErinaAnimInstance::Update()
 		PlayingAnimation("Attack1");
 		//if (playingAnimation->IsEnd())
 		{
-			//erina->GetPikoHammer()->SetIsValid(true);
+			erina->GetPikoHammer()->SetIsValid(true);
 			erina->GetPikoHammer()->SetAnimationKinds(HammerAnimationKinds::Attack_1);
 			if ((playingAnimation->IsEnd()) & (erina->GetNextAttack()))
 			{
@@ -97,7 +97,7 @@ void ErinaAnimInstance::Update()
 		PlayingAnimation("Attack2");
 		//if (playingAnimation->IsEnd())
 		{
-			//erina->GetPikoHammer()->SetIsValid(true);
+			erina->GetPikoHammer()->SetIsValid(true);
 			erina->GetPikoHammer()->SetAnimationKinds(HammerAnimationKinds::Attack_2);
 			if ((playingAnimation->IsEnd()) & (erina->GetNextAttack()))
 			{
@@ -109,7 +109,7 @@ void ErinaAnimInstance::Update()
 		PlayingAnimation("Attack3");
 		//if (playingAnimation->IsEnd())
 		{
-			//erina->GetPikoHammer()->SetIsValid(true);
+			erina->GetPikoHammer()->SetIsValid(true);
 			erina->GetPikoHammer()->SetAnimationKinds(HammerAnimationKinds::Attack_3);
 			if ((playingAnimation->IsEnd()) & (erina->GetNextAttack()))
 			{

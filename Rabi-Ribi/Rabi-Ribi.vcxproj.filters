@@ -88,6 +88,15 @@
     <Filter Include="Object\Actor\Character\Enemy">
       <UniqueIdentifier>{a9591ebe-21ce-45f8-a4fc-df5cc9c05d56}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{7d1fd1ca-f10f-473a-ba5f-c9f94e20f376}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Color">
+      <UniqueIdentifier>{b5d016f0-2594-48cb-9f24-8641ef842a11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Vector2">
+      <UniqueIdentifier>{1c88d2d8-fd3e-47c3-8b6a-a645106cd849}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -95,9 +104,6 @@
     </ClCompile>
     <ClCompile Include="D2DGraphic.cpp">
       <Filter>Direct2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Color.cpp">
-      <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="ImageManager.cpp">
       <Filter>Manager\Image</Filter>
@@ -153,9 +159,6 @@
     <ClCompile Include="Actor.cpp">
       <Filter>Object\Actor</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerInput.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="ErinaAnimInstance.cpp">
       <Filter>Object\Actor\Character\Player</Filter>
     </ClCompile>
@@ -177,22 +180,37 @@
     <ClCompile Include="HammerAnimInstance.cpp">
       <Filter>Object\Actor\Weapone\pikoHammer</Filter>
     </ClCompile>
-    <ClCompile Include="Eenemy.cpp">
-      <Filter>Object\Actor\Character\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Rabbit.cpp">
       <Filter>Object\Actor\Character\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="RabbitAnimInstance.cpp">
+      <Filter>Object\Actor\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerInput.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="AIBase.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyAIController.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Object\Actor\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>Utility\Color</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>Utility\Vector2</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2F.cpp">
+      <Filter>Utility\Vector2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D2DGraphic.h">
       <Filter>Direct2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="Delegate.h">
       <Filter>Utility</Filter>
@@ -272,9 +290,6 @@
     <ClInclude Include="Actor.h">
       <Filter>Object\Actor</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerInput.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="ErinaAnimInstance.h">
       <Filter>Object\Actor\Character\Player</Filter>
     </ClInclude>
@@ -296,14 +311,32 @@
     <ClInclude Include="Hammer.h">
       <Filter>Object\Actor\Weapone\pikoHammer</Filter>
     </ClInclude>
-    <ClInclude Include="Eenemy.h">
-      <Filter>Object\Actor\Character\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Rabbit.h">
       <Filter>Object\Actor\Character\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="RabbitAnimInstance.h">
+      <Filter>Object\Actor\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInput.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="AIBase.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyAIController.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Object\Actor\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Utility\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2F.h">
+      <Filter>Utility\Vector2</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Utility\Vector2</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

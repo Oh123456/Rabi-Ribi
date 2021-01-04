@@ -2,13 +2,21 @@
 #include "RabbitAnimInstance.h"
 #include "D2DGraphic.h"
 #include "GeometryCollision.h"
+#include "EnemyAIController.h"
 
 Rabbit::Rabbit()
 {
 	animmation = CreateObject<RabbitAnimInstance>();
 	animmation->SetOwner(this);
 
-	moveSpeed = 100.0f;
+	seeAreaSize = { 80.0f,20.0f };
+	SettingSeeArea();
+
+	moveSpeed = 0.11f;
+
+	CreateAIController<EnemyAIController>();
+
+	onSee.BindObject(this,&Rabbit::OnSee);
 }
 
 Rabbit::~Rabbit()
@@ -43,18 +51,39 @@ void Rabbit::Update()
 {
 	Super::Update();
 	imageInfo.imageLocation = { location.x ,location.y - 10.0f };
-	geomtryLocation.x += 0.11f;
-	imageInfo.affineMatrix = Matrix3x2F::Scale({ -1.0f,1.0f }, { 24.0f,24.0f });
+	geomtryLocation.x += moveSpeed;
 }
 
 void Rabbit::Render()
 {
 	Super::Render();
+	return;
 #ifdef _DEBUG
 	ID2D1SolidColorBrush* brush = D2D::GetSingleton()->GetBrush();
 	brush->SetColor(D2D1::ColorF(0xf0f00f, 1.0f));
 	D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle({ location.x - size.width / 2, location.y - size.height / 2 ,
-																				 location.x + size.width / 2, location.y + size.height / 2 }, brush);
+																				 location.x + size.width / 2, location.y + size.height / 2 } , brush);
 	brush->SetColor(D2D1::ColorF(0x0000ff, 1.0f));
 #endif // _DEBUG
+}
+
+void Rabbit::MoveCharacter(Vector2_F speed)
+{
+	imageInfo.imageLocation = { location.x ,location.y - 10.0f };
+	if (speed.x < 0.0f)
+	{
+		moveSpeed = +0.11f;
+		imageInfo.affineMatrix = Matrix3x2F::Scale({ -1.0f,1.0f }, { 24.0f,24.0f });
+	}
+	else
+	{
+		moveSpeed = -0.11f;
+		imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.0f,1.0f }, { 24.0f,24.0f });
+	}
+}
+
+void Rabbit::OnSee(Object * object)
+{
+	EnemyAIController* eAIController = Cast<EnemyAIController>(AIController);
+	eAIController->SetTaget(Cast<Actor>(object));
 }

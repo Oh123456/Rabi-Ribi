@@ -156,5 +156,5 @@ void Erina::AttackPikoHammer()
 
 void Erina::OnHit(Object* object)
 {
-	DEBUG_MASSAGE("面倒贸府 眉农 \n");
+	//DEBUG_MASSAGE("面倒贸府 眉农 \n");
 }

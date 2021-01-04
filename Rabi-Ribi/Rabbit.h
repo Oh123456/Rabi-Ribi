@@ -1,8 +1,8 @@
 #pragma once
-#include "Eenemy.h"
-class Rabbit : public Eenemy
+#include "Enemy.h"
+class Rabbit : public Enemy
 {
-	SUPER(Eenemy);
+	SUPER(Enemy);
 public:
 	Rabbit();
 	~Rabbit();
@@ -12,5 +12,9 @@ public:
 	void Update()	override;
 	void Render()	override;
 
+	void MoveCharacter(Vector2_F speed)override;
+
+private:
+	void OnSee(Object* object);
 };
 

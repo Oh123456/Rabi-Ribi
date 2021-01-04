@@ -41,11 +41,15 @@ private:
 	bool TerrainTopCollision(class Actor* actor, UINT tileX_Size, const Location& player_LTLocation);
 
 	void ActorCollision();
+	void ActorCollision(list<Actor*>& splitCollision);
+	// 4분할
+	void SplitScreen();
 private:
 	// 충돌 검사할 액터
 	set<ActorKey_Value> actors;
 	class TileMap* tileMap;
 
+	list<Actor*> collision[4];
 
 	class GeometryCollision* SideCollosion[2];
 	class GeometryCollision* battomCollosion[4];

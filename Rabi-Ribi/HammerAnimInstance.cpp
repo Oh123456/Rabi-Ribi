@@ -59,6 +59,8 @@ void HammerAnimInstance::Update()
 				pikoHammer->SetAnimationKinds(HammerAnimationKinds::None);
 				erina->SetMoveLock(false);
 				erina->SetAnimKinds(AnimmationKinds::Idle);
+				pikoHammer->SetIsValid(false);
+				playingAnimation->Stop();
 			}
 			else
 			{
@@ -78,6 +80,8 @@ void HammerAnimInstance::Update()
 				pikoHammer->SetAnimationKinds(HammerAnimationKinds::None);
 				erina->SetMoveLock(false);
 				erina->SetAnimKinds(AnimmationKinds::Idle);
+				pikoHammer->SetIsValid(false);
+				playingAnimation->Stop();
 			}
 			else
 			{
@@ -98,6 +102,8 @@ void HammerAnimInstance::Update()
 				pikoHammer->SetAnimationKinds(HammerAnimationKinds::None);
 				erina->SetMoveLock(false);
 				erina->SetAnimKinds(AnimmationKinds::Idle);
+				pikoHammer->SetIsValid(false);
+				playingAnimation->Stop();
 			}
 			else
 			{
@@ -119,6 +125,7 @@ void HammerAnimInstance::Update()
 		{
 			playingAnimation->Stop();
 			playingAnimation = nullptr;
+			pikoHammer->SetIsValid(false);
 		}
 		break;
 	}

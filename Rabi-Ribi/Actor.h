@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "AIBase.h"
 
 DELEGATE_OneParam(OnHit, Object*);
 
@@ -8,10 +9,10 @@ class Actor : public Object
 {
 	SUPER(Object);
 public:
-	Actor() : collisionGeomtry(nullptr), IgnoreTerrain(false){}
+	Actor() : collisionGeomtry(nullptr), AIController(nullptr),IgnoreTerrain(false){}
 	~Actor() {}
 
-	void Release() override;
+	void Release()	override;
 
 	void SetCollisionGeometry(const ID2D1PathGeometry* const collisionGeomtry);
 	inline void SetLocation(const Location& location)													{ this->location = location; }
@@ -22,6 +23,7 @@ public:
 
 	inline class GeometryCollision* GetCollisionGeomtry()										const { return this->collisionGeomtry; }
 	const ID2D1PathGeometry* GetCollisionPathGeomtry();
+	Location GetLTLocation();
 	inline const Location& GetLocation()															const { return this->location; }
 	inline const Location& GetGeomtryLocation()												const { return this->geomtryLocation; }
 	inline const SIZE_F& GetSize()																	const { return this->size; }
@@ -30,6 +32,14 @@ public:
 	inline class Animinstance* GetAnimInstance()												const { return animmation; }
 protected:
 	void SetGeomtryCollsion();
+
+	template<class UserClass>
+	Object* CreateAIController()
+	{
+		AIController = CreateObject<UserClass>();
+		AIController->SetOwner(this);
+		return AIController;
+	}
 public:
 	// 콜리전 충돌
 	OnHit onHit;
@@ -46,5 +56,7 @@ protected:
 	ImageInfo imageInfo;
 	class Animinstance* animmation;
 	bool IgnoreTerrain;
+
+	class AIBase* AIController;
 };
 

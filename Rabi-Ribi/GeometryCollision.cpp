@@ -1,5 +1,5 @@
 #include "GeometryCollision.h"
-#include "Actor.h"
+#include "Enemy.h"
 
 GeometryCollision::GeometryCollision() : 
 	geometry(nullptr) , owner(nullptr)
@@ -22,6 +22,13 @@ void GeometryCollision::SetCollision(ID2D1PathGeometry* geometry, const Actor* o
 {
 	this->geometry = geometry;
 	owner = object;
+	collisionSize = object->GetSize();
+}
+
+void GeometryCollision::SetCollision(ID2D1PathGeometry * geometry, const SIZE_F & size, const Actor * object)
+{
+	SetCollision(geometry, object);
+	collisionSize = size;
 }
 
 Matrix3x2F GeometryCollision::GetTranslationMatrix3x2F(const Location& objectLocation)
@@ -30,8 +37,8 @@ Matrix3x2F GeometryCollision::GetTranslationMatrix3x2F(const Location& objectLoc
 	if (actor == nullptr)
 		return Matrix3x2F();
 
-	Location ownerLocation = { actor->GetLocation().x - (actor->GetSize().width) / 2,
-								actor->GetLocation().y - (actor->GetSize().height) / 2 };
+	Location ownerLocation = { actor->GetLocation().x - (collisionSize.width) / 2,
+								actor->GetLocation().y - (collisionSize.height) / 2 };
 
 	// 두 객체간의 차이를 행렬로 변환한다.
 	Location result = { objectLocation.x - ownerLocation.x ,objectLocation.y - ownerLocation.y  };
@@ -47,6 +54,21 @@ Location GeometryCollision::GetOwnerLocation()
 	return actor->GetLocation();
 }
 
+
+D2D_RECT_F GeometryCollision::GetGeometryRect()
+{
+	Enemy* actor = Cast<Enemy>(owner);
+	if (actor)
+	{
+		const Location& location = actor->GetLocation();
+		const SIZE_F& size = actor->GetSeeAreaSize();
+		D2D_RECT_F rect = { location.x - size.width / 2.0f, location.y - size.height / 2.0f,
+								 location.x + size.width / 2.0f, location.y + size.height / 2.0f };
+		return rect;
+
+	}
+	return D2D_RECT_F();
+}
 
 D2D1_GEOMETRY_RELATION GeometryCollision::CollisionCheck(ID2D1PathGeometry* geometry, const Location& objectLocation)
 {
@@ -66,9 +88,7 @@ bool GeometryCollision::CollisionHitCheck(ID2D1PathGeometry* geometry, const Loc
 		//DEBUG_MASSAGE("안곂침");
 		return false;
 	case D2D1_GEOMETRY_RELATION_IS_CONTAINED:
-		return false;
 	case D2D1_GEOMETRY_RELATION_CONTAINS:
-		return false;
 	case D2D1_GEOMETRY_RELATION_OVERLAP:
 		return true;
 		//DEBUG_MASSAGE("충돌");
