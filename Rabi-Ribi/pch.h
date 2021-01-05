@@ -105,5 +105,5 @@ inline void SetWindowSize(int startX, int startY, int sizeX, int sizeY)
 #define SOUNDMANAGER	GETMANAGER(SoundManager)
 #define SCENEMANAGER	GETMANAGER(SceneManager)
 #define CAMERA			GETMANAGER(Camera)
-
+#define WORLD				SCENEMANAGER->currScene;
 

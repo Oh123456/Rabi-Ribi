@@ -5,7 +5,7 @@
 
 
 
-#define JUM_KEYDOWN_TIME 0.20f
+#define JUM_KEYDOWN_TIME 0.30f
 class Erina : public Character
 {
 	SUPER(Character);
@@ -30,11 +30,13 @@ private:
 	void MoveSide();
 
 	void AttackPikoHammer();
+	void RebbonAttack();
 
 	void OnHit(Object* object);
 private:
 	float jumKeyDownTime;
 	class Hammer* pikoHammer;
+	class Rebbon_Weapon* rebbon;
 	bool isNextAttack;
 };
 

@@ -56,6 +56,7 @@ public:
 	void SetMoveLock(bool value) { moveLock = value; }
 	bool GetMoveLocl() const { return moveLock; }
 
+	float GetAcceleration() { return acceleration; }
 protected:
 	void MoveSideValue(float value) { moveSideValue = value; }
 	void MoveUpValue(float value) { moveUpValue = value; }

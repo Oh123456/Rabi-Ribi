@@ -16,7 +16,7 @@ Vector2_F::Vector2_F(const Location & location) :
 }
 
 Vector2_F::Vector2_F(float x, float y) :
-	Vector2(0.0f, 0.0f)
+	Vector2(x, y)
 {
 }
 

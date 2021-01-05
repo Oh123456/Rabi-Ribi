@@ -4,6 +4,7 @@
 struct IAnimation;
 class Animinstance : public Object
 {
+	SUPER(Object);
 public:
 	Animinstance();
 	~Animinstance();

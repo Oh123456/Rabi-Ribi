@@ -17,6 +17,7 @@ HRESULT Animinstance::Init()
 
 void Animinstance::Release()
 {
+	SafemapRelease(animations);
 }
 
 void Animinstance::Update()

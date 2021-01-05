@@ -97,6 +97,15 @@
     <Filter Include="Utility\Vector2">
       <UniqueIdentifier>{1c88d2d8-fd3e-47c3-8b6a-a645106cd849}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Actor\Weapone\Rebbon">
+      <UniqueIdentifier>{3f8a3b88-56e9-4df5-bae0-03a51dc80f41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AI">
+      <UniqueIdentifier>{e9780bc5-ea0e-4d48-871e-83198591ea2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Actor\Weapone\Projectile">
+      <UniqueIdentifier>{f51227a8-aa81-492d-a421-3536a0c40fbf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -189,12 +198,6 @@
     <ClCompile Include="PlayerInput.cpp">
       <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="AIBase.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyAIController.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>Object\Actor\Character\Enemy</Filter>
     </ClCompile>
@@ -206,6 +209,30 @@
     </ClCompile>
     <ClCompile Include="Vector2F.cpp">
       <Filter>Utility\Vector2</Filter>
+    </ClCompile>
+    <ClCompile Include="Rebbon.cpp">
+      <Filter>Object\Actor\Weapone\Rebbon</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyAIController.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="AIBase.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="RebbonAnimInstance.cpp">
+      <Filter>Object\Actor\Weapone\Rebbon</Filter>
+    </ClCompile>
+    <ClCompile Include="Rebbon_Weapon.cpp">
+      <Filter>Object\Actor\Weapone\Rebbon</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Object\Actor\Weapone\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileAnimInstance.cpp">
+      <Filter>Object\Actor\Weapone\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileManager.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -320,12 +347,6 @@
     <ClInclude Include="PlayerInput.h">
       <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="AIBase.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyAIController.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>Object\Actor\Character\Enemy</Filter>
     </ClInclude>
@@ -337,6 +358,30 @@
     </ClInclude>
     <ClInclude Include="Vector2.h">
       <Filter>Utility\Vector2</Filter>
+    </ClInclude>
+    <ClInclude Include="Rebbon.h">
+      <Filter>Object\Actor\Weapone\Rebbon</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyAIController.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="AIBase.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="RebbonAnimInstance.h">
+      <Filter>Object\Actor\Weapone\Rebbon</Filter>
+    </ClInclude>
+    <ClInclude Include="Rebbon_Weapon.h">
+      <Filter>Object\Actor\Weapone\Rebbon</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Object\Actor\Weapone\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileAnimInstance.h">
+      <Filter>Object\Actor\Weapone\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileManager.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

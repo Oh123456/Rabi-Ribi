@@ -6,6 +6,8 @@
 #include "CollisionManager.h"
 #include "PlayerInput.h"
 #include "Rabbit.h"
+#include "Projectile.h"
+#include "ProjectileManager.h"
 
 
 TestRoom::TestRoom()
@@ -33,7 +35,10 @@ HRESULT TestRoom::Init()
 	//D2D::GetSingleton()->GetD2DRenderTarget()->SetTransform(Matrix3x2F::Scale({ 2.0f,2.2f }));
 	Cast<Character>(player)->PlayerInputSetting(CreateObject<PlayerInput>(false));
 	CreateObject<CollisionManager>(true)->SettingActor(this);
-	
+	CreateObject<ProjectileManager>();
+
+
+
 	CAMERA->SetFocusActor(player);
 	return S_OK;
 }
@@ -132,7 +137,7 @@ void TestRoom::Render()
 	const Location& playerLocation = player->GetLocation();
 	const SIZE_F& playerSize = player->GetSize();
 	D2D_POINT_2F playrLT = { (playerLocation.x - (playerSize.width / 2)) ,(playerLocation.y - (playerSize.height / 2)) };
-	//D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle({ playrLT.x,playrLT.y,playrLT.x + (playerSize.width ),playrLT.y + (playerSize.height) }, D2D::GetSingleton()->GetBrush());
+	D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle({ playrLT.x,playrLT.y,playrLT.x + (playerSize.width ),playrLT.y + (playerSize.height) }, D2D::GetSingleton()->GetBrush());
 
 	//list<GeometryCollision*> collisionlist = test->GetcollisionList();
 	//list<GeometryCollision*>::const_iterator c_it;

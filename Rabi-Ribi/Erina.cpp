@@ -4,14 +4,20 @@
 #include "PlayerInput.h"
 #include "ErinaAnimInstance.h"
 #include "Hammer.h"
+#include "Rebbon_Weapon.h"
 
 Erina::Erina()
 {
 	animmation = CreateObject<ErinaAnimInstance>();
 	animmation->SetOwner(this);
 
+	pikoHammer = CreateObject<Hammer>();
+	pikoHammer->SetOwner(this);
 
-	moveSpeed = 100.0f;
+	rebbon = CreateObject<Rebbon_Weapon>();
+	rebbon->SetOwner(this);
+
+	moveSpeed = 160.0f;
 
 	onHit.BindObject(this,&Erina::OnHit);
 }
@@ -25,7 +31,7 @@ HRESULT Erina::Init()
 {
 	Super::Init();
 	location = { 350.0f,100.0f };                           
-	size = { 20.0f ,32.0f  };
+	size = { 10.0f ,32.0f  };
 	imageInfo.imageName = L"Erina";
 	imageInfo.imageLocation = location;
 	imageInfo.atlasInfo.frameSize = { 64.0f,64.0f };
@@ -52,10 +58,10 @@ HRESULT Erina::Init()
 	collisionGeomtry->SetCollision(collsion,this);
 	//collisionGeomtry;
 	geomtryLocation = location;
-	
-
-	pikoHammer = CreateObject<Hammer>();
-	pikoHammer->SetOwner(this);
+	if (rebbon)
+	{
+		rebbon->SetLocation({ location });
+	}
 
 	return S_OK;
 }
@@ -69,6 +75,7 @@ void Erina::Release()
 void Erina::Update()
 {
 	Super::Update();
+
 }
 
 void Erina::Render()
@@ -87,6 +94,7 @@ void Erina::PlayerInputSetting(PlayerInput* playerInput)
 	playerInput->BindInputKey(VK_RIGHT, KeyInputKinds::StayKey_Down, this, &Erina::MoveSide);
 
 	playerInput->BindInputKey(ZKey, KeyInputKinds::Key_Down, this, &Erina::AttackPikoHammer);
+	playerInput->BindInputKey(XKey, KeyInputKinds::Key_Down, this, &Erina::RebbonAttack);
 }
 
 void Erina::MoveUP()
@@ -103,7 +111,9 @@ void Erina::MoveUP()
 		this->isFalling = true;
 		animKinds = AnimmationKinds::Jum;
 		//location.y -= 12.8f;
-		this->geomtryLocation.y -= 9.8f* 0.16f;
+		acceleration = (-98.0f * TIMERMANAGER->GettimeElapsed());
+		//MoveUpValue((-9.8f  * 50.f));
+		//this->geomtryLocation.y -= (9.8f * TIMERMANAGER->GettimeElapsed() * 1.8f);
 		jumKeyDownTime += TIMERMANAGER->GettimeElapsed();
 	}
 	else if (KEYMANAGER->GetKeyDown()[VK_DOWN])
@@ -152,6 +162,11 @@ void Erina::AttackPikoHammer()
 			break;
 		}
 	}
+}
+
+void Erina::RebbonAttack()
+{
+	rebbon->Attack();
 }
 
 void Erina::OnHit(Object* object)

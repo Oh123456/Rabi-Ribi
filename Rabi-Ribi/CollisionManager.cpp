@@ -168,7 +168,8 @@ void CollisionManager::TerrainCollisionCheck()
 			if (cplayer)
 			{
 				cplayer->MoveToNewGeomtryLocation(actorLT);
-				cplayer->MoveCancel(side, up);
+				cplayer->MoveCancel(side,false);
+				cplayer->MoveCancel(up, up);
 				//cplayer->MoveCharacter();
 			}
 		}
@@ -213,34 +214,9 @@ void CollisionManager::TerrainBottomCollision(Actor* actor, UINT tileX_Size, Loc
 		if (c_it != collisionlist.end())
 			battomCollosion[i] = c_it->second;
 	}
-
-	Character* character = Cast<Character>(actor);
-	bool isFalling = true;
-	for (int i = 0; i < 4; i++)
-	{
-		if (battomCollosion[i])
-		{
-			if (battomCollosion[i]->CollisionHitCheck(Cast<ID2D1PathGeometry>(actor->GetCollisionPathGeomtry()), player_LTLocation))
-			{
-			
-				if (character)
-				{
-					//if ((character->GetFalling()))
-					{
-						isFalling = false;
-						while (battomCollosion[i]->CollisionHitCheck(Cast<ID2D1PathGeometry>(actor->GetCollisionPathGeomtry()), player_LTLocation))
-							player_LTLocation.y -= 0.1f;
-					}
-				}
-			}
-		}
-	}
-	if (character)
-		character->SetFalling(isFalling);
+	// 처리부는 TerrainSideCollision으로 이동
 
 
-
-	
 }
 
 bool CollisionManager::TerrainSideCollision(Actor * actor, UINT tileX_Size, Location & player_LTLocation)
@@ -271,6 +247,8 @@ bool CollisionManager::TerrainSideCollision(Actor * actor, UINT tileX_Size, Loca
 	{
 		if ((SideCollosion[i] != nullptr) & (battomCollosion[i * 2] != nullptr))
 			battomCollosion[i * 2] = nullptr;
+		if ((SideCollosion[i] == battomCollosion[3]))
+			battomCollosion[3] = nullptr;
 	}
 #ifdef _DEBUG
 	for (int i = 0; i < 2; i++)
@@ -280,7 +258,34 @@ bool CollisionManager::TerrainSideCollision(Actor * actor, UINT tileX_Size, Loca
 
 #endif // _DEBUG
 
+	// 바닥부 충돌처리 
+// 순서를 바꾸면 공중에떠있는 버그가 있어
+// 충돌 타일은 먼저 검사후 여기서 충동처리를 해준다
 	Character* character = Cast<Character>(actor);
+	bool isFalling = true;
+	for (int i = 0; i < 4; i++)
+	{
+		if (battomCollosion[i])
+		{
+			if (battomCollosion[i]->CollisionHitCheck(Cast<ID2D1PathGeometry>(actor->GetCollisionPathGeomtry()), player_LTLocation))
+			{
+
+				if (character)
+				{
+					//if ((character->GetFalling()))
+					{
+						isFalling = false;
+						while (battomCollosion[i]->CollisionHitCheck(Cast<ID2D1PathGeometry>(actor->GetCollisionPathGeomtry()), player_LTLocation))
+							player_LTLocation.y -= 0.1f;
+					}
+				}
+			}
+		}
+	}
+	if (character)
+		character->SetFalling(isFalling);
+
+	//Character* character = Cast<Character>(actor);
 	for (int i = 0; i < 2; i++)
 	{
 		
@@ -529,7 +534,7 @@ void CollisionManager::SplitScreen()
 		ZeroMemory(&quadrant, sizeof(bool) * 4);
 		actor = nullptr;
 		actor = c_it->actor;
-		if ((actor == nullptr) | (!actor->GetIsValid()))
+		if ((actor == nullptr) | (!actor->GetIsValid()) | (actor->GetCollisionGeomtry() == nullptr))
 			continue;
 		actorlocation = actor->GetLocation();
 		actorCollisionSize = actor->GetSize();

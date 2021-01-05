@@ -29,7 +29,7 @@ void D2DGraphic::Init(HWND hWnd)
 	GetClientRect(hWnd, &rect);
 	D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED);
 	// 지정한 윈도우의 클라이언트 영역에 그림을 그리기 위한 RenderTarget을 얻는다.
-	D2DFactory->CreateHwndRenderTarget(RenderTargetProperties(), HwndRenderTargetProperties(hWnd, SizeU(rect.right, rect.bottom),D2D1_PRESENT_OPTIONS_IMMEDIATELY), &D2DRenderTarget);
+	D2DFactory->CreateHwndRenderTarget(RenderTargetProperties(), HwndRenderTargetProperties(hWnd, SizeU(rect.right, rect.bottom)/*,D2D1_PRESENT_OPTIONS_IMMEDIATELY*/), &D2DRenderTarget);
 	D2DRenderTarget->SetAntialiasMode(D2D1_ANTIALIAS_MODE::D2D1_ANTIALIAS_MODE_ALIASED);
 	//D2DRenderTarget->CreateCompatibleRenderTarget(D2D1::SizeF(10.0f, 10.0f), &D2DbitMapRenderTarget);
 	D2DRenderTarget->QueryInterface(__uuidof(ID2D1DeviceContext), (void**)&Context);

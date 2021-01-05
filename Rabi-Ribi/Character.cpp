@@ -4,8 +4,8 @@
 
 HRESULT Character::Init()
 {
-	timerInterval = (1.0f / 60.0f);
-	TIMERMANAGER->SetTimer(movementTimer,this, &Character::CharaterMove, timerInterval);
+	timerInterval = (1.0f / 120.0f);
+	TIMERMANAGER->SetTimer(movementTimer,this, &Character::CharaterMove, timerInterval,false);
 	return S_OK;
 }
 
@@ -24,7 +24,7 @@ void Character::Update()
 	{
 		// 채공시간이 0.1초 이상이면 추락상태이다
 		delayTime += TIMERMANAGER->GettimeElapsed();
-		if (delayTime > 0.1f)
+		if (delayTime > 0.17f)
 		{
 			if ((animKinds != AnimmationKinds::Falling) &
 				(animKinds != AnimmationKinds::Jum))
@@ -64,8 +64,8 @@ void Character::MoveCancel(bool isSide, bool isUp)
 		geomtryLocation.x = location.x;
 	if (isUp)
 		geomtryLocation.y = location.y;
-	if (isFalling)
-		geomtryLocation.y += acceleration;
+	//if (isFalling)
+	//	geomtryLocation.y += acceleration;
 	MoveCharacter();
 }
 
@@ -82,16 +82,17 @@ void Character::CharaterMove()
 {
 	if (isFalling)
 	{
-		if (acceleration <= 0.0f)
-			acceleration = 0.98f*(0.16f);
-		acceleration *= 1.03f;
-		if (acceleration >= 2.0f)
-			acceleration = 2.0f;
+		if (acceleration == 0.0f)
+			acceleration = (98.0f * TIMERMANAGER->GettimeElapsed() );
+		else
+			acceleration += (9.8f * TIMERMANAGER->GettimeElapsed());
+		if (acceleration >= 8.0f)
+			acceleration = 8.0f;
 		//moveUpValue = acceleration;
-		geomtryLocation.y += acceleration;
+		geomtryLocation.y += (acceleration);
 	}
-	this->geomtryLocation.x += (moveSideValue / 60.0f);
-	this->geomtryLocation.y += (moveUpValue / 60.0f);
+	this->geomtryLocation.x += (moveSideValue * TIMERMANAGER->GettimeElapsed() * 0.5f);
+	this->geomtryLocation.y += (moveUpValue * TIMERMANAGER->GettimeElapsed());
 
 	moveSideValue = 0.0f;
 	moveUpValue = 0.0f;
