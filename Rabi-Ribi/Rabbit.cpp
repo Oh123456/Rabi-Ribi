@@ -29,12 +29,12 @@ HRESULT Rabbit::Init()
 	IMAGEMANAGER->LoadPng(L"enemy1",L"Chacter/Enemy/enemy1_a");
 	location = { 350.0f,100.0f };
 	worldLocation = location;
-	size = { 20.0f,20.0f };
+	size = { 20.0f * 1.5f,20.0f * 1.5f};
 	imageInfo.imageName = L"enemy1";
 	imageInfo.imageLocation = { location.x ,location.y - 20.0f };
 	imageInfo.atlasInfo.frameSize = { 48.0f,48.0f };
 	imageInfo.atlasInfo.frame = { 0,0 };
-	imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.0f,1.0f }, { 48.0f,48.0f });
+	imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.5f,1.5f }, { 48.0f,48.0f });
 	imageInfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE;
 	hp = 100;
 
@@ -51,9 +51,10 @@ void Rabbit::Release()
 void Rabbit::Update()
 {
 	Super::Update();
-	imageInfo.imageLocation = { location.x ,location.y - 10.0f };
-	geomtryLocation.x += moveSpeed;
-	moveLock = true;
+	imageInfo.imageLocation = { location.x ,location.y - 15.0f };
+	if (!isMoveLock)
+		geomtryLocation.x += moveSpeed;
+	noAnimChange = true;
 }
 
 void Rabbit::Render()
@@ -76,19 +77,22 @@ void Rabbit::MoveCharacter(Vector2_F speed)
 	if (speed.x < 0.0f)
 	{
 		moveSpeed = +0.11f;
-		imageInfo.affineMatrix = Matrix3x2F::Scale({ -1.0f,1.0f }, { 24.0f,24.0f });
+		imageInfo.affineMatrix = Matrix3x2F::Scale({ -1.5f,1.5f }, { 24.0f,24.0f });
 		animKinds = AnimationKinds::Move_Right;
 	}
 	else
 	{
 		moveSpeed = -0.11f;
-		imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.0f,1.0f }, { 24.0f,24.0f });
+		imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.5f,1.5f }, { 24.0f,24.0f });
 		animKinds = AnimationKinds::Move_Left;
 	}
 }
 
 void Rabbit::OnSee(Object * object)
 {
-	EnemyAIController* eAIController = Cast<EnemyAIController>(AIController);
-	eAIController->SetTaget(Cast<Actor>(object));
+	if (object != this)
+	{
+		EnemyAIController* eAIController = Cast<EnemyAIController>(AIController);
+		eAIController->SetTaget(Cast<Actor>(object));
+	}
 }

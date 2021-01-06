@@ -58,6 +58,7 @@ void RabbitAnimInstance::Update()
 			if (delayTime > 0.5f)
 			{
 				rabbit->SetAnimKinds(AnimationKinds::Idle);
+				rabbit->SetMoveLock(false);
 				delayTime = 0.0f;
 			}
 		}

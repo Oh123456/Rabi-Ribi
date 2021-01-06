@@ -23,7 +23,7 @@ class Character :public Actor
 public:
 	Character()  :
 		isFalling(true) , hp(0), maxHP(0) , damage(0) , moveSpeed(0.0f) , jumSpeed(0.0f) ,
-		moveSideValue(0.0f), moveUpValue(0.0f), delayTime(0.0f) , moveLock(false),animKinds(AnimationKinds::Idle){ };
+		moveSideValue(0.0f), moveUpValue(0.0f), delayTime(0.0f) , noAnimChange(false),animKinds(AnimationKinds::Idle){ };
 	~Character() override {};
 
 	HRESULT Init()	override;
@@ -55,8 +55,8 @@ public:
 	void SetAnimKinds(AnimationKinds animKinds) { this->animKinds = animKinds; }
 	AnimationKinds GetAnimKinds() { return animKinds; }
 
-	void SetMoveLock(bool value) { moveLock = value; }
-	bool GetMoveLocl() const { return moveLock; }
+	void SetMoveLock(bool value) { isMoveLock = value; noAnimChange = value; }
+	bool GetMoveLocl() const { return isMoveLock; }
 
 	float GetAcceleration() { return acceleration; }
 
@@ -76,7 +76,8 @@ protected:
 	float moveSpeed;
 	float jumSpeed;
 	bool isFalling;
-	bool moveLock;
+	bool noAnimChange;
+	bool isMoveLock;
 	float acceleration;
 	float delayTime;
 	AnimationKinds animKinds;

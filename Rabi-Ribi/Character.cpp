@@ -38,7 +38,7 @@ void Character::Update()
 	{
 		delayTime = 0.0f;
 		acceleration = 0.0f;
-		if (!moveLock)
+		if (!noAnimChange)
 			animKinds = AnimationKinds::Idle;
 	}
 
@@ -85,7 +85,7 @@ void Character::MoveToNewGeomtryLocation(const Location & newLocation)
 
 void Character::TakeDamage(int damage)
 {
-	moveLock = true;
+	isMoveLock = true;
 	animKinds = AnimationKinds::Hit;
 	hp -= damage;
 	if (hp <= 0)

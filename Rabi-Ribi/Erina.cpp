@@ -102,7 +102,7 @@ void Erina::PlayerInputSetting(PlayerInput* playerInput)
 
 void Erina::MoveUP()
 {
-	if (moveLock)
+	if (noAnimChange)
 		return;
 	// 점프가 끝났으면 초기화
 	if (((animKinds != AnimationKinds::Jum) &
@@ -125,7 +125,7 @@ void Erina::MoveUP()
 
 void Erina::MoveSide()
 {
-	if (moveLock)
+	if (noAnimChange)
 		return;
 	if (KEYMANAGER->GetKeyDown()[VK_LEFT])
 	{
@@ -145,10 +145,10 @@ void Erina::MoveSide()
 
 void Erina::AttackPikoHammer()
 {
-	if (!moveLock)
+	if (!noAnimChange)
 	{
 		animKinds = AnimationKinds::Attack1;
-		moveLock = true;
+		noAnimChange = true;
 	}
 	else
 	{
