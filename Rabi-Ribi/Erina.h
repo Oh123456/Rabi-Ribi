@@ -31,6 +31,8 @@ private:
 
 	void AttackPikoHammer();
 	void RebbonAttack();
+	void RebbonChargeAttack();
+	void RebbonChagetAttackFire();
 
 	void OnHit(Object* object);
 private:

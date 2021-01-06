@@ -15,9 +15,11 @@ public:
 	// 프레임 단위 출력 (이미지, 텍스트)
 	void Render() override;
 
+	class ProjectileManager* GetProjectileManager() { return projectileManager; }
 private:
 	ImageInfo testbg;
 	class Actor* player;
 	class TileMap* test;
+	class ProjectileManager* projectileManager;
 };
 

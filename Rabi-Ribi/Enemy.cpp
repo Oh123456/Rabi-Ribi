@@ -29,14 +29,14 @@ void Enemy::MoveCharacter()
 void Enemy::Render()
 {
 	Super::Render();
-#ifdef _DEBUG
-	if (seeArea)
-	{
-		ID2D1SolidColorBrush* brush = D2D::GetSingleton()->GetBrush();
-		brush->SetColor(D2D1::ColorF(0xff23ff, 1.0f));
-		D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(seeArea->GetGeometryRect(), brush);
-	}
-#endif // _DEBUG
+//#ifdef _DEBUG
+//	if (seeArea)
+//	{
+//		ID2D1SolidColorBrush* brush = D2D::GetSingleton()->GetBrush();
+//		brush->SetColor(D2D1::ColorF(0xff23ff, 1.0f));
+//		D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(seeArea->GetGeometryRect(), brush);
+//	}
+//#endif // _DEBUG
 
 }
 

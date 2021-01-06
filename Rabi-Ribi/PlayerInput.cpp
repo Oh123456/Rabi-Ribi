@@ -38,7 +38,7 @@ void PlayerInput::Render()
 void PlayerInput::InputKey()
 {
 	KeyManager* keyManager = KEYMANAGER;
-	map<BindKeyInfo, OnKeyInput*>::const_iterator c_it;
+	multimap<BindKeyInfo, OnKeyInput*>::const_iterator c_it;
 	BindKeyInfo bindkeyInfo;
 	for (c_it = bindingkey.begin(); c_it != bindingkey.end(); c_it++)
 	{

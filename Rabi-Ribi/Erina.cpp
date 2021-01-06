@@ -18,7 +18,7 @@ Erina::Erina()
 	rebbon->SetOwner(this);
 
 	moveSpeed = 160.0f;
-
+	damage = 10;
 	onHit.BindObject(this,&Erina::OnHit);
 }
 
@@ -31,13 +31,14 @@ HRESULT Erina::Init()
 {
 	Super::Init();
 	location = { 350.0f,100.0f };                           
-	size = { 10.0f ,32.0f  };
+	size = { 10.0f * 1.5f ,34.0f*1.5f  };
 	imageInfo.imageName = L"Erina";
 	imageInfo.imageLocation = location;
 	imageInfo.atlasInfo.frameSize = { 64.0f,64.0f };
 	imageInfo.atlasInfo.frame = {0,0};
-	imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.0f,1.0f }, { 32.0f,32.0f });
-	imageInfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE;
+	imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.5f,1.5f }, { 32.0f,32.0f });
+	imageInfo.contrasteInfo.contrast = 1.0f;
+	imageInfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE | D2DIE_CONTRASTEFFECT;
 
 	ID2D1PathGeometry* collsion;
 	D2D::GetSingleton()->GetD2DFactory()->CreatePathGeometry(&collsion);
@@ -88,13 +89,15 @@ void Erina::PlayerInputSetting(PlayerInput* playerInput)
 	Super::PlayerInputSetting(playerInput);
 
 	playerInput->BindInputKey(VK_UP, KeyInputKinds::StayKey_Down, this, &Erina::MoveUP);
-	playerInput->BindInputKey(VK_DOWN, KeyInputKinds::StayKey_Down, this, &Erina::MoveUP);
+	playerInput->BindInputKey(XKey, KeyInputKinds::StayKey_Down, this, &Erina::MoveUP);
 
 	playerInput->BindInputKey(VK_LEFT, KeyInputKinds::StayKey_Down, this, &Erina::MoveSide);
 	playerInput->BindInputKey(VK_RIGHT, KeyInputKinds::StayKey_Down, this, &Erina::MoveSide);
 
-	playerInput->BindInputKey(ZKey, KeyInputKinds::Key_Down, this, &Erina::AttackPikoHammer);
-	playerInput->BindInputKey(XKey, KeyInputKinds::Key_Down, this, &Erina::RebbonAttack);
+	playerInput->BindInputKey(CKey, KeyInputKinds::Key_Down, this, &Erina::AttackPikoHammer);
+	playerInput->BindInputKey(ZKey, KeyInputKinds::Key_Down, this, &Erina::RebbonAttack);
+	playerInput->BindInputKey(ZKey, KeyInputKinds::StayKey_Down, this, &Erina::RebbonChargeAttack);
+	playerInput->BindInputKey(ZKey, KeyInputKinds::Key_UP, this, &Erina::RebbonChagetAttackFire);
 }
 
 void Erina::MoveUP()
@@ -102,22 +105,22 @@ void Erina::MoveUP()
 	if (moveLock)
 		return;
 	// 점프가 끝났으면 초기화
-	if (((animKinds != AnimmationKinds::Jum) &
-		(animKinds != AnimmationKinds::Falling)) & (jumKeyDownTime >= JUM_KEYDOWN_TIME))
+	if (((animKinds != AnimationKinds::Jum) &
+		(animKinds != AnimationKinds::Falling)) & (jumKeyDownTime >= JUM_KEYDOWN_TIME))
 		jumKeyDownTime = 0.0f;
 
-	if (KEYMANAGER->GetKeyDown()[VK_UP] & (jumKeyDownTime <= JUM_KEYDOWN_TIME))
+	if (KEYMANAGER->GetKeyDown()[XKey] & (jumKeyDownTime <= JUM_KEYDOWN_TIME))
 	{
 		this->isFalling = true;
-		animKinds = AnimmationKinds::Jum;
+		animKinds = AnimationKinds::Jum;
 		//location.y -= 12.8f;
-		acceleration = (-98.0f * TIMERMANAGER->GettimeElapsed());
+		acceleration = (-98.0f * TIMERMANAGER->GettimeElapsed() * 1.8f);
 		//MoveUpValue((-9.8f  * 50.f));
 		//this->geomtryLocation.y -= (9.8f * TIMERMANAGER->GettimeElapsed() * 1.8f);
 		jumKeyDownTime += TIMERMANAGER->GettimeElapsed();
 	}
-	else if (KEYMANAGER->GetKeyDown()[VK_DOWN])
-		this->geomtryLocation.y += moveSpeed * (TIMERMANAGER->GettimeElapsed() * 100.0f);
+	//else if (KEYMANAGER->GetKeyDown()[VK_DOWN])
+	//	this->geomtryLocation.y += moveSpeed * (TIMERMANAGER->GettimeElapsed() * 100.0f);
 }
 
 void Erina::MoveSide()
@@ -128,15 +131,15 @@ void Erina::MoveSide()
 	{
 		MoveSideValue(moveSpeed * -1.0f);
 		if (!isFalling)
-			animKinds = AnimmationKinds::Move_Left;
-		imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.0f,1.0f }, { 32.0f,32.0f });
+			animKinds = AnimationKinds::Move_Left;
+		imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.5f,1.5f }, { 32.0f,32.0f });
 	}
 	else if (KEYMANAGER->GetKeyDown()[VK_RIGHT])
 	{
 		MoveSideValue(moveSpeed * 1.0f);
 		if (!isFalling)
-			animKinds = AnimmationKinds::Move_Right;
-		imageInfo.affineMatrix = Matrix3x2F::Scale({ -1.0f,1.0f }, { 32.0f,32.0f });
+			animKinds = AnimationKinds::Move_Right;
+		imageInfo.affineMatrix = Matrix3x2F::Scale({ -1.5f,1.5f }, { 32.0f,32.0f });
 	}
 }
 
@@ -144,7 +147,7 @@ void Erina::AttackPikoHammer()
 {
 	if (!moveLock)
 	{
-		animKinds = AnimmationKinds::Attack1;
+		animKinds = AnimationKinds::Attack1;
 		moveLock = true;
 	}
 	else
@@ -152,12 +155,12 @@ void Erina::AttackPikoHammer()
 		isNextAttack = false;
 		switch (animKinds)
 		{
-		case AnimmationKinds::Attack1:
-		case AnimmationKinds::Attack2:
-		case AnimmationKinds::Attack3:
+		case AnimationKinds::Attack1:
+		case AnimationKinds::Attack2:
+		case AnimationKinds::Attack3:
 			isNextAttack = true;
 			break;
-		case AnimmationKinds::Attack4:
+		case AnimationKinds::Attack4:
 			isNextAttack = false;
 			break;
 		}
@@ -168,6 +171,17 @@ void Erina::RebbonAttack()
 {
 	rebbon->Attack();
 }
+
+void Erina::RebbonChargeAttack()
+{
+	rebbon->ChargeAttack();
+}
+
+void Erina::RebbonChagetAttackFire()
+{
+	rebbon->ChargeAttackFire();
+}
+
 
 void Erina::OnHit(Object* object)
 {

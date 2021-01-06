@@ -64,24 +64,24 @@ void ErinaAnimInstance::Update()
 	switch (erina->GetAnimKinds())
 	{
 	default:
-	case AnimmationKinds::Idle:
+	case AnimationKinds::Idle:
 		PlayingAnimation("Idle");
 		break;
-	case AnimmationKinds::Move_Right:
+	case AnimationKinds::Move_Right:
 		PlayingAnimation("Right");
 		break;
-	case AnimmationKinds::Move_Left:
+	case AnimationKinds::Move_Left:
 		PlayingAnimation("Left");
 		break;
-	case AnimmationKinds::Jum:
+	case AnimationKinds::Jum:
 		PlayingAnimation("Jum");
 		if (playingAnimation->IsEnd())
-			erina->SetAnimKinds(AnimmationKinds::Falling);
+			erina->SetAnimKinds(AnimationKinds::Falling);
 		break;
-	case AnimmationKinds::Falling:
+	case AnimationKinds::Falling:
 		PlayingAnimation("Falling");
 		break;
-	case AnimmationKinds::Attack1:
+	case AnimationKinds::Attack1:
 		PlayingAnimation("Attack1");
 		//if (playingAnimation->IsEnd())
 		{
@@ -89,11 +89,11 @@ void ErinaAnimInstance::Update()
 			erina->GetPikoHammer()->SetAnimationKinds(HammerAnimationKinds::Attack_1);
 			if ((playingAnimation->IsEnd()) & (erina->GetNextAttack()))
 			{
-				erina->SetAnimKinds(AnimmationKinds::Attack2);
+				erina->SetAnimKinds(AnimationKinds::Attack2);
 			}
 		}
 		break;
-	case AnimmationKinds::Attack2:
+	case AnimationKinds::Attack2:
 		PlayingAnimation("Attack2");
 		//if (playingAnimation->IsEnd())
 		{
@@ -101,11 +101,11 @@ void ErinaAnimInstance::Update()
 			erina->GetPikoHammer()->SetAnimationKinds(HammerAnimationKinds::Attack_2);
 			if ((playingAnimation->IsEnd()) & (erina->GetNextAttack()))
 			{
-				erina->SetAnimKinds(AnimmationKinds::Attack3);
+				erina->SetAnimKinds(AnimationKinds::Attack3);
 			}
 		}
 		break;
-	case AnimmationKinds::Attack3:
+	case AnimationKinds::Attack3:
 		PlayingAnimation("Attack3");
 		//if (playingAnimation->IsEnd())
 		{
@@ -113,11 +113,11 @@ void ErinaAnimInstance::Update()
 			erina->GetPikoHammer()->SetAnimationKinds(HammerAnimationKinds::Attack_3);
 			if ((playingAnimation->IsEnd()) & (erina->GetNextAttack()))
 			{
-				erina->SetAnimKinds(AnimmationKinds::Attack4);
+				erina->SetAnimKinds(AnimationKinds::Attack4);
 			}
 		}
 		break;
-	case AnimmationKinds::Attack4:
+	case AnimationKinds::Attack4:
 		PlayingAnimation("Attack1");
 		erina->GetPikoHammer()->SetAnimationKinds(HammerAnimationKinds::Attack_4);
 		if (playingAnimation->IsEnd())
@@ -125,7 +125,7 @@ void ErinaAnimInstance::Update()
 			erina->GetPikoHammer()->SetAnimationKinds(HammerAnimationKinds::None);
 			erina->SetMoveLock(false);
 			erina->SetNextAttack(false);
-			erina->SetAnimKinds(AnimmationKinds::Idle);
+			erina->SetAnimKinds(AnimationKinds::Idle);
 		}
 		break;
 

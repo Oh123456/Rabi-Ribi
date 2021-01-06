@@ -112,7 +112,9 @@ void CollisionManager::SettingActor(Object * secen)
 			actor_Value.actor = actor;
 			actors.insert(actor_Value);
 			SettingActor(actor);
+			continue;
 		}
+		SettingActor(object);
 	}
 }
 
@@ -168,7 +170,7 @@ void CollisionManager::TerrainCollisionCheck()
 			if (cplayer)
 			{
 				cplayer->MoveToNewGeomtryLocation(actorLT);
-				cplayer->MoveCancel(side,false);
+				cplayer->MoveCancel(side);
 				cplayer->MoveCancel(up, up);
 				//cplayer->MoveCharacter();
 			}
@@ -216,7 +218,6 @@ void CollisionManager::TerrainBottomCollision(Actor* actor, UINT tileX_Size, Loc
 	}
 	// 처리부는 TerrainSideCollision으로 이동
 
-
 }
 
 bool CollisionManager::TerrainSideCollision(Actor * actor, UINT tileX_Size, Location & player_LTLocation)
@@ -259,8 +260,8 @@ bool CollisionManager::TerrainSideCollision(Actor * actor, UINT tileX_Size, Loca
 #endif // _DEBUG
 
 	// 바닥부 충돌처리 
-// 순서를 바꾸면 공중에떠있는 버그가 있어
-// 충돌 타일은 먼저 검사후 여기서 충동처리를 해준다
+	// 순서를 바꾸면 공중에떠있는 버그가 있어
+	// 충돌 타일은 먼저 검사후 여기서 충동처리를 해준다
 	Character* character = Cast<Character>(actor);
 	bool isFalling = true;
 	for (int i = 0; i < 4; i++)

@@ -36,6 +36,7 @@ HRESULT Rabbit::Init()
 	imageInfo.atlasInfo.frame = { 0,0 };
 	imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.0f,1.0f }, { 48.0f,48.0f });
 	imageInfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE;
+	hp = 100;
 
 	SetGeomtryCollsion();
 
@@ -52,12 +53,12 @@ void Rabbit::Update()
 	Super::Update();
 	imageInfo.imageLocation = { location.x ,location.y - 10.0f };
 	geomtryLocation.x += moveSpeed;
+	moveLock = true;
 }
 
 void Rabbit::Render()
 {
 	Super::Render();
-	return;
 #ifdef _DEBUG
 	ID2D1SolidColorBrush* brush = D2D::GetSingleton()->GetBrush();
 	brush->SetColor(D2D1::ColorF(0xf0f00f, 1.0f));
@@ -69,16 +70,20 @@ void Rabbit::Render()
 
 void Rabbit::MoveCharacter(Vector2_F speed)
 {
+	if (animKinds == AnimationKinds::Hit)
+		return;
 	imageInfo.imageLocation = { location.x ,location.y - 10.0f };
 	if (speed.x < 0.0f)
 	{
 		moveSpeed = +0.11f;
 		imageInfo.affineMatrix = Matrix3x2F::Scale({ -1.0f,1.0f }, { 24.0f,24.0f });
+		animKinds = AnimationKinds::Move_Right;
 	}
 	else
 	{
 		moveSpeed = -0.11f;
 		imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.0f,1.0f }, { 24.0f,24.0f });
+		animKinds = AnimationKinds::Move_Left;
 	}
 }
 

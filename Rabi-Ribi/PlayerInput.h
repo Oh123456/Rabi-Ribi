@@ -61,7 +61,7 @@ public:
 	void BindInputKey(UINT VK_value, KeyInputKinds inputKinds, UserClass* userClass, typename Memptr<UserClass>::Type memfun)
 	{
 		BindKeyInfo newKeyinfo(VK_value, inputKinds);
-		map<BindKeyInfo, OnKeyInput*>::const_iterator c_it = bindingkey.find(newKeyinfo);
+		multimap<BindKeyInfo, OnKeyInput*>::const_iterator c_it = bindingkey.find(newKeyinfo);
 		OnKeyInput* Key = nullptr;
 		if (c_it == bindingkey.end())
 		{
@@ -71,14 +71,23 @@ public:
 		}
 		else
 		{
-			Key = c_it->second;
-			Key->UnBind();
-			Key->BindObject(userClass, memfun);
+			if (c_it->first.inputKinds == inputKinds)
+			{
+				Key = c_it->second;
+				Key->UnBind();
+				Key->BindObject(userClass, memfun);
+			}
+			else
+			{
+				Key = new OnKeyInput();
+				Key->BindObject(userClass, memfun);
+				bindingkey.insert(make_pair(newKeyinfo, Key));
+			}
 		}
 	}
 private:
 	void InputKey();
 private:
-	map<BindKeyInfo, OnKeyInput*> bindingkey;
+	multimap<BindKeyInfo, OnKeyInput*> bindingkey;
 };
 

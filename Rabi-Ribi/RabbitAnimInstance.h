@@ -13,5 +13,7 @@ public:
 	void Update()	override;
 	void Render()	override;
 
+private:
+	float delayTime;
 };
 

@@ -1,9 +1,21 @@
 #pragma once
 #include "Weapon.h"
 #include "Rebbon.h"
+
+enum class Rebbon_WeaponKinds
+{
+	Nomal,
+};
+
 class Rebbon_Weapon : public Weapon, public Rebbon
 {
 	SUPER(Weapon);
+
+	enum class ChargeAttacekStat
+	{
+		Chage,
+		Fire,
+	};
 public:
 	Rebbon_Weapon();
 	~Rebbon_Weapon();
@@ -14,13 +26,26 @@ public:
 	void Render()	override;
 
 	void Attack();
+	void ChargeAttack();
+	void ChargeAttackFire();
 private:
 	// 초기 위치로 이동
 	void MoveToDefaultLocation();
 
 	void MoveToAttackLocation();
+
+	void OnFire();
+
+	void AttackEndTimer();
 private:
 	bool isAttack;
+	bool isChargeAttack;
+	bool isAttackend;
 	float moveSpeed;
+	float chargeTiem;
+	Rebbon_WeaponKinds kinds;
+	ChargeAttacekStat chargeAttackStat;
+
+	TimerHandle attackEndTimer;
 };
 

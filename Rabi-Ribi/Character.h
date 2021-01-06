@@ -3,7 +3,7 @@
 
 DELEGATE(OnTerrainCollion);
 
-enum class AnimmationKinds
+enum class AnimationKinds
 {
 	Idle,
 	Move_Right,
@@ -23,7 +23,7 @@ class Character :public Actor
 public:
 	Character()  :
 		isFalling(true) , hp(0), maxHP(0) , damage(0) , moveSpeed(0.0f) , jumSpeed(0.0f) ,
-		moveSideValue(0.0f), moveUpValue(0.0f), delayTime(0.0f) , moveLock(false),animKinds(AnimmationKinds::Idle){ };
+		moveSideValue(0.0f), moveUpValue(0.0f), delayTime(0.0f) , moveLock(false),animKinds(AnimationKinds::Idle){ };
 	~Character() override {};
 
 	HRESULT Init()	override;
@@ -45,18 +45,22 @@ public:
 
 	void MoveGeomtry(Location a);
 	virtual void MoveCharacter();
-	void MoveCancel(bool isSide = true, bool isUp = true);
+	void MoveCancel(bool isSide , bool isUp);
+	void MoveCancel(bool isSide);
 	void MoveToNewGeomtryLocation(const Location& newLocation );
+	virtual void TakeDamage(int damage);
 
 	virtual void PlayerInputSetting(class PlayerInput* playerInput);
 
-	void SetAnimKinds(AnimmationKinds animKinds) { this->animKinds = animKinds; }
-	AnimmationKinds GetAnimKinds() { return animKinds; }
+	void SetAnimKinds(AnimationKinds animKinds) { this->animKinds = animKinds; }
+	AnimationKinds GetAnimKinds() { return animKinds; }
 
 	void SetMoveLock(bool value) { moveLock = value; }
 	bool GetMoveLocl() const { return moveLock; }
 
 	float GetAcceleration() { return acceleration; }
+
+	int GetDamage() { return damage; }
 protected:
 	void MoveSideValue(float value) { moveSideValue = value; }
 	void MoveUpValue(float value) { moveUpValue = value; }
@@ -75,7 +79,7 @@ protected:
 	bool moveLock;
 	float acceleration;
 	float delayTime;
-	AnimmationKinds animKinds;
+	AnimationKinds animKinds;
 private:
 	float moveSideValue;
 	float moveUpValue;

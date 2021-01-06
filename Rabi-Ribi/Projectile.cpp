@@ -6,6 +6,7 @@ Projectile::Projectile() :
 {
 	animmation = CreateObject<ProjectileAnimInstance>();
 	animmation->SetOwner(this);
+	onHit.BindObject(this,&Projectile::OnHit);
 
 	vcMovePatten.resize(MovePattenEnd);
 	for (int i = 0; i < MovePattenEnd; i++)
@@ -25,6 +26,7 @@ HRESULT Projectile::Init()
 	imageInfo.affineMatrix = Matrix3x2F::Scale({ 0.5f,0.5f }, {31.0f,15.5f});
 	size = { 64.0f  ,31.0f };
 
+	SetGeomtryCollsion();
 	//projectile_a
 	return S_OK;
 }
@@ -39,6 +41,7 @@ void Projectile::Update()
 	Super::Update();
 	if (vcMovePatten[Cast<int>(movePatten)])
 		(this->*vcMovePatten[Cast<int>(movePatten)])();
+	imageInfo.imageLocation = location;
 }
 
 void Projectile::Render()
@@ -58,11 +61,14 @@ void Projectile::OnHit(Object* object)
 {
 	if ((this != object) & (owner != object))
 	{
-		DEBUG_MASSAGE("ÃÑ¾Ë Ãæµ¹");
+		//DEBUG_MASSAGE("ÃÑ¾Ë Ãæµ¹");
+		this->SetIsValid(false);
+		object->SetIsValid(false);
 	}
 }
 
 void Projectile::NomalMovePatten()
 {
 	geomtryLocation.x += speed.x;
+	location.x = geomtryLocation.x;
 }

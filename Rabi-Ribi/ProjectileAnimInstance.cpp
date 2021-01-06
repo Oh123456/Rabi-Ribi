@@ -10,15 +10,15 @@ ProjectileAnimInstance::ProjectileAnimInstance()
 	animations.insert(make_pair("Circle_Red", C_Red));
 
 	Animation* C_Blue = new Animation;
-	C_Blue->Setting({ 1,0 }, { 1,6 }, AnimDelelyTime, false);
+	C_Blue->Setting({ 1,0 }, { 1,6 }, AnimDelelyTime);
 	animations.insert(make_pair("Circle_Blue", C_Blue));
 
 	Animation* C_Purple = new Animation;
-	C_Purple->Setting({ 6,0 }, { 6,6 }, AnimDelelyTime, false);
+	C_Purple->Setting({ 6,0 }, { 6,6 }, AnimDelelyTime);
 	animations.insert(make_pair("Circle_Purple", C_Purple));
 
 	Animation* C_Green = new Animation;
-	C_Green->Setting({ 7,0 }, { 7,6 }, AnimDelelyTime, false);
+	C_Green->Setting({ 7,0 }, { 7,6 }, AnimDelelyTime);
 	animations.insert(make_pair("Circle_Green", C_Green));
 
 }

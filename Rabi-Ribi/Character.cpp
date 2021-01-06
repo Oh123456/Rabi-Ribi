@@ -15,6 +15,7 @@ void Character::Release()
 	TIMERMANAGER->DeleteTimer(movementTimer);
 }
 
+#include "Enemy.h"
 void Character::Update()
 {
 	Super::Update();
@@ -24,11 +25,13 @@ void Character::Update()
 	{
 		// 채공시간이 0.1초 이상이면 추락상태이다
 		delayTime += TIMERMANAGER->GettimeElapsed();
+		if (Cast<Enemy>(this))
+			DEBUG_MASSAGE("%f\n", delayTime);
 		if (delayTime > 0.17f)
 		{
-			if ((animKinds != AnimmationKinds::Falling) &
-				(animKinds != AnimmationKinds::Jum))
-				animKinds = AnimmationKinds::Falling;
+			if ((animKinds != AnimationKinds::Falling) &
+				(animKinds != AnimationKinds::Jum))
+				animKinds = AnimationKinds::Falling;
 		}
 	}
 	else
@@ -36,7 +39,7 @@ void Character::Update()
 		delayTime = 0.0f;
 		acceleration = 0.0f;
 		if (!moveLock)
-			animKinds = AnimmationKinds::Idle;
+			animKinds = AnimationKinds::Idle;
 	}
 
 }
@@ -69,9 +72,24 @@ void Character::MoveCancel(bool isSide, bool isUp)
 	MoveCharacter();
 }
 
+void Character::MoveCancel(bool isSide)
+{
+	if (isSide)
+		geomtryLocation.x = location.x;
+}
+
 void Character::MoveToNewGeomtryLocation(const Location & newLocation)
 {
 	SetGeomtryLocation(newLocation,this->size);
+}
+
+void Character::TakeDamage(int damage)
+{
+	moveLock = true;
+	animKinds = AnimationKinds::Hit;
+	hp -= damage;
+	if (hp <= 0)
+		this->SetIsValid(false);
 }
 
 void Character::PlayerInputSetting(PlayerInput* playerInput)
@@ -80,6 +98,8 @@ void Character::PlayerInputSetting(PlayerInput* playerInput)
 
 void Character::CharaterMove()
 {
+	if (Cast<Enemy>(this))
+		DEBUG_MASSAGE("%f\n", delayTime);
 	if (isFalling)
 	{
 		if (acceleration == 0.0f)

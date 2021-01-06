@@ -22,6 +22,7 @@ HRESULT TestRoom::Init()
 {
 	test =CreateObject<TileMap>();
 	test->LoadTile("Save/CameTest.map");
+	CollisionManager* collision = CreateObject<CollisionManager>(true);
 	player = CreateObject<Erina>();
 	CreateObject<Rabbit>();
 	IMAGEMANAGER->LoadPng(L"테스트배경",L"forest3_a");
@@ -34,8 +35,8 @@ HRESULT TestRoom::Init()
 	CAMERA->SetZoom({ 2.0f,2.2f });
 	//D2D::GetSingleton()->GetD2DRenderTarget()->SetTransform(Matrix3x2F::Scale({ 2.0f,2.2f }));
 	Cast<Character>(player)->PlayerInputSetting(CreateObject<PlayerInput>(false));
-	CreateObject<CollisionManager>(true)->SettingActor(this);
-	CreateObject<ProjectileManager>();
+	projectileManager = CreateObject<ProjectileManager>();
+	collision->SettingActor(this);
 
 
 
@@ -137,7 +138,7 @@ void TestRoom::Render()
 	const Location& playerLocation = player->GetLocation();
 	const SIZE_F& playerSize = player->GetSize();
 	D2D_POINT_2F playrLT = { (playerLocation.x - (playerSize.width / 2)) ,(playerLocation.y - (playerSize.height / 2)) };
-	D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle({ playrLT.x,playrLT.y,playrLT.x + (playerSize.width ),playrLT.y + (playerSize.height) }, D2D::GetSingleton()->GetBrush());
+	//D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle({ playrLT.x,playrLT.y,playrLT.x + (playerSize.width ),playrLT.y + (playerSize.height) }, D2D::GetSingleton()->GetBrush());
 
 	//list<GeometryCollision*> collisionlist = test->GetcollisionList();
 	//list<GeometryCollision*>::const_iterator c_it;

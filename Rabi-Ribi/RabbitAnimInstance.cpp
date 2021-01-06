@@ -14,9 +14,10 @@ RabbitAnimInstance::RabbitAnimInstance()
 	animations.insert(make_pair("Move", MoveAnim));
 
 	Animation* HitAnim = new Animation;
-	HitAnim->Setting({ 1,1 }, { 1,1 }, 0.10f);
+	HitAnim->Setting({ 1,1 }, { 1,1 }, 0.10f, false);
 	animations.insert(make_pair("Hit", HitAnim));
-
+	 
+	delayTime = 0.0f;
 }
 
 RabbitAnimInstance::~RabbitAnimInstance()
@@ -42,29 +43,33 @@ void RabbitAnimInstance::Update()
 
 	switch (rabbit->GetAnimKinds())
 	{
-	case AnimmationKinds::Idle:
+	case AnimationKinds::Idle:
 		PlayingAnimation("Idle");
 		break;
-	case AnimmationKinds::Move_Right:
-	case AnimmationKinds::Move_Left:
+	case AnimationKinds::Move_Right:
+	case AnimationKinds::Move_Left:
 		PlayingAnimation("Move");
 		break;
-	case AnimmationKinds::Hit:
+	case AnimationKinds::Hit:
 		PlayingAnimation("Hit");
+		if (playingAnimation->IsEnd())
+		{
+			delayTime += TIMERMANAGER->GettimeElapsed();
+			if (delayTime > 0.5f)
+			{
+				rabbit->SetAnimKinds(AnimationKinds::Idle);
+				delayTime = 0.0f;
+			}
+		}
 		break;
-	case AnimmationKinds::Jum:
-		break;
-	case AnimmationKinds::Falling:
-		break;
-	case AnimmationKinds::Attack1:
-		break;
-	case AnimmationKinds::Attack2:
-		break;
-	case AnimmationKinds::Attack3:
-		break;
-	case AnimmationKinds::Attack4:
-		break;
+	case AnimationKinds::Jum:
+	case AnimationKinds::Falling:
+	case AnimationKinds::Attack1:
+	case AnimationKinds::Attack2:
+	case AnimationKinds::Attack3:
+	case AnimationKinds::Attack4:
 	default:
+		delayTime = 0.0f;
 		break;
 	}
 }

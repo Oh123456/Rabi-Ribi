@@ -25,20 +25,21 @@ void Camera::Update()
 	{
 		const Location& focusActorLocation = focusActor->GetLocation();
 		float moveSpeed = Cast<Character>(focusActor)->GetMoveSpeed() / 60.0f;
-		if ((focusActorLocation.x > 320.f) & (location.x < mapMaxLocation.x))
+		float xSize = WINSIZE_X / (zoomScale.x * 2.0f);
+		if ((focusActorLocation.x > xSize) & (location.x < mapMaxLocation.x))
 		{
-			location.x += focusActorLocation.x - 320.f;
+			location.x += focusActorLocation.x - xSize;
 			//location.x += moveSpeed;
 			if (location.x >= mapMaxLocation.x)
 				location.x = mapMaxLocation.x;
-			focusActor->SetGeomtryLocation({ 320.0f,focusActorLocation.y});
+			focusActor->SetGeomtryLocation({ xSize,focusActorLocation.y});
 		}
-		else if ((focusActorLocation.x < 320.f) & (location.x > 0.0f))
+		else if ((focusActorLocation.x < xSize) & (location.x > 0.0f))
 		{
-			location.x += focusActorLocation.x - 320.f;
+			location.x += focusActorLocation.x - xSize;
 			if (location.x <= 0.0f)
 				location.x = 0.0f;
-			focusActor->SetGeomtryLocation({ 320.0f,focusActorLocation.y });
+			focusActor->SetGeomtryLocation({ xSize,focusActorLocation.y });
 		}
 
 	}

@@ -10,11 +10,11 @@ HammerAnimInstance::HammerAnimInstance()
 	animations.insert(make_pair("Attack1", AttackAnim));
 
 	Animation* Attack2Anim = new Animation;
-	Attack2Anim->Setting({ 0,11 }, { 6,11 }, 0.05f, false);
+	Attack2Anim->Setting({ 0,11 }, { 6,11 }, 0.045f, false);
 	animations.insert(make_pair("Attack2", Attack2Anim));
 
 	Animation* Attack3Anim = new Animation;
-	Attack3Anim->Setting({ 0,0 }, { 9,0 }, 0.05f, false);
+	Attack3Anim->Setting({ 0,0 }, { 9,0 }, 0.045f, false);
 	animations.insert(make_pair("Attack3", Attack3Anim));
 
 }
@@ -54,11 +54,12 @@ void HammerAnimInstance::Update()
 		PlayingAnimation("Attack1");
 		if (playingAnimation->IsEnd())
 		{
+			pikoHammer->ClearHitObject();
 			if (!erina->GetNextAttack())
 			{
 				pikoHammer->SetAnimationKinds(HammerAnimationKinds::None);
 				erina->SetMoveLock(false);
-				erina->SetAnimKinds(AnimmationKinds::Idle);
+				erina->SetAnimKinds(AnimationKinds::Idle);
 				pikoHammer->SetIsValid(false);
 				playingAnimation->Stop();
 			}
@@ -75,11 +76,12 @@ void HammerAnimInstance::Update()
 		PlayingAnimation("Attack2");
 		if (playingAnimation->IsEnd())
 		{
+			pikoHammer->ClearHitObject();
 			if (!erina->GetNextAttack())
 			{
 				pikoHammer->SetAnimationKinds(HammerAnimationKinds::None);
 				erina->SetMoveLock(false);
-				erina->SetAnimKinds(AnimmationKinds::Idle);
+				erina->SetAnimKinds(AnimationKinds::Idle);
 				pikoHammer->SetIsValid(false);
 				playingAnimation->Stop();
 			}
@@ -97,11 +99,12 @@ void HammerAnimInstance::Update()
 		PlayingAnimation("Attack3");
 		if (playingAnimation->IsEnd())
 		{
+			pikoHammer->ClearHitObject();
 			if (!erina->GetNextAttack())
 			{
 				pikoHammer->SetAnimationKinds(HammerAnimationKinds::None);
 				erina->SetMoveLock(false);
-				erina->SetAnimKinds(AnimmationKinds::Idle);
+				erina->SetAnimKinds(AnimationKinds::Idle);
 				pikoHammer->SetIsValid(false);
 				playingAnimation->Stop();
 			}
@@ -126,6 +129,7 @@ void HammerAnimInstance::Update()
 			playingAnimation->Stop();
 			playingAnimation = nullptr;
 			pikoHammer->SetIsValid(false);
+			pikoHammer->ClearHitObject();
 		}
 		break;
 	}

@@ -1,5 +1,8 @@
 #include "Rebbon_Weapon.h"
 #include "RebbonAnimInstance.h"
+#include "TestRoom.h"
+#include "ProjectileManager.h"
+#include "Projectile.h"
 
 Rebbon_Weapon::Rebbon_Weapon() : 
 	isAttack(false)
@@ -21,6 +24,8 @@ HRESULT Rebbon_Weapon::Init()
 	imageInfo.atlasInfo.frameSize = { 48.0,48.0f };
 	size = { 48.0f  ,48.0f };
 	moveSpeed = 1.0f;
+	chargeTiem = 0.0f;
+	isAttackend = false;
 	return S_OK;
 }
 
@@ -32,7 +37,7 @@ void Rebbon_Weapon::Release()
 void Rebbon_Weapon::Update()
 {
 	Super::Update();
-	if (!isAttack)
+	if (!isAttack )
 		MoveToDefaultLocation();
 	else
 		MoveToAttackLocation();
@@ -47,12 +52,29 @@ void Rebbon_Weapon::Render()
 void Rebbon_Weapon::Attack()
 {
 	isAttack = true;
+	isAttackend = false;
+	isChargeAttack = false;
 	moveSpeed = 2.0f;
 }
 
+void Rebbon_Weapon::ChargeAttack()
+{
+	chargeTiem += TIMERMANAGER->GettimeElapsed();
+}
+
+void Rebbon_Weapon::ChargeAttackFire()
+{
+	if (chargeTiem > 1.0f)
+	{
+		isChargeAttack = true;
+		isAttackend = false;
+	}
+	chargeTiem = 0.0f;
+}
+
+
 void Rebbon_Weapon::MoveToDefaultLocation()
 {
-	int goalCount = 0;
 	Vector2_F ownerLocation;
 	if (owner->GetImageInfo_ptr()->affineMatrix.m11 >= 0.0f)
 	{
@@ -69,17 +91,9 @@ void Rebbon_Weapon::MoveToDefaultLocation()
 	Vector2_F goalLocation = thisLocation - ownerLocation;
 
 	if ((goalLocation.x < 1.5f) & (goalLocation.x > -1.5f))
-	{
 		goalLocation.x = 0.0f;
-		goalCount++;
-	}
-
 	if ((goalLocation.y < 1.5f) & (goalLocation.y > -1.5f))
-	{
 		goalLocation.y = 0.0f;
-		goalCount++;
-	}
-
 	if (goalLocation.x > 0)
 		location.x -= moveSpeed;
 	else if (goalLocation.x < 0)
@@ -89,14 +103,12 @@ void Rebbon_Weapon::MoveToDefaultLocation()
 	else if (goalLocation.y < 0)
 		location.y += moveSpeed;
 	
-	if (goalCount == 2)
-	{
 
-	}
 }
 
 void Rebbon_Weapon::MoveToAttackLocation()
 {
+	int goalCount = 0;
 	Vector2_F ownerLocation;
 	if (owner->GetImageInfo_ptr()->affineMatrix.m11 >= 0.0f)
 	{
@@ -113,10 +125,15 @@ void Rebbon_Weapon::MoveToAttackLocation()
 	Vector2_F goalLocation = thisLocation - ownerLocation;
 
 	if ((goalLocation.x < 1.5f) & (goalLocation.x > -1.5f))
+	{
 		goalLocation.x = 0.0f;
+		goalCount++;
+	}
 	if ((goalLocation.y < 1.5f) & (goalLocation.y > -1.5f))
+	{
 		goalLocation.y = 0.0f;
-
+		goalCount++;
+	}
 	if (goalLocation.x > 0)
 		location.x -= moveSpeed;
 	else if (goalLocation.x < 0)
@@ -125,4 +142,73 @@ void Rebbon_Weapon::MoveToAttackLocation()
 		location.y -= moveSpeed;
 	else if (goalLocation.y < 0)
 		location.y += moveSpeed;
+
+
+	if (goalCount == 2)
+	{
+		if (!isAttackend)
+			OnFire();
+	}
+}
+
+void Rebbon_Weapon::OnFire()
+{
+	ProjectileManager* projectileManager = Cast<TestRoom>(SceneManager::currScene)->GetProjectileManager();
+	const list <class Projectile*>& list = projectileManager->GetProjectile();
+	Projectile* projectile = list.front();
+	ImageInfo* projectileImage = Cast<ImageInfo>(projectile->GetImageInfo_ptr());
+	Vector2_F speed;
+	MovePatten movePatten;
+	float angle = 0.0f;
+	D2D1_SIZE_F scaleValue = {1.0f,1.0f};
+	switch (kinds)
+	{
+	case Rebbon_WeaponKinds::Nomal:
+		if (owner->GetImageInfo_ptr()->affineMatrix.m11 >= 0.0f)
+			speed = { -7.0f,0.0f };
+		else
+			speed = { 7.0f,0.0f };
+		movePatten = MovePatten::Nomal;
+		scaleValue = { 1.0f,1.0f };
+		if (isChargeAttack)
+		{
+			projectile->SetProjectileAnimationKinds(ProjectileAnimationKinds::Circle_Blue);
+			scaleValue = { 1.5f,1.5f };
+		}
+		else
+			projectile->SetProjectileAnimationKinds(ProjectileAnimationKinds::Circle_Red);
+		break;
+	default:
+		break;
+	}
+	projectileImage->affineMatrix = Matrix3x2F::Scale(scaleValue,
+		{ projectileImage->atlasInfo.frameSize.width / 2.0f ,projectileImage->atlasInfo.frameSize.height / 2.0f });
+	if (owner->GetImageInfo_ptr()->affineMatrix.m11 >= 0.0f)
+	{
+		if (projectileImage->affineMatrix.m11 > 0.0f)
+			projectileImage->affineMatrix.m11 *= -1.0f;
+	}
+	else
+	{
+		if (projectileImage->affineMatrix.m11 < 0.0f)
+			projectileImage->affineMatrix.m11 *= -1.0f;
+	}
+	projectile->MoveSetting(angle, speed, movePatten);
+	projectile->SetLocation({ location.x + 25.0f,location.y });
+	projectile->SetGeomtryLocation({ location.x + 25.0f,location.y });
+	projectile->SetIsValid(true);
+	projectile->SetOwner(owner);
+	TIMERMANAGER->SetTimer(attackEndTimer,this,&Rebbon_Weapon::AttackEndTimer, 0.5f);
+	isAttackend = true;
+	moveSpeed = 1.0f;
+}
+
+void Rebbon_Weapon::AttackEndTimer()
+{
+	if (chargeTiem == 0.0f)
+	{
+		isAttack = false;
+		//isAttackend = false;
+		TIMERMANAGER->DeleteTimer(attackEndTimer);
+	}
 }

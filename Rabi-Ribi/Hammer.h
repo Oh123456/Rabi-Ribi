@@ -10,6 +10,11 @@ enum class HammerAnimationKinds
 	Attack_4,
 };
 
+enum class AttackKinds
+{
+	OneHit,
+	AllHit,
+};
 
 class Hammer : public Weapon
 {
@@ -26,9 +31,12 @@ public:
 
 	inline void SetAnimationKinds(HammerAnimationKinds animKinds) { this->animKinds = animKinds; }
 	inline HammerAnimationKinds GetAnimationKinds() const { return animKinds; }
+	void ClearHitObject() { hitobjects.clear(); }
 private:
 	void OnHit(Object* object);
 private:
 	HammerAnimationKinds animKinds;
+	AttackKinds attackKinds;
+	deque<Actor*> hitobjects;
 };
 

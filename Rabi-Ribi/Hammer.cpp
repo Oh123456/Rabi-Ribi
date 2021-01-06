@@ -2,8 +2,10 @@
 #include "HammerAnimInstance.h"
 #include "D2DGraphic.h"
 #include "GeometryCollision.h"
+#include "Character.h"
 
-Hammer::Hammer() : animKinds(HammerAnimationKinds::None)
+Hammer::Hammer() : 
+	animKinds(HammerAnimationKinds::None), attackKinds(AttackKinds::OneHit)
 {
 	animmation = CreateObject<HammerAnimInstance>();
 	animmation->SetOwner(this);
@@ -43,7 +45,7 @@ HRESULT Hammer::Init()
 
 	collisionGeomtry->SetCollision(collsion, this);
 	geomtryLocation = location;
-
+	hitobjects.clear();
 
 	return S_OK;
 }
@@ -80,6 +82,28 @@ void Hammer::Render()
 
 void Hammer::OnHit(Object* object)
 {
-	if ((object != owner) & (object != this))
-		DEBUG_MASSAGE("해머 충돌");
+	Character* hitObject = Cast<Character>(object);
+	if (attackKinds == AttackKinds::OneHit)
+	{
+		bool isNoHit = true;
+		if ((object != owner) & (object != this) & (hitObject != nullptr))
+		{
+			size_t size = hitobjects.size();
+			for (size_t i = 0; i < size; i++)
+			{
+				if (hitobjects[i] == hitObject)
+				{
+					isNoHit = false;
+					break;
+				}
+			}
+			if (isNoHit)
+			{
+				hitObject->TakeDamage(Cast<Character>(owner)->GetDamage());
+				hitobjects.push_back(hitObject);
+			}
+		}
+	}
+	else
+		hitObject->TakeDamage(Cast<Character>(owner)->GetDamage());
 }
