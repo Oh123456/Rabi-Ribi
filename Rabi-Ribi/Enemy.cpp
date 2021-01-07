@@ -4,6 +4,7 @@
 
 Enemy::Enemy()
 {
+	characterType = CharacterType::Enemy;
 	invincibleTime = 0.5f;
 }
 

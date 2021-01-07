@@ -56,8 +56,8 @@ void Rabbit::Update()
 {
 	Super::Update();
 	imageInfo.imageLocation = { location.x ,location.y - 15.0f };
-	if (!isMoveLock)
-		geomtryLocation.x += moveSpeed;
+	//if (!isMoveLock)
+	//	geomtryLocation.x += moveSpeed;
 	noAnimChange = true;
 }
 
@@ -76,14 +76,14 @@ void Rabbit::Render()
 void Rabbit::MoveCharacter(Vector2_F speed)
 {
 	TimerManager* tiemrManager = TIMERMANAGER;
-	moveSpeed = 0.0f;
+	
 	if (animKinds == AnimationKinds::Hit)
 		return;
 	imageInfo.imageLocation = { location.x ,location.y - 20.0f };
 	
 	if (speed.x < 0.0f)
 	{
-		moveSpeed = +11.0f * tiemrManager->GettimeElapsed();
+		moveSpeed = 50.0f;
 		imageInfo.affineMatrix = Matrix3x2F::Scale({ -1.5f,1.5f }, { 24.0f,24.0f });
 		animKinds = AnimationKinds::Move_Right;
 		if ((!isFalling) & (!tiemrManager->ExistTimer(jumTimer)))
@@ -91,22 +91,33 @@ void Rabbit::MoveCharacter(Vector2_F speed)
 	}
 	else if (speed.x > 0.0f)
 	{
-		moveSpeed = -11.0f * tiemrManager->GettimeElapsed();
+		moveSpeed = -50.0f;
 		imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.5f,1.5f }, { 24.0f,24.0f });
 		animKinds = AnimationKinds::Move_Left;
 		if ((!isFalling) & (!tiemrManager->ExistTimer(jumTimer)))
 			tiemrManager->SetTimer(jumTimer, this, &Rabbit::Jum, 0.1f);
 	}
 	else
-		animKinds = AnimationKinds::Idle;
+	{
+		if (!isFalling)
+		{
+			animKinds = AnimationKinds::Idle;
+			moveSpeed = 0.0f;
+		}
+	}
+	MoveSideValue(moveSpeed);
 }
 
 void Rabbit::OnSee(Object* object)
 {
-	if (object != this)
+	PlayScene* playScene = Cast<PlayScene>(SceneManager::currScene);
+	if (playScene)
 	{
-		EnemyAIController* eAIController = Cast<EnemyAIController>(AIController);
-		eAIController->SetTaget(Cast<Actor>(object));
+		if (object != this & (object == playScene->GetPlayer()))
+		{
+			EnemyAIController* eAIController = Cast<EnemyAIController>(AIController);
+			eAIController->SetTaget(Cast<Actor>(object));
+		}
 	}
 }
 

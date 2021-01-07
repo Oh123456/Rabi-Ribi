@@ -20,6 +20,8 @@ Erina::Erina()
 	moveSpeed = 180.0f;
 	damage = 10;
 	onHit.BindObject(this,&Erina::OnHit);
+
+	characterType = CharacterType::Player;
 }
 
 Erina::~Erina()
@@ -39,7 +41,7 @@ HRESULT Erina::Init()
 	imageInfo.atlasInfo.frame = {0,0};
 	imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.5f,1.5f }, { 32.0f,32.0f });
 	imageInfo.contrasteInfo.contrast = 1.0f;
-	imageInfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE; //| D2DIE_CONTRASTEFFECT;
+	imageInfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE| D2DIE_CONTRASTEFFECT;
 	hp = (int)pow(2,7 * 4);
 	SetGeomtryCollsion();
 	if (rebbon)

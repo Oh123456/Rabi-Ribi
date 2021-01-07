@@ -17,15 +17,18 @@ enum class AnimationKinds
 	Attack4,
 };
 
+enum class CharacterType
+{
+	Enemy,
+	Player,
+	None,
+};
+
 class Character :public Actor
 {
 	SUPER(Actor);
 public:
-	Character()  :
-		isFalling(true) , hp(0), maxHP(0) , damage(0) , moveSpeed(0.0f) , jumSpeed(0.0f) ,
-		moveSideValue(0.0f), moveUpValue(0.0f), delayTime(0.0f) , noAnimChange(false),
-		animKinds(AnimationKinds::Idle) , isInvincible (false), invincibleTime(2.0f)
-	{ };
+	Character();
 	~Character() override {};
 
 	HRESULT Init()	override;
@@ -93,6 +96,7 @@ protected:
 	float acceleration;
 	float delayTime;
 	AnimationKinds animKinds;
+	CharacterType characterType;
 private:
 	float moveSideValue;
 	float moveUpValue;

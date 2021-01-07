@@ -106,6 +106,12 @@
     <Filter Include="Object\Actor\Weapone\Projectile">
       <UniqueIdentifier>{f51227a8-aa81-492d-a421-3536a0c40fbf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Actor\Character\Enemy\Rabbit">
+      <UniqueIdentifier>{2cac679f-0e9b-46c6-b46b-aa0233afc91c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Actor\Character\Enemy\Wizard">
+      <UniqueIdentifier>{0a5b5e98-ecaa-480f-95b1-c77c67efaf97}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -186,12 +192,6 @@
     <ClCompile Include="HammerAnimInstance.cpp">
       <Filter>Object\Actor\Weapone\pikoHammer</Filter>
     </ClCompile>
-    <ClCompile Include="Rabbit.cpp">
-      <Filter>Object\Actor\Character\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="RabbitAnimInstance.cpp">
-      <Filter>Object\Actor\Character\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerInput.cpp">
       <Filter>Input</Filter>
     </ClCompile>
@@ -233,6 +233,21 @@
     </ClCompile>
     <ClCompile Include="PlayScene.cpp">
       <Filter>Object\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Rabbit.cpp">
+      <Filter>Object\Actor\Character\Enemy\Rabbit</Filter>
+    </ClCompile>
+    <ClCompile Include="RabbitAnimInstance.cpp">
+      <Filter>Object\Actor\Character\Enemy\Rabbit</Filter>
+    </ClCompile>
+    <ClCompile Include="Wizard.cpp">
+      <Filter>Object\Actor\Character\Enemy\Wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="BunnyBand.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="WizardAnimInstance.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -335,12 +350,6 @@
     <ClInclude Include="Hammer.h">
       <Filter>Object\Actor\Weapone\pikoHammer</Filter>
     </ClInclude>
-    <ClInclude Include="Rabbit.h">
-      <Filter>Object\Actor\Character\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="RabbitAnimInstance.h">
-      <Filter>Object\Actor\Character\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerInput.h">
       <Filter>Input</Filter>
     </ClInclude>
@@ -382,6 +391,21 @@
     </ClInclude>
     <ClInclude Include="PlayScene.h">
       <Filter>Object\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="RabbitAnimInstance.h">
+      <Filter>Object\Actor\Character\Enemy\Rabbit</Filter>
+    </ClInclude>
+    <ClInclude Include="Rabbit.h">
+      <Filter>Object\Actor\Character\Enemy\Rabbit</Filter>
+    </ClInclude>
+    <ClInclude Include="Wizard.h">
+      <Filter>Object\Actor\Character\Enemy\Wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="BunnyBand.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="WizardAnimInstance.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

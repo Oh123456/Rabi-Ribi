@@ -2,11 +2,20 @@
 #include "PlayerInput.h"
 #include "GeometryCollision.h"
 
+
+Character::Character() :
+	isFalling(true), hp(0), maxHP(0), damage(0), moveSpeed(0.0f), jumSpeed(0.0f),
+	moveSideValue(0.0f), moveUpValue(0.0f), delayTime(0.0f), noAnimChange(false),
+	animKinds(AnimationKinds::Idle), isInvincible(false), invincibleTime(2.0f),
+	characterType(CharacterType::None)
+{ 
+	timerInterval = (1.0f / 120.0f);
+	TIMERMANAGER->SetTimer(movementTimer, this, &Character::CharaterMove, timerInterval, false);
+	imageInfo.exposureEffectInfo = 0.7f;
+};
+
 HRESULT Character::Init()
 {
-	timerInterval = (1.0f / 120.0f);
-	TIMERMANAGER->SetTimer(movementTimer,this, &Character::CharaterMove, timerInterval,false);
-	imageInfo.exposureEffectInfo = 0.7f;
 	return S_OK;
 }
 
@@ -16,7 +25,6 @@ void Character::Release()
 	TIMERMANAGER->DeleteTimer(movementTimer);
 }
 
-#include "Enemy.h"
 void Character::Update()
 {
 	Super::Update();
@@ -44,6 +52,7 @@ void Character::Update()
 	if (isInvincible)
 	{
 		imageInfo.tintColor = Color::RGBAToVector_4f({ 239,238,179,255});
+		//imageInfo.tintColor = Color::RGBAToVector_4f({ 255,255,255,255});
 		AddImageEffect(imageInfo, D2DIE_TINT);
 		AddImageEffect(imageInfo, D2DIE_EXPOSUREEFFECT);
 	}
@@ -133,9 +142,12 @@ void Character::CharaterMove()
 		//moveUpValue = acceleration;
 		geomtryLocation.y += (acceleration);
 	}
-	this->geomtryLocation.x += (moveSideValue * TIMERMANAGER->GettimeElapsed() * 0.5f);
-	this->geomtryLocation.y += (moveUpValue * TIMERMANAGER->GettimeElapsed());
+	if (!isMoveLock)
+	{
+		this->geomtryLocation.x += (moveSideValue * TIMERMANAGER->GettimeElapsed());
+		this->geomtryLocation.y += (moveUpValue * TIMERMANAGER->GettimeElapsed());
 
+	}
 	moveSideValue = 0.0f;
 	moveUpValue = 0.0f;
 }

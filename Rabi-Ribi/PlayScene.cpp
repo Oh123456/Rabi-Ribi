@@ -6,6 +6,7 @@
 #include "CollisionManager.h"
 #include "PlayerInput.h"
 #include "Rabbit.h"
+#include "Wizard.h"
 #include "Projectile.h"
 #include "ProjectileManager.h"
 
@@ -25,6 +26,7 @@ HRESULT PlayScene::Init()
 	CollisionManager* collision = CreateObject<CollisionManager>(true);
 	player = CreateObject<Erina>();
 	CreateObject<Rabbit>();
+	CreateObject<Wizard>();
 	IMAGEMANAGER->LoadPng(L"테스트배경",L"forest3_a");
 	IMAGEMANAGER->LoadPng(L"Erina", L"Chacter/player_a");
 
