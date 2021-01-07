@@ -50,6 +50,8 @@ private:
 	class TileMap* tileMap;
 
 	list<Actor*> collision[4];
+	// AI 센서 콜리전
+	list<Actor*> sensorCollision[4];
 
 	class GeometryCollision* SideCollosion[2];
 	class GeometryCollision* battomCollosion[4];

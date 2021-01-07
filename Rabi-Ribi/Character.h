@@ -23,7 +23,9 @@ class Character :public Actor
 public:
 	Character()  :
 		isFalling(true) , hp(0), maxHP(0) , damage(0) , moveSpeed(0.0f) , jumSpeed(0.0f) ,
-		moveSideValue(0.0f), moveUpValue(0.0f), delayTime(0.0f) , noAnimChange(false),animKinds(AnimationKinds::Idle){ };
+		moveSideValue(0.0f), moveUpValue(0.0f), delayTime(0.0f) , noAnimChange(false),
+		animKinds(AnimationKinds::Idle) , isInvincible (false), invincibleTime(2.0f)
+	{ };
 	~Character() override {};
 
 	HRESULT Init()	override;
@@ -55,6 +57,12 @@ public:
 	void SetAnimKinds(AnimationKinds animKinds) { this->animKinds = animKinds; }
 	AnimationKinds GetAnimKinds() { return animKinds; }
 
+	void SetInvincibleTimer(float time);
+	void SetInvincibleTimer();
+	void SetInvincible(bool value)		{ isInvincible = value; }
+	bool GetInvincible()		const	{ return isInvincible; }
+	float GetInvincibleTime()			{ return invincibleTime; };
+
 	void SetMoveLock(bool value) { isMoveLock = value; noAnimChange = value; }
 	bool GetMoveLocl() const { return isMoveLock; }
 
@@ -66,6 +74,8 @@ protected:
 	void MoveUpValue(float value) { moveUpValue = value; }
 private:
 	void CharaterMove();
+	void InvincibleTimerFun();
+	void HitAnimationTimer();
 public:
 	// 지형과의 충돌
 	OnTerrainCollion onTerrainCollion;
@@ -78,13 +88,17 @@ protected:
 	bool isFalling;
 	bool noAnimChange;
 	bool isMoveLock;
+	bool isInvincible;
+	float invincibleTime;
 	float acceleration;
 	float delayTime;
 	AnimationKinds animKinds;
 private:
 	float moveSideValue;
 	float moveUpValue;
-private:
 	TimerHandle movementTimer;
+	TimerHandle invincibleTimer;
+	TimerHandle hitAnimTimer;
+
 	float timerInterval;
 };

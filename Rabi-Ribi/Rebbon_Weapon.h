@@ -28,6 +28,8 @@ public:
 	void Attack();
 	void ChargeAttack();
 	void ChargeAttackFire();
+
+	void AttackEnd() { isAttack = false; isChargeAttack = false; isAttackend = false; }
 private:
 	// 초기 위치로 이동
 	void MoveToDefaultLocation();

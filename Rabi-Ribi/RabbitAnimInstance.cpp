@@ -52,16 +52,16 @@ void RabbitAnimInstance::Update()
 		break;
 	case AnimationKinds::Hit:
 		PlayingAnimation("Hit");
-		if (playingAnimation->IsEnd())
-		{
-			delayTime += TIMERMANAGER->GettimeElapsed();
-			if (delayTime > 0.5f)
-			{
-				rabbit->SetAnimKinds(AnimationKinds::Idle);
-				rabbit->SetMoveLock(false);
-				delayTime = 0.0f;
-			}
-		}
+		//if (playingAnimation->IsEnd())
+		//{
+		//	delayTime += TIMERMANAGER->GettimeElapsed();
+		//	if (delayTime > 0.5f)
+		//	{
+		//		rabbit->SetAnimKinds(AnimationKinds::Idle);
+		//		rabbit->SetMoveLock(false);
+		//		delayTime = 0.0f;
+		//	}
+		//}
 		break;
 	case AnimationKinds::Jum:
 	case AnimationKinds::Falling:

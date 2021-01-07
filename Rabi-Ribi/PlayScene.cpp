@@ -1,4 +1,4 @@
-#include "TestRoom.h"
+#include "PlayScene.h"
 #include "TileMap.h"
 #include "D2DGraphic.h"
 #include "Erina.h"
@@ -10,15 +10,15 @@
 #include "ProjectileManager.h"
 
 
-TestRoom::TestRoom()
+PlayScene::PlayScene()
 {
 }
 
-TestRoom::~TestRoom()
+PlayScene::~PlayScene()
 {
 }
 
-HRESULT TestRoom::Init()
+HRESULT PlayScene::Init()
 {
 	test =CreateObject<TileMap>();
 	test->LoadTile("Save/CameTest.map");
@@ -44,13 +44,13 @@ HRESULT TestRoom::Init()
 	return S_OK;
 }
 
-void TestRoom::Release()
+void PlayScene::Release()
 {
 	Super::Release();
 	D2D::GetSingleton()->GetD2DRenderTarget()->SetTransform(Matrix3x2F::Scale({ 1.0f,1.0f }));
 }
 
-void TestRoom::Update()
+void PlayScene::Update()
 {
 	Super::Update();
 }
@@ -130,7 +130,7 @@ void GetGeomrtyPoint(ID2D1PathGeometry* const geometry, const GeometryInfo & geo
 }
 
 
-void TestRoom::Render()
+void PlayScene::Render()
 {
 	IMAGEMANAGER->ImageRander(testbg);
 	Super::Render();
@@ -159,12 +159,5 @@ void TestRoom::Render()
 	//	D2D::GetSingleton()->GetD2DRenderTarget()->FillGeometry(test, D2D::GetSingleton()->GetBrush());
 	//	test->Release();
 	//}
-
-
-
-
-
-
-	
 
 }

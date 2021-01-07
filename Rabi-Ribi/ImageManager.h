@@ -9,6 +9,7 @@
 #define D2DIE_TINT								0x008			//0b 0000 0000 1000
 #define D2DIE_TEMPERATURE						0x010			//0b 0000 0001 0000
 #define D2DIE_CONTRASTEFFECT					0x020			//0b 0000 0010 0000
+#define D2DIE_EXPOSUREEFFECT					0x040			//0b 0000 0100 0000
 #define D2DIE_SPOTSPECULARLIGHTING				0x200			//0b 0010 0000 0000
 #define D2DIE_SPOTDIFFUSELIGHTING				0x400			//0b 0100 0000 0000
 //#define IE_CHECK	0b1111111111
@@ -20,6 +21,7 @@ enum class EFFECTKIND : UINT
 	SCALE,
 	AFFINE,
 	TINT,
+	EXPOSUREEFFECT,
 	TEMPERATUREANDTINT,
 	CONTRASTEFFECT,
 	SPOTSPECULARLIGHTING,
@@ -89,6 +91,8 @@ struct ImageInfo
 	// 대비 효과 
 	ContrastEffectInfo contrasteInfo;
 
+	// -2.0f ~ 2.0f
+	float exposureEffectInfo = 0.0f;
 
 	// 이미지 이펙트 값 IE_ATLAS
 	UINT imageEffect = 0;
@@ -96,6 +100,24 @@ struct ImageInfo
 	LPCWCHAR imageName = L"";
 };
 
+// 이미지 이팩트 추가
+inline void AddImageEffect(ImageInfo& imageInfo, UINT imageEffect)
+{
+	imageInfo.imageEffect |= imageEffect;
+}
+
+// 이미지 이팩트 제거
+inline void RemoveImageEffect(ImageInfo& imageInfo, UINT imageEffect)
+{
+	// 비트값이 0일때 XOR 연산을 할시 1로 변화 하기에 비트값이 1일때 XOR 연산을 시켜준다.
+	if (imageInfo.imageEffect & imageEffect)
+		imageInfo.imageEffect ^= imageEffect;
+}
+
+inline bool CheckImageEffect(ImageInfo& imageInfo, UINT imageEffect)
+{
+	return (imageInfo.imageEffect & imageEffect);
+}
 
 class ImageManager :public Singleton<ImageManager>
 {

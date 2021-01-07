@@ -12,9 +12,15 @@ public:
 	void Update()	override;
 	void Render()	override;
 
-	void MoveCharacter(Vector2_F speed)override;
+	void MoveCharacter(Vector2_F speed) override;
 
 private:
 	void OnSee(Object* object);
+	void OnHit(Object* object);
+	void Jum();
+
+private:
+	TimerHandle jumTimer;
+	int jumTimerCount;
 };
 

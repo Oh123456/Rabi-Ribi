@@ -27,3 +27,15 @@ Color& Color::operator=(const ColorF & color)
 	a = color.a;
 	return *this;
 }
+
+
+D2D1_VECTOR_4F Color::RGBAToVector_4f(RGBAColor color)
+{
+	D2D1_VECTOR_4F reusltcolor;
+	reusltcolor.x = (float)color.r / 255.0f;
+	reusltcolor.y = (float)color.g / 255.0f;
+	reusltcolor.z = (float)color.b / 255.0f;
+	reusltcolor.w = (float)color.a / 255.0f;
+	return reusltcolor;
+}
+

@@ -1,6 +1,6 @@
 #include "Rebbon_Weapon.h"
 #include "RebbonAnimInstance.h"
-#include "TestRoom.h"
+#include "PlayScene.h"
 #include "ProjectileManager.h"
 #include "Projectile.h"
 
@@ -37,7 +37,7 @@ void Rebbon_Weapon::Release()
 void Rebbon_Weapon::Update()
 {
 	Super::Update();
-	if (!isAttack )
+	if (!isAttack & !isChargeAttack)
 		MoveToDefaultLocation();
 	else
 		MoveToAttackLocation();
@@ -54,7 +54,7 @@ void Rebbon_Weapon::Attack()
 	isAttack = true;
 	isAttackend = false;
 	isChargeAttack = false;
-	moveSpeed = 2.0f;
+	moveSpeed = 3.0f;
 }
 
 void Rebbon_Weapon::ChargeAttack()
@@ -68,6 +68,7 @@ void Rebbon_Weapon::ChargeAttackFire()
 	{
 		isChargeAttack = true;
 		isAttackend = false;
+		moveSpeed = 10.f;
 	}
 	chargeTiem = 0.0f;
 }
@@ -79,21 +80,27 @@ void Rebbon_Weapon::MoveToDefaultLocation()
 	if (owner->GetImageInfo_ptr()->affineMatrix.m11 >= 0.0f)
 	{
 		imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.0f,1.0f }, { 24.0f,24.0f });// *Matrix3x2F::Translation(25.f, -10.0f);
-		ownerLocation = { owner->GetLocation().x + 25.0f, owner->GetLocation().y - 10.0f };
+		ownerLocation = { owner->GetLocation().x + 40.0f, owner->GetLocation().y - 15.0f };
 
 	}
 	else
 	{
 		imageInfo.affineMatrix = Matrix3x2F::Scale({ -1.0f,1.0f }, { 24.0f,24.0f });// *Matrix3x2F::Translation(-25.f, -10.0f);
-		ownerLocation = { owner->GetLocation().x - 25.0f, owner->GetLocation().y - 10.0f };
+		ownerLocation = { owner->GetLocation().x - 40.0f, owner->GetLocation().y - 15.0f };
 	}
 	Vector2_F thisLocation = location;
 	Vector2_F goalLocation = thisLocation - ownerLocation;
 
 	if ((goalLocation.x < 1.5f) & (goalLocation.x > -1.5f))
+	{
+		moveSpeed = 1.0f;
 		goalLocation.x = 0.0f;
+	}
 	if ((goalLocation.y < 1.5f) & (goalLocation.y > -1.5f))
+	{
+		//moveSpeed = 1.0f;
 		goalLocation.y = 0.0f;
+	}
 	if (goalLocation.x > 0)
 		location.x -= moveSpeed;
 	else if (goalLocation.x < 0)
@@ -153,7 +160,7 @@ void Rebbon_Weapon::MoveToAttackLocation()
 
 void Rebbon_Weapon::OnFire()
 {
-	ProjectileManager* projectileManager = Cast<TestRoom>(SceneManager::currScene)->GetProjectileManager();
+	ProjectileManager* projectileManager = Cast<PlayScene>(SceneManager::currScene)->GetProjectileManager();
 	const list <class Projectile*>& list = projectileManager->GetProjectile();
 	Projectile* projectile = list.front();
 	ImageInfo* projectileImage = Cast<ImageInfo>(projectile->GetImageInfo_ptr());
@@ -174,6 +181,7 @@ void Rebbon_Weapon::OnFire()
 		{
 			projectile->SetProjectileAnimationKinds(ProjectileAnimationKinds::Circle_Blue);
 			scaleValue = { 1.5f,1.5f };
+			isChargeAttack = false;
 		}
 		else
 			projectile->SetProjectileAnimationKinds(ProjectileAnimationKinds::Circle_Red);
@@ -200,7 +208,7 @@ void Rebbon_Weapon::OnFire()
 	projectile->SetOwner(owner);
 	TIMERMANAGER->SetTimer(attackEndTimer,this,&Rebbon_Weapon::AttackEndTimer, 0.5f);
 	isAttackend = true;
-	moveSpeed = 1.0f;
+	moveSpeed = 3.0f;
 }
 
 void Rebbon_Weapon::AttackEndTimer()

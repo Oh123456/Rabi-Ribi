@@ -7,7 +7,6 @@
 #include "GeometryCollision.h"
 #include "D2DGraphic.h"
 
-
 CollisionManager::CollisionManager() : 
 	tileMap(nullptr) 
 {
@@ -469,7 +468,7 @@ void CollisionManager::ActorCollision(list<Actor*>& splitCollision)
 		for (c_nowit = splitCollision.begin(); c_nowit != splitCollision.end();)
 		{
 			nowActor = *c_nowit;
-			nowGeimetryCollision = nowActor->GetCollisionGeomtry();
+			nowGeimetryCollision = nowActor->GetHitBoxCollisionGeomtry();
 			c_nowit++;
 			if (nowActor == nullptr)
 				continue;
@@ -479,7 +478,7 @@ void CollisionManager::ActorCollision(list<Actor*>& splitCollision)
 				if (nextActor == nullptr)
 					continue;
 
-				nextGeimetryCollision = nextActor->GetCollisionGeomtry();
+				nextGeimetryCollision = nextActor->GetHitBoxCollisionGeomtry();
 				bool isHit = nowGeimetryCollision->CollisionHitCheck(nextGeimetryCollision->GetGeometry(), nextActor->GetLTLocation());
 				if (isHit)
 				{
@@ -493,6 +492,7 @@ void CollisionManager::ActorCollision(list<Actor*>& splitCollision)
 					seeAreaGeimetryCollision = enemy->GetSeeArea();
 					if (seeAreaGeimetryCollision)
 					{
+						nextGeimetryCollision = nextActor->GetCollisionGeomtry();
 						bool isSee = seeAreaGeimetryCollision->CollisionHitCheck(nextGeimetryCollision->GetGeometry(), nextActor->GetLTLocation());
 						if (isSee)
 							enemy->onSee.Execute(nowActor);
@@ -505,6 +505,7 @@ void CollisionManager::ActorCollision(list<Actor*>& splitCollision)
 					seeAreaGeimetryCollision = enemy->GetSeeArea();
 					if (seeAreaGeimetryCollision)
 					{
+						nowGeimetryCollision = nowActor->GetCollisionGeomtry();
 						bool isSee = seeAreaGeimetryCollision->CollisionHitCheck(nowGeimetryCollision->GetGeometry(), nowActor->GetLTLocation());
 						if (isSee)
 							enemy->onSee.Execute(nowActor);
@@ -523,6 +524,7 @@ void CollisionManager::SplitScreen()
 	D2D1_RECT_F actorRc;
 	SIZE_F actorCollisionSize;
 	Actor* actor = nullptr;
+	Enemy* enmey = nullptr;
 	set<ActorKey_Value>::const_iterator c_it;
 	for (int i = 0; i < 4; i++)
 		collision[i].clear();
@@ -539,10 +541,21 @@ void CollisionManager::SplitScreen()
 			continue;
 		actorlocation = actor->GetLocation();
 		actorCollisionSize = actor->GetSize();
-
+		enmey = Cast<Enemy>(actor);
+		if (enmey)
+		{
+			// AI영역이 있을경우 둘중 큰걸로 잡아 화면 분할에 넣어준다.
+			SIZE_F_CompareResult result;
+			result = SIZE_FCompare(actorCollisionSize, enmey->GetSeeAreaSize());
+			if (result.widthReult == SIZE_F_RESULT::Width_Size_Over)
+				actorCollisionSize.width = enmey->GetSeeAreaSize().width;
+			if (result.HeightReult == SIZE_F_RESULT::Height_Size_Over)
+				actorCollisionSize.height = enmey->GetSeeAreaSize().height;
+		}
 		actorRc = { actorlocation.x - (actorCollisionSize.width / 2) , actorlocation.y - (actorCollisionSize.height / 2) ,
 						actorlocation.x + (actorCollisionSize.width / 2) ,actorlocation.y + (actorCollisionSize.height / 2) };
 		
+
 		// 화면 밖에 있을경우 충돌 처리에서 제외한다
 		if (	(actorRc.left > (float)WINSIZE_X) |
 			(actorRc.right < 0.0f) |

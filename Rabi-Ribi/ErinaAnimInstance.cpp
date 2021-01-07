@@ -39,6 +39,10 @@ ErinaAnimInstance::ErinaAnimInstance()
 	Animation* Attack3Anim = new Animation;
 	Attack3Anim->Setting({ 0,7 }, { 9,7 }, 0.05f, false);
 	animations.insert(make_pair("Attack3", Attack3Anim));
+
+	Animation* HitAnim = new Animation;
+	HitAnim->Setting({ 0,8 }, { 1,8 }, 0.10f, false);
+	animations.insert(make_pair("Hit", HitAnim));
 }
 
 ErinaAnimInstance::~ErinaAnimInstance()
@@ -77,6 +81,9 @@ void ErinaAnimInstance::Update()
 		PlayingAnimation("Jum");
 		if (playingAnimation->IsEnd())
 			erina->SetAnimKinds(AnimationKinds::Falling);
+		break;
+	case AnimationKinds::Hit:
+		PlayingAnimation("Hit");
 		break;
 	case AnimationKinds::Falling:
 		PlayingAnimation("Falling");

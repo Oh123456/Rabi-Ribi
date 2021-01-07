@@ -3,20 +3,22 @@
 #include "D2DGraphic.h"
 #include "GeometryCollision.h"
 #include "EnemyAIController.h"
+#include "PlayScene.h"
 
-Rabbit::Rabbit()
+Rabbit::Rabbit() : 
+	jumTimerCount(0)
 {
 	animmation = CreateObject<RabbitAnimInstance>();
 	animmation->SetOwner(this);
 
-	seeAreaSize = { 80.0f,20.0f };
-	SettingSeeArea();
-
+	seeAreaSize = { 200.0f,20.0f };
+	SettingSeeArea(seeAreaSize);
 	moveSpeed = 0.11f;
 
 	CreateAIController<EnemyAIController>();
 
 	onSee.BindObject(this,&Rabbit::OnSee);
+	onHit.BindObject(this,&Rabbit::OnHit);
 }
 
 Rabbit::~Rabbit()
@@ -30,6 +32,7 @@ HRESULT Rabbit::Init()
 	location = { 350.0f,100.0f };
 	worldLocation = location;
 	size = { 20.0f * 1.5f,20.0f * 1.5f};
+	hitBoxSize = size;
 	imageInfo.imageName = L"enemy1";
 	imageInfo.imageLocation = { location.x ,location.y - 20.0f };
 	imageInfo.atlasInfo.frameSize = { 48.0f,48.0f };
@@ -37,6 +40,7 @@ HRESULT Rabbit::Init()
 	imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.5f,1.5f }, { 48.0f,48.0f });
 	imageInfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE;
 	hp = 100;
+	damage = 10;
 
 	SetGeomtryCollsion();
 
@@ -71,28 +75,62 @@ void Rabbit::Render()
 
 void Rabbit::MoveCharacter(Vector2_F speed)
 {
+	TimerManager* tiemrManager = TIMERMANAGER;
+	moveSpeed = 0.0f;
 	if (animKinds == AnimationKinds::Hit)
 		return;
-	imageInfo.imageLocation = { location.x ,location.y - 10.0f };
+	imageInfo.imageLocation = { location.x ,location.y - 20.0f };
+	
 	if (speed.x < 0.0f)
 	{
-		moveSpeed = +0.11f;
+		moveSpeed = +11.0f * tiemrManager->GettimeElapsed();
 		imageInfo.affineMatrix = Matrix3x2F::Scale({ -1.5f,1.5f }, { 24.0f,24.0f });
 		animKinds = AnimationKinds::Move_Right;
+		if ((!isFalling) & (!tiemrManager->ExistTimer(jumTimer)))
+			tiemrManager->SetTimer(jumTimer, this, &Rabbit::Jum, 0.1f);
 	}
-	else
+	else if (speed.x > 0.0f)
 	{
-		moveSpeed = -0.11f;
+		moveSpeed = -11.0f * tiemrManager->GettimeElapsed();
 		imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.5f,1.5f }, { 24.0f,24.0f });
 		animKinds = AnimationKinds::Move_Left;
+		if ((!isFalling) & (!tiemrManager->ExistTimer(jumTimer)))
+			tiemrManager->SetTimer(jumTimer, this, &Rabbit::Jum, 0.1f);
 	}
+	else
+		animKinds = AnimationKinds::Idle;
 }
 
-void Rabbit::OnSee(Object * object)
+void Rabbit::OnSee(Object* object)
 {
 	if (object != this)
 	{
 		EnemyAIController* eAIController = Cast<EnemyAIController>(AIController);
 		eAIController->SetTaget(Cast<Actor>(object));
+	}
+}
+
+void Rabbit::OnHit(Object* object)
+{
+	PlayScene* playScene = Cast<PlayScene>(SceneManager::currScene);
+	if (playScene)
+	{
+		if ((object != this) & (object == playScene->GetPlayer()))
+		{
+			Character* player = Cast<Character>(object);
+			player->TakeDamage(damage);
+		}
+	}
+}
+
+void Rabbit::Jum()
+{
+	TimerManager* tiemrManager = TIMERMANAGER;
+	jumTimerCount++;
+	acceleration = (-98.0f * tiemrManager->GettimeElapsed() * 1.8f);
+	if (jumTimerCount >= 3)
+	{
+		jumTimerCount = 0;
+		tiemrManager->DeleteTimer(jumTimer);
 	}
 }

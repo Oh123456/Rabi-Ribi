@@ -364,6 +364,18 @@ void D2DGraphic::ContrastEffect(ID2D1Effect* imageEffect, float contrastValue, B
 	imageEffect->SetValue(D2D1_CONTRAST_PROP_CLAMP_INPUT, bvalue);
 }
 
+ID2D1Effect * D2DGraphic::CreateExposureEffect()
+{
+	ID2D1Effect* exposureEffect;
+	Context->CreateEffect(CLSID_D2D1Exposure, &exposureEffect);
+	return exposureEffect;
+}
+
+void D2DGraphic::ExposureEffect(ID2D1Effect * imageEffect, float value)
+{
+	imageEffect->SetValue(D2D1_EXPOSURE_PROP_EXPOSURE_VALUE, value);
+}
+
 void D2DGraphic::FontCreate(LPCWSTR fontName)
 {
 	DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(D2DWriteFactory), reinterpret_cast<IUnknown**>(&D2DWriteFactory));

@@ -91,6 +91,14 @@ void TimerManager::AllDeleteTimer()
 	timers.clear();
 }
 
+bool TimerManager::ExistTimer(const TimerHandle& timerHandle)
+{
+	Const_IteratorTimerMap c_it = timers.find(timerHandle);
+	if (c_it != timers.end())
+		return true;
+	return false;
+}
+
 void TimerManager::DeleteTimer(TimerHandle & timerHandle)
 {
 	map<TimerHandle, Timer*>::iterator it;

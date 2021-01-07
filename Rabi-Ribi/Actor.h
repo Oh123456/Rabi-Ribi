@@ -9,7 +9,7 @@ class Actor : public Object
 {
 	SUPER(Object);
 public:
-	Actor() : collisionGeomtry(nullptr), AIController(nullptr),IgnoreTerrain(false){}
+	Actor() : collisionGeomtry(nullptr), AIController(nullptr), IgnoreTerrain(false), hitBoxSize({-1.0f,-1.0f}) {}
 	~Actor() {}
 
 	void Release()	override;
@@ -21,6 +21,7 @@ public:
 	inline void SetSize(const SIZE_F& size)																{ this->size = size; }
 
 
+	inline class GeometryCollision* GetHitBoxCollisionGeomtry()									const { return this->hitBoxCollisionGeomtry; }
 	inline class GeometryCollision* GetCollisionGeomtry()										const { return this->collisionGeomtry; }
 	const ID2D1PathGeometry* GetCollisionPathGeomtry();
 	Location GetLTLocation();
@@ -47,8 +48,10 @@ protected:
 	// 위치
 	Location location;
 	SIZE_F size;
+	SIZE_F hitBoxSize;
 	// 충돌영역
 	class GeometryCollision* collisionGeomtry;
+	class GeometryCollision* hitBoxCollisionGeomtry;
 	//ID2D1PathGeometry* collisionGeomtry;
 	Location geomtryLocation;
 

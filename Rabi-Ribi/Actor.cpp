@@ -7,6 +7,7 @@ void Actor::Release()
 {
 	Super::Release();
 	SAFE_RELEASE(collisionGeomtry);
+	SAFE_RELEASE(hitBoxCollisionGeomtry);
 }
 
 void Actor::SetCollisionGeometry(const ID2D1PathGeometry * const collisionGeomtry)
@@ -51,5 +52,28 @@ void Actor::SetGeomtryCollsion()
 
 	collisionGeomtry->SetCollision(collsion, this);
 	geomtryLocation = location;
+
+	if ((hitBoxSize.width == -1.0f) & (hitBoxSize.height == -1.0f))
+		hitBoxSize = size;
+
+	ID2D1PathGeometry* hitBoxPathCollsion = nullptr;
+	D2D::GetSingleton()->GetD2DFactory()->CreatePathGeometry(&hitBoxPathCollsion);
+	ID2D1GeometrySink* sink2 = NULL;
+	hitBoxPathCollsion->Open(&sink2);
+
+	sink2->BeginFigure({ 0,hitBoxSize.height }, D2D1_FIGURE_BEGIN_FILLED);
+	D2D1_POINT_2F point2[3] = { {hitBoxSize.width,hitBoxSize.height},
+								{hitBoxSize.width,0.0f},
+								{0.0f,0.0f} };
+	sink2->AddLines(point2, 3);
+	sink2->EndFigure(D2D1_FIGURE_END_CLOSED);
+	sink2->Close();
+	sink2->Release();
+
+
+	hitBoxCollisionGeomtry = new GeometryCollision;
+
+	hitBoxCollisionGeomtry->SetCollision(hitBoxPathCollsion, this);
+	hitBoxCollisionGeomtry->SetCollisionSize(hitBoxSize);
 
 }

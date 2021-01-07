@@ -6,6 +6,7 @@ HRESULT Character::Init()
 {
 	timerInterval = (1.0f / 120.0f);
 	TIMERMANAGER->SetTimer(movementTimer,this, &Character::CharaterMove, timerInterval,false);
+	imageInfo.exposureEffectInfo = 0.7f;
 	return S_OK;
 }
 
@@ -25,12 +26,10 @@ void Character::Update()
 	{
 		// 채공시간이 0.1초 이상이면 추락상태이다
 		delayTime += TIMERMANAGER->GettimeElapsed();
-		if (Cast<Enemy>(this))
-			DEBUG_MASSAGE("%f\n", delayTime);
 		if (delayTime > 0.17f)
 		{
 			if ((animKinds != AnimationKinds::Falling) &
-				(animKinds != AnimationKinds::Jum))
+				(animKinds != AnimationKinds::Jum) & (animKinds != AnimationKinds::Hit))
 				animKinds = AnimationKinds::Falling;
 		}
 	}
@@ -40,6 +39,13 @@ void Character::Update()
 		acceleration = 0.0f;
 		if (!noAnimChange)
 			animKinds = AnimationKinds::Idle;
+	}
+
+	if (isInvincible)
+	{
+		imageInfo.tintColor = Color::RGBAToVector_4f({ 239,238,179,255});
+		AddImageEffect(imageInfo, D2DIE_TINT);
+		AddImageEffect(imageInfo, D2DIE_EXPOSUREEFFECT);
 	}
 
 }
@@ -85,21 +91,37 @@ void Character::MoveToNewGeomtryLocation(const Location & newLocation)
 
 void Character::TakeDamage(int damage)
 {
-	isMoveLock = true;
-	animKinds = AnimationKinds::Hit;
-	hp -= damage;
-	if (hp <= 0)
-		this->SetIsValid(false);
+	if (!isInvincible)
+	{
+		isInvincible = true;
+		TIMERMANAGER->SetTimer(hitAnimTimer, this, &Character::HitAnimationTimer, 0.5f);
+		TIMERMANAGER->SetTimer(invincibleTimer, this, &Character::InvincibleTimerFun, invincibleTime);
+		isMoveLock = true;
+		animKinds = AnimationKinds::Hit;
+		noAnimChange = true;
+		hp -= damage;
+		if (hp <= 0)
+			this->SetIsValid(false);
+	}
 }
 
 void Character::PlayerInputSetting(PlayerInput* playerInput)
 {
+
+}
+
+void Character::SetInvincibleTimer(float time)
+{
+	TIMERMANAGER->SetTimer(invincibleTimer, this, &Character::InvincibleTimerFun, time);
+}
+
+void Character::SetInvincibleTimer()
+{
+	this->SetInvincibleTimer(invincibleTime);
 }
 
 void Character::CharaterMove()
 {
-	if (Cast<Enemy>(this))
-		DEBUG_MASSAGE("%f\n", delayTime);
 	if (isFalling)
 	{
 		if (acceleration == 0.0f)
@@ -116,5 +138,21 @@ void Character::CharaterMove()
 
 	moveSideValue = 0.0f;
 	moveUpValue = 0.0f;
+}
+
+void Character::InvincibleTimerFun()
+{
+	RemoveImageEffect(imageInfo, D2DIE_TINT);
+	RemoveImageEffect(imageInfo, D2DIE_EXPOSUREEFFECT);
+	isInvincible = false;
+	TIMERMANAGER->DeleteTimer(invincibleTimer);
+}
+
+void Character::HitAnimationTimer()
+{
+	animKinds = AnimationKinds::Idle;
+	isMoveLock = false;
+	noAnimChange = false;
+	TIMERMANAGER->DeleteTimer(hitAnimTimer);
 }
 

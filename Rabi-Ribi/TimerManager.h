@@ -120,8 +120,8 @@ public:
 		}
 	}
 
-
-
+	// 타이머가 존재하는지 찾는다.
+	bool ExistTimer(const TimerHandle& timerHandle);
 	void DeleteTimer(TimerHandle& timerHandle);
 private:
 	// 월드 타이머

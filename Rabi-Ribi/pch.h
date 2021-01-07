@@ -83,6 +83,48 @@ inline void SetWindowSize(int startX, int startY, int sizeX, int sizeY)
 	g_defaultWindowSize = { (UINT)rc.right ,(UINT)rc.bottom };
 }
 
+enum class SIZE_F_RESULT
+{
+	// 검사 대상보다 넓이가 크다.
+	Width_Size_Over,
+	// 검사 대상보다 넓이가 작다.
+	Width_Size_Under,
+	// 검사 대상이랑 넓이가 같다.
+	Width_Size_Same,
+	// 검사 대상보다 폭이 크다.
+	Height_Size_Over,
+	// 검사 대상보다 폭이 작다.
+	Height_Size_Under,
+	// 검사 대상이랑 폭이 같다.
+	Height_Size_Same,
+};
+
+struct SIZE_F_CompareResult
+{
+	SIZE_F_RESULT widthReult;
+	SIZE_F_RESULT HeightReult;
+};
+
+//  Destination를 검사 대상으로 하여 Source를 비교한다
+inline SIZE_F_CompareResult SIZE_FCompare(const SIZE_F& destination, const SIZE_F& source)
+{
+	SIZE_F_CompareResult result;
+	if (destination.width < source.width)
+		result.widthReult = SIZE_F_RESULT::Width_Size_Over;
+	else if (destination.width > source.width)
+		result.widthReult = SIZE_F_RESULT::Width_Size_Under;
+	else
+		result.widthReult = SIZE_F_RESULT::Width_Size_Same;
+
+	if (destination.height < source.height)
+		result.HeightReult = SIZE_F_RESULT::Height_Size_Over;
+	else if (destination.height > source.height)
+		result.HeightReult = SIZE_F_RESULT::Height_Size_Under;
+	else
+		result.HeightReult = SIZE_F_RESULT::Height_Size_Same;
+
+	return result;
+}
 
 #include "Vector2F.h"
 #include "ImageManager.h"

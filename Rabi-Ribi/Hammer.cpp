@@ -26,25 +26,7 @@ HRESULT Hammer::Init()
 	imageInfo.atlasInfo.frameSize = { 64.0,64.0f };
 	size = { 64.0f  ,64.0f };
 
-	ID2D1PathGeometry* collsion;
-	D2D::GetSingleton()->GetD2DFactory()->CreatePathGeometry(&collsion);
-	ID2D1GeometrySink* sink = NULL;
-	collsion->Open(&sink);
-
-	sink->BeginFigure({ 0,size.height }, D2D1_FIGURE_BEGIN_FILLED);
-	D2D1_POINT_2F point[3] = { {size.width,size.height},
-								{size.width,0.0f},
-								{0.0f,0.0f} };
-	sink->AddLines(point, 3);
-	sink->EndFigure(D2D1_FIGURE_END_CLOSED);
-	sink->Close();
-	sink->Release();
-
-
-	collisionGeomtry = new GeometryCollision;
-
-	collisionGeomtry->SetCollision(collsion, this);
-	geomtryLocation = location;
+	SetGeomtryCollsion();
 	hitobjects.clear();
 
 	return S_OK;
@@ -105,5 +87,8 @@ void Hammer::OnHit(Object* object)
 		}
 	}
 	else
+	{
+		hitObject->SetInvincible(false);
 		hitObject->TakeDamage(Cast<Character>(owner)->GetDamage());
+	}
 }

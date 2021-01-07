@@ -1,7 +1,7 @@
 #include "MainGame.h"
 #include "D2DGraphic.h"
 #include "TileMapToolScene.h"
-#include "TestRoom.h"
+#include "PlayScene.h"
 
 HRESULT MainGame::Init()
 {
@@ -18,7 +18,7 @@ HRESULT MainGame::Init()
 	imageManager->LoadPng(L"»ùÇÃÅ¸ÀÏ", L"Tile/tile1_a");
 	
 	scenManager->AddScene("¸ÊÅø¾À", CreateScene<TileMapToolScene>());
-	scenManager->AddScene("Å×½ºÆ®·ë", CreateScene<TestRoom>());
+	scenManager->AddScene("Å×½ºÆ®·ë", CreateScene<PlayScene>());
 
 	scenManager->ChangeScene("¸ÊÅø¾À");
 

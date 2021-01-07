@@ -15,6 +15,7 @@ void ImageManager::Init()
 	effects.insert(pair<EFFECTKIND, ID2D1Effect*>(EFFECTKIND::SPOTSPECULARLIGHTING, d2d->CreateSpotSpecularLightingEffect()));
 	effects.insert(pair<EFFECTKIND, ID2D1Effect*>(EFFECTKIND::ALPHAMASK, d2d->CreateAlphaMaskEffect()));
 	effects.insert(pair<EFFECTKIND, ID2D1Effect*>(EFFECTKIND::CONTRASTEFFECT, d2d->CreateContrastEffect()));
+	effects.insert(pair<EFFECTKIND, ID2D1Effect*>(EFFECTKIND::EXPOSUREEFFECT, d2d->CreateExposureEffect()));
 
 	defaultDirectory = L"";
 }
@@ -243,6 +244,25 @@ void ImageManager::ImageRander(ID2D1Bitmap * image, const ImageInfo & imageInfo)
 					effect->SetInputEffect(0, oldeffect);
 				ContrastEffectInfo contrastInfo = imageInfo.contrasteInfo;
 				d2d->ContrastEffect(effect, contrastInfo.contrast, contrastInfo.clampInput);
+				oldeffect = effect;
+				effect = nullptr;
+			}
+			break;
+		case EFFECTKIND::EXPOSUREEFFECT:
+			if (imageEffect & D2DIE_EXPOSUREEFFECT)
+			{
+				effect = this->FindEffect(effectKind);
+				if (effect == nullptr)
+				{
+					DEBUG_MASSAGE("노출 효과 이펙트가 널값입니다.\n");
+					break;
+				}
+
+				if (oldeffect == nullptr)
+					effect->SetInput(0, bitmap);
+				else
+					effect->SetInputEffect(0, oldeffect);
+				d2d->ExposureEffect(effect, imageInfo.exposureEffectInfo);
 				oldeffect = effect;
 				effect = nullptr;
 			}

@@ -4,6 +4,7 @@
 
 Enemy::Enemy()
 {
+	invincibleTime = 0.5f;
 }
 
 Enemy::~Enemy()
@@ -29,14 +30,14 @@ void Enemy::MoveCharacter()
 void Enemy::Render()
 {
 	Super::Render();
-//#ifdef _DEBUG
-//	if (seeArea)
-//	{
-//		ID2D1SolidColorBrush* brush = D2D::GetSingleton()->GetBrush();
-//		brush->SetColor(D2D1::ColorF(0xff23ff, 1.0f));
-//		D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(seeArea->GetGeometryRect(), brush);
-//	}
-//#endif // _DEBUG
+#ifdef _DEBUG
+	if (seeArea)
+	{
+		ID2D1SolidColorBrush* brush = D2D::GetSingleton()->GetBrush();
+		brush->SetColor(D2D1::ColorF(0xff23ff, 1.0f));
+		D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(seeArea->GetGeometryRect(), brush);
+	}
+#endif // _DEBUG
 
 }
 
@@ -69,4 +70,9 @@ void Enemy::SettingSeeArea(SIZE_F& size)
 	seeArea = new GeometryCollision;
 
 	seeArea->SetCollision(collsion, seeAreaSize , this);
+}
+
+void Enemy::HitCharacterInvincible(Character* hitCharacter)
+{
+	hitCharacter->SetInvincibleTimer();
 }

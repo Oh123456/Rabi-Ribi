@@ -991,7 +991,7 @@ void TileMapToolScene::Draw(const RECT& tileRc)
 				tiles[i * tile_X + j].frameX = selectTiles[count].frameX;
 				tiles[i * tile_X + j].frameY = selectTiles[count].frameX;
 				tiles[i * tile_X + j].rotation = selectTiles[count].rotation;
-				tiles[i * tile_X + j].isReverse = selectTiles[count++].rotation;
+				tiles[i * tile_X + j].isReverse = selectTiles[count++].isReverse;
 			}
 		}
 	}

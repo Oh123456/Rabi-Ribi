@@ -1,11 +1,11 @@
 #pragma once
 #include "Object.h"
-class TestRoom : public Object
+class PlayScene : public Object
 {
 	SUPER(Object)
 public:
-	TestRoom();
-	~TestRoom();
+	PlayScene();
+	~PlayScene();
 	//  멤버 변수 초기화, 메모리 할당
 	HRESULT Init() override;
 	// 메모리 해제
@@ -16,6 +16,7 @@ public:
 	void Render() override;
 
 	class ProjectileManager* GetProjectileManager() { return projectileManager; }
+	class Actor* GetPlayer() { return player; }
 private:
 	ImageInfo testbg;
 	class Actor* player;

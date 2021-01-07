@@ -17,7 +17,7 @@ Erina::Erina()
 	rebbon = CreateObject<Rebbon_Weapon>();
 	rebbon->SetOwner(this);
 
-	moveSpeed = 160.0f;
+	moveSpeed = 180.0f;
 	damage = 10;
 	onHit.BindObject(this,&Erina::OnHit);
 }
@@ -32,33 +32,16 @@ HRESULT Erina::Init()
 	Super::Init();
 	location = { 350.0f,100.0f };                           
 	size = { 10.0f * 1.5f ,34.0f*1.5f  };
+	hitBoxSize = { 0.0f,0.0f };
 	imageInfo.imageName = L"Erina";
 	imageInfo.imageLocation = location;
 	imageInfo.atlasInfo.frameSize = { 64.0f,64.0f };
 	imageInfo.atlasInfo.frame = {0,0};
 	imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.5f,1.5f }, { 32.0f,32.0f });
 	imageInfo.contrasteInfo.contrast = 1.0f;
-	imageInfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE | D2DIE_CONTRASTEFFECT;
-
-	ID2D1PathGeometry* collsion;
-	D2D::GetSingleton()->GetD2DFactory()->CreatePathGeometry(&collsion);
-	ID2D1GeometrySink* sink = NULL;
-	collsion->Open(&sink);
-
-	sink->BeginFigure({0,size.height}, D2D1_FIGURE_BEGIN_FILLED);
-	D2D1_POINT_2F point[3] = {	{size.width,size.height},
-								{size.width,0.0f},
-								{0.0f,0.0f}};
-	sink->AddLines(point,3);
-	sink->EndFigure(D2D1_FIGURE_END_CLOSED);
-	sink->Close();
-	sink->Release();
-
-	collisionGeomtry = new GeometryCollision;
-
-	collisionGeomtry->SetCollision(collsion,this);
-	//collisionGeomtry;
-	geomtryLocation = location;
+	imageInfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE; //| D2DIE_CONTRASTEFFECT;
+	hp = (int)pow(2,7 * 4);
+	SetGeomtryCollsion();
 	if (rebbon)
 	{
 		rebbon->SetLocation({ location });
@@ -102,7 +85,7 @@ void Erina::PlayerInputSetting(PlayerInput* playerInput)
 
 void Erina::MoveUP()
 {
-	if (noAnimChange)
+	if (isMoveLock)
 		return;
 	// 점프가 끝났으면 초기화
 	if (((animKinds != AnimationKinds::Jum) &
@@ -125,7 +108,7 @@ void Erina::MoveUP()
 
 void Erina::MoveSide()
 {
-	if (noAnimChange)
+	if (isMoveLock)
 		return;
 	if (KEYMANAGER->GetKeyDown()[VK_LEFT])
 	{
@@ -145,14 +128,17 @@ void Erina::MoveSide()
 
 void Erina::AttackPikoHammer()
 {
-	if (!noAnimChange)
+	if (!isMoveLock)
 	{
 		animKinds = AnimationKinds::Attack1;
 		noAnimChange = true;
+		isMoveLock = true;
+		rebbon->AttackEnd();
 	}
 	else
 	{
 		isNextAttack = false;
+		rebbon->AttackEnd();
 		switch (animKinds)
 		{
 		case AnimationKinds::Attack1:
@@ -169,17 +155,47 @@ void Erina::AttackPikoHammer()
 
 void Erina::RebbonAttack()
 {
-	rebbon->Attack();
+	switch (animKinds)
+	{
+	case AnimationKinds::Attack1:
+	case AnimationKinds::Attack2:
+	case AnimationKinds::Attack3:
+	case AnimationKinds::Attack4:
+		break;
+	default:
+		rebbon->Attack();
+		break;
+	}
 }
 
 void Erina::RebbonChargeAttack()
 {
-	rebbon->ChargeAttack();
+	switch (animKinds)
+	{
+	case AnimationKinds::Attack1:
+	case AnimationKinds::Attack2:
+	case AnimationKinds::Attack3:
+	case AnimationKinds::Attack4:
+	default:
+		rebbon->ChargeAttack();
+		break;
+	}
+
 }
 
 void Erina::RebbonChagetAttackFire()
 {
-	rebbon->ChargeAttackFire();
+	switch (animKinds)
+	{
+	case AnimationKinds::Attack1:
+	case AnimationKinds::Attack2:
+	case AnimationKinds::Attack3:
+	case AnimationKinds::Attack4:
+	default:
+		rebbon->ChargeAttackFire();
+		break;
+	}
+
 }
 
 

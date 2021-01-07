@@ -22,6 +22,8 @@ public:
 protected:
 	void SettingSeeArea();
 	void SettingSeeArea(SIZE_F& size);
+	// 피격한 대상의 무적 처리 
+	void HitCharacterInvincible(Character* hitCharacter);
 public:
 	OnSee onSee;
 protected:

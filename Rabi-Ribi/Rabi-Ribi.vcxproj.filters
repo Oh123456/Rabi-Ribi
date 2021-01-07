@@ -141,9 +141,6 @@
     <ClCompile Include="Timer.cpp">
       <Filter>Manager\Timer</Filter>
     </ClCompile>
-    <ClCompile Include="TestRoom.cpp">
-      <Filter>Object\Map</Filter>
-    </ClCompile>
     <ClCompile Include="TileMap.cpp">
       <Filter>Object\Map\Tile</Filter>
     </ClCompile>
@@ -234,6 +231,9 @@
     <ClCompile Include="ProjectileManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>Object\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D2DGraphic.h">
@@ -271,9 +271,6 @@
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Manager\Timer</Filter>
-    </ClInclude>
-    <ClInclude Include="TestRoom.h">
-      <Filter>Object\Map</Filter>
     </ClInclude>
     <ClInclude Include="TileMap.h">
       <Filter>Object\Map\Tile</Filter>
@@ -382,6 +379,9 @@
     </ClInclude>
     <ClInclude Include="ProjectileManager.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>Object\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
