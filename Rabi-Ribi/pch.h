@@ -148,3 +148,7 @@ inline SIZE_F_CompareResult SIZE_FCompare(const SIZE_F& destination, const SIZE_
 #define SCENEMANAGER	GETMANAGER(SceneManager)
 #define CAMERA			GETMANAGER(Camera)
 
+#define PI				3.14f
+#define DegreeToRadian(x)	(x * PI / 180.0f)
+#define RadianToDegree(x)	(x * 180.0f / PI)
+

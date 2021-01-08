@@ -17,12 +17,6 @@ enum class AnimationKinds
 	Attack4,
 };
 
-enum class CharacterType
-{
-	Enemy,
-	Player,
-	None,
-};
 
 class Character :public Actor
 {
@@ -96,7 +90,6 @@ protected:
 	float acceleration;
 	float delayTime;
 	AnimationKinds animKinds;
-	CharacterType characterType;
 private:
 	float moveSideValue;
 	float moveUpValue;

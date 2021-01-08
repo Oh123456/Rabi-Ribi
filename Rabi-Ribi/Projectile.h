@@ -15,6 +15,7 @@ enum class ProjectileAnimationKinds
 enum class MovePatten : int
 {
 	Nomal,
+	Angle,
 	End,
 };
 
@@ -33,6 +34,7 @@ public:
 	 void Release()	override;
 	 void Update()	override;
 	 void Render()	override;
+	 void SetIsValid(bool value) override;
 
 	 void MoveSetting(float angle, Vector2_F speed, MovePatten movePatten);
 
@@ -47,9 +49,13 @@ public:
 	 void SetProjectileAnimationKinds(ProjectileAnimationKinds kinds) { animKinds = kinds; }
 	 ProjectileAnimationKinds GetProjectileAnimationKinds() { return animKinds; }
 
+	 void CreateEffect();
+	 _INTERFACE IEffect* GetEffect() { return effect; }
+
 private:
 	void OnHit(Object* object);
 	void NomalMovePatten();
+	void AngleMovePatten();
 protected:
 	ProjectileAnimationKinds animKinds;
 	float angle;
@@ -58,5 +64,7 @@ protected:
 	MovePatten movePatten;
 
 	vector<Funptr> vcMovePatten;
+
+	_INTERFACE IEffect* effect;
 };
 

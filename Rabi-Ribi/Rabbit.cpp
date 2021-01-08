@@ -17,7 +17,7 @@ Rabbit::Rabbit() :
 
 	CreateAIController<EnemyAIController>();
 
-	onSee.BindObject(this,&Rabbit::OnSee);
+	//onSee.BindObject(this,&Rabbit::OnSee);
 	onHit.BindObject(this,&Rabbit::OnHit);
 }
 
@@ -113,7 +113,7 @@ void Rabbit::OnSee(Object* object)
 	PlayScene* playScene = Cast<PlayScene>(SceneManager::currScene);
 	if (playScene)
 	{
-		if (object != this & (object == playScene->GetPlayer()))
+		if ((object != this) & (object == playScene->GetPlayer()))
 		{
 			EnemyAIController* eAIController = Cast<EnemyAIController>(AIController);
 			eAIController->SetTaget(Cast<Actor>(object));

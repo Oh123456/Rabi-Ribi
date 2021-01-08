@@ -1,11 +1,15 @@
 #include "Enemy.h"
 #include "GeometryCollision.h"
+#include "PlayScene.h"
+#include "EnemyAIController.h"
 #include "D2DGraphic.h"
 
 Enemy::Enemy()
 {
-	characterType = CharacterType::Enemy;
+	actorType = ActorType::Enemy;
 	invincibleTime = 0.5f;
+
+	onSee.BindObject(this,&Enemy::See);
 }
 
 Enemy::~Enemy()
@@ -76,4 +80,17 @@ void Enemy::SettingSeeArea(SIZE_F& size)
 void Enemy::HitCharacterInvincible(Character* hitCharacter)
 {
 	hitCharacter->SetInvincibleTimer();
+}
+
+void Enemy::See(Object * object)
+{
+	PlayScene* playScene = Cast<PlayScene>(SceneManager::currScene);
+	if (playScene)
+	{
+		if ((object != this) & (object == playScene->GetPlayer()))
+		{
+			EnemyAIController* eAIController = Cast<EnemyAIController>(AIController);
+			eAIController->SetTaget(Cast<Actor>(object));
+		}
+	}
 }

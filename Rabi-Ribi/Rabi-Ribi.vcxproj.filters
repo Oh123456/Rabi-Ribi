@@ -112,6 +112,9 @@
     <Filter Include="Object\Actor\Character\Enemy\Wizard">
       <UniqueIdentifier>{0a5b5e98-ecaa-480f-95b1-c77c67efaf97}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Effect">
+      <UniqueIdentifier>{0edc561e-e40b-4731-a811-074fa05867a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -247,6 +250,15 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="WizardAnimInstance.cpp">
+      <Filter>Object\Actor\Character\Enemy\Wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="WizardAIController.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="WizardProjectileEffect.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -405,6 +417,15 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="WizardAnimInstance.h">
+      <Filter>Object\Actor\Character\Enemy\Wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="WizardAIController.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="WizardProjectileEffect.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

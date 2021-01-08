@@ -16,6 +16,8 @@ public:
 	// 프레임 단위 출력 (이미지, 텍스트)
 	void Render() override;
 
+	class Projectile* SpawnProjectile();
+
 	const list <class Projectile*>& GetProjectile()			const { return projectiles; }
 	const list <class Projectile*>& GetActiveProjectiles()	const { return activeProjectiles;}
 private:

@@ -162,7 +162,7 @@ void Rebbon_Weapon::OnFire()
 {
 	ProjectileManager* projectileManager = Cast<PlayScene>(SceneManager::currScene)->GetProjectileManager();
 	const list <class Projectile*>& list = projectileManager->GetProjectile();
-	Projectile* projectile = list.front();
+	Projectile* projectile = projectileManager->SpawnProjectile();
 	ImageInfo* projectileImage = Cast<ImageInfo>(projectile->GetImageInfo_ptr());
 	Vector2_F speed;
 	MovePatten movePatten;

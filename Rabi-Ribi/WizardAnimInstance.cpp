@@ -6,11 +6,11 @@ WizardAnimInstance::WizardAnimInstance()
 {
 	// Blue
 	Animation* nowAnim = new Animation;
-	nowAnim->Setting({ 0,0 }, { 0,3 }, 0.10f);
+	nowAnim->Setting({ 0,0 }, { 3,0 }, 0.15f);
 	animations.insert(make_pair("Idle_b", nowAnim));
 
 	nowAnim = new Animation;
-	nowAnim->Setting({ 0,1 }, { 4, 1 }, 0.10f);
+	nowAnim->Setting({ 0,1 }, { 4, 1 }, 0.15f);
 	animations.insert(make_pair("Move_b", nowAnim));
 	
 	nowAnim = new Animation;
@@ -24,6 +24,7 @@ WizardAnimInstance::WizardAnimInstance()
 
 	nowAnim = new Animation;
 	nowAnim->Setting({ 0,4 }, { 4, 4 }, 0.10f);
+	nowAnim->SettingLoopIndex({ 2,4 }, { 4, 4 });
 	animations.insert(make_pair("Attack_b", nowAnim));
 
 	nowAnim = new Animation;
@@ -98,6 +99,7 @@ void WizardAnimInstance::Update()
 	case AnimationKinds::Attack4:
 		animKeyValue = "Attack" + suffix[(int)(wizard->GetWizardType())];
 		PlayingAnimation(animKeyValue);
+		wizard->Attack();
 		break;
 	default:
 		animKeyValue = "Idle" + suffix[(int)(wizard->GetWizardType())];

@@ -67,7 +67,7 @@ public:
 	list<Object*>* GetChilds() { return &allClass; }
 
 	// 활성화 여부
-	void SetIsValid(bool value);
+	virtual void SetIsValid(bool value);
 	inline bool GetIsValid() { return isValid; }
 
 	void SetIsRender(bool value);

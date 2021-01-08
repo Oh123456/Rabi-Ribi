@@ -23,7 +23,7 @@ public:
 
 	void MoveCharacter(Vector2_F speed) override;
 
-
+	void Attack();
 
 	void SetWizardType(WizardType type)			{ wizardType = type; }
 	WizardType GetWizardType()			const	{ return wizardType; }

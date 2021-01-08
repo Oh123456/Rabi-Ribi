@@ -6,8 +6,7 @@
 Character::Character() :
 	isFalling(true), hp(0), maxHP(0), damage(0), moveSpeed(0.0f), jumSpeed(0.0f),
 	moveSideValue(0.0f), moveUpValue(0.0f), delayTime(0.0f), noAnimChange(false),
-	animKinds(AnimationKinds::Idle), isInvincible(false), invincibleTime(2.0f),
-	characterType(CharacterType::None)
+	animKinds(AnimationKinds::Idle), isInvincible(false), invincibleTime(2.0f)
 { 
 	timerInterval = (1.0f / 120.0f);
 	TIMERMANAGER->SetTimer(movementTimer, this, &Character::CharaterMove, timerInterval, false);

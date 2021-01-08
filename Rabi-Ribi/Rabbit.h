@@ -18,7 +18,6 @@ private:
 	void OnSee(Object* object);
 	void OnHit(Object* object);
 	void Jum();
-
 private:
 	TimerHandle jumTimer;
 	int jumTimerCount;

@@ -9,6 +9,7 @@
 #include "Wizard.h"
 #include "Projectile.h"
 #include "ProjectileManager.h"
+#include "Effect.h"
 
 
 PlayScene::PlayScene()
@@ -40,6 +41,9 @@ HRESULT PlayScene::Init()
 	projectileManager = CreateObject<ProjectileManager>();
 	collision->SettingActor(this);
 
+	IEffect* test123 = CreateObject<Effect>();
+	test123->SetSocketLocation({ 300.0f,300.f });
+	test123->SetEffect(EffectKinds::Small_Blue_Effect);
 
 
 	CAMERA->SetFocusActor(player);

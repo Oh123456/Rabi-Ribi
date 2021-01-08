@@ -1,9 +1,12 @@
 #include "Projectile.h"
 #include "ProjectileAnimInstance.h"
+#include "Character.h"
+#include "Effect.h"
 
 Projectile::Projectile() : 
 	angle(0.0f), speed(0.0f,0.0f) , animKinds(ProjectileAnimationKinds::Circle_Red)
 {
+	IgnoreTerrain = false;
 	animmation = CreateObject<ProjectileAnimInstance>();
 	animmation->SetOwner(this);
 	onHit.BindObject(this,&Projectile::OnHit);
@@ -13,6 +16,7 @@ Projectile::Projectile() :
 		vcMovePatten[i] = nullptr;
 	int i = 0;
 	vcMovePatten[i++] = &Projectile::NomalMovePatten;
+	vcMovePatten[i++] = &Projectile::AngleMovePatten;
 }
 
 HRESULT Projectile::Init()
@@ -50,6 +54,13 @@ void Projectile::Render()
 
 }
 
+void Projectile::SetIsValid(bool value)
+{
+	Super::SetIsValid(value);
+	// 생성된 이펙트를 제거한다.
+	Object::Release();
+}
+
 void Projectile::MoveSetting(float angle, Vector2_F speed, MovePatten movePatten)
 {
 	this->angle = angle;
@@ -57,13 +68,22 @@ void Projectile::MoveSetting(float angle, Vector2_F speed, MovePatten movePatten
 	this->movePatten = movePatten;
 }
 
+void Projectile::CreateEffect()
+{
+	if (!effect)
+		effect = CreateObject<Effect>();
+	effect->SetOwner(this);
+}
+
 void Projectile::OnHit(Object* object)
 {
-	if ((this != object) & (owner != object))
+
+	if ((this != object) & (owner != object) & (Cast<Actor>(object)->GetActorType() != ActorType::Weapone))
 	{
-		//DEBUG_MASSAGE("총알 충돌");
 		this->SetIsValid(false);
-		object->SetIsValid(false);
+		Character* character = Cast<Character>(object);
+		if (character)
+			character->TakeDamage(100);
 	}
 }
 
@@ -71,4 +91,12 @@ void Projectile::NomalMovePatten()
 {
 	geomtryLocation.x += speed.x;
 	location.x = geomtryLocation.x;
+}
+
+void Projectile::AngleMovePatten()
+{
+	geomtryLocation.x += cosf(this->angle) * speed.x;
+	geomtryLocation.y += sinf(this->angle) * speed.y;
+	location = geomtryLocation;
+
 }

@@ -16,10 +16,10 @@ if (x) \
 	x = nullptr; \
 }
 
-#define SAFE_RELEASE(x) \
+#define SAFE_RELEASE(x,...) \
  if (x)\
 { \
- 	x->Release(); \
+ 	x->Release(##__VA_ARGS__); \
 	x = nullptr; \
 }
 

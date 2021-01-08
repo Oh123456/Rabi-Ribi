@@ -6,6 +6,7 @@
 #include "TileMap.h"
 #include "GeometryCollision.h"
 #include "D2DGraphic.h"
+#include "Weapon.h"
 
 CollisionManager::CollisionManager() : 
 	tileMap(nullptr) 
@@ -147,7 +148,7 @@ void CollisionManager::TerrainCollisionCheck()
 			ZeroMemory(battomCollosion, sizeof(GeometryCollision*) * 4);
 			ZeroMemory(topCollosion, sizeof(GeometryCollision*) * 3);
 			actor = (*c_setier).actor;
-			if (actor->GetIgnoreTerrain())
+			if (actor->GetIgnoreTerrain() | !actor->GetIsValid())
 				continue;
 			actorCollision = const_cast<ID2D1PathGeometry*>(actor->GetCollisionPathGeomtry());
 			actorLocation = actor->GetGeomtryLocation();
@@ -262,6 +263,7 @@ bool CollisionManager::TerrainSideCollision(Actor * actor, UINT tileX_Size, Loca
 	// 순서를 바꾸면 공중에떠있는 버그가 있어
 	// 충돌 타일은 먼저 검사후 여기서 충동처리를 해준다
 	Character* character = Cast<Character>(actor);
+	Weapon* weapon = Cast<Weapon>(actor);
 	bool isFalling = true;
 	for (int i = 0; i < 4; i++)
 	{
@@ -279,6 +281,9 @@ bool CollisionManager::TerrainSideCollision(Actor * actor, UINT tileX_Size, Loca
 							player_LTLocation.y -= 0.1f;
 					}
 				}
+				if (weapon)
+					weapon->onHit.Execute(Cast<Object>(battomCollosion[i]->GetOwner()));
+				
 			}
 		}
 	}
@@ -295,6 +300,8 @@ bool CollisionManager::TerrainSideCollision(Actor * actor, UINT tileX_Size, Loca
 			//D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(Cast<TILE_F>(SideCollosion[i]->GetOwner())->rc, D2D::GetSingleton()->GetBrush());
 			if (SideCollosion[i]->CollisionHitCheck(Cast<ID2D1PathGeometry>(actor->GetCollisionPathGeomtry()), player_LTLocation))
 			{
+				if (weapon)
+					weapon->onHit.Execute(Cast<Object>(SideCollosion[i]->GetOwner()));
 
 				if (((tile->isReverse) & (i == 0)) | ((tile->geometryinfo.geometrykind == GeometryKinds::Square)))
 				{
@@ -365,6 +372,7 @@ bool CollisionManager::TerrainTopCollision(class Actor* actor, UINT tileX_Size, 
 #endif // _DEBUG
 
 	Character* character = Cast<Character>(actor);
+	Weapon* weapon = Cast<Weapon>(actor);
 	bool isFalling = true;
 	for (int i = 0; i < 3; i++)
 	{
@@ -385,6 +393,8 @@ bool CollisionManager::TerrainTopCollision(class Actor* actor, UINT tileX_Size, 
 						return true;
 					}
 				}
+				if (weapon)
+					weapon->onHit.Execute(Cast<Object>(topCollosion[i]->GetOwner()));
 			}
 		}
 	}
@@ -495,7 +505,7 @@ void CollisionManager::ActorCollision(list<Actor*>& splitCollision)
 						nextGeimetryCollision = nextActor->GetCollisionGeomtry();
 						bool isSee = seeAreaGeimetryCollision->CollisionHitCheck(nextGeimetryCollision->GetGeometry(), nextActor->GetLTLocation());
 						if (isSee)
-							enemy->onSee.Execute(nowActor);
+							enemy->onSee.Execute(nextActor);
 					}
 				}
 

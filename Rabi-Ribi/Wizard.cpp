@@ -1,6 +1,11 @@
 #include "Wizard.h"
 #include "ImageManager.h"
 #include "WizardAnimInstance.h"
+#include "WizardAIController.h"
+#include "PlayScene.h"
+#include "ProjectileManager.h"
+#include "Projectile.h"
+#include "Effect.h"
 #include "D2DGraphic.h"
 
 Wizard::Wizard() :
@@ -8,6 +13,11 @@ Wizard::Wizard() :
 {
 	animmation = CreateObject<WizardAnimInstance>();
 	animmation->SetOwner(this);
+
+	CreateAIController<WizardAIController>();
+
+	seeAreaSize = { 200.0f,50.0f };
+	SettingSeeArea(seeAreaSize);
 
 }
 
@@ -58,4 +68,72 @@ void Wizard::Render()
 
 void Wizard::MoveCharacter(Vector2_F speed)
 {
+	TimerManager* tiemrManager = TIMERMANAGER;
+
+	if ((animKinds == AnimationKinds::Hit) | (isMoveLock))
+		return;
+	imageInfo.imageLocation = { location.x ,location.y - 20.0f };
+
+	noAnimChange = true;
+	if (speed.x < 0.0f)
+	{
+		moveSpeed = 50.0f;
+		imageInfo.affineMatrix = Matrix3x2F::Scale({ -1.5f,1.5f }, { 24.0f,24.0f });
+		animKinds = AnimationKinds::Move_Right;
+	}
+	else if (speed.x > 0.0f)
+	{
+		moveSpeed = -50.0f;
+		imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.5f,1.5f }, { 24.0f,24.0f });
+		animKinds = AnimationKinds::Move_Left;
+	}
+	else
+	{
+		if (!isFalling)
+		{
+			animKinds = AnimationKinds::Idle;
+			moveSpeed = 0.0f;
+			noAnimChange = false;
+		}
+	}
+	MoveSideValue(moveSpeed);
+}
+
+void Wizard::Attack()
+{
+	static float Test = 0.0f;
+	Test += TIMERMANAGER->GettimeElapsed();
+	noAnimChange = true;
+
+	PlayScene* playScene = Cast<PlayScene>(SceneManager::currScene);
+
+	if (Test >= 2.0f)
+	{
+		Test = 0.0f;
+		isMoveLock = false;
+		noAnimChange = false;
+		for (int i = 0; i < 10; i++)
+		{
+
+			Projectile* projectile = playScene->GetProjectileManager()->SpawnProjectile();
+			if (i < 5)
+			{
+				float angle = 30.0f - (15.0f * (float)(i));
+				if (angle <= 0.0f)
+					angle -= 360.0f;
+				projectile->MoveSetting(DegreeToRadian(angle), { 5.0f,5.0f }, MovePatten::Angle);
+			}
+			else
+				projectile->MoveSetting(DegreeToRadian(210.0f + (15.0f * (float)(i - 5))), { 5.0f,5.0f }, MovePatten::Angle);
+			projectile->SetLocation(location);
+			projectile->SetGeomtryLocation(location);
+			projectile->SetIsValid(true);
+			projectile->SetOwner(this);
+			projectile->SetSize({31.0f, 31.0f});
+			ImageInfo* projectileInageinfo = Cast<ImageInfo>(projectile->GetImageInfo_ptr());
+			projectileInageinfo->imageEffect = 0;
+			projectile->CreateEffect();
+			projectile->GetEffect()->SetEffect(EffectKinds::Small_Blue_Effect);
+		}
+	}
 }

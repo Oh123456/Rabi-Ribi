@@ -4,12 +4,21 @@
 
 DELEGATE_OneParam(OnHit, Object*);
 
+enum class ActorType
+{
+	Enemy,
+	Player,
+	Weapone,
+	None,
+};
+
+
 // 게임에 소환되에 그려지는 객체들
 class Actor : public Object
 {
 	SUPER(Object);
 public:
-	Actor() : collisionGeomtry(nullptr), AIController(nullptr), IgnoreTerrain(false), hitBoxSize({-1.0f,-1.0f}) {}
+	Actor() : collisionGeomtry(nullptr), AIController(nullptr), IgnoreTerrain(false), hitBoxSize({-1.0f,-1.0f}), actorType(ActorType::None) {}
 	~Actor() {}
 
 	void Release()	override;
@@ -31,6 +40,7 @@ public:
 	inline const ImageInfo* GetImageInfo_ptr()															{ return &this->imageInfo;}
 	inline bool GetIgnoreTerrain()																	const { return IgnoreTerrain; }
 	inline class Animinstance* GetAnimInstance()												const { return animmation; }
+	inline ActorType GetActorType()																const { return actorType; }
 protected:
 	void SetGeomtryCollsion();
 
@@ -61,5 +71,6 @@ protected:
 	bool IgnoreTerrain;
 
 	class AIBase* AIController;
+	ActorType actorType;
 };
 

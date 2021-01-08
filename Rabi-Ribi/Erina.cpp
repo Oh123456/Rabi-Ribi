@@ -21,7 +21,7 @@ Erina::Erina()
 	damage = 10;
 	onHit.BindObject(this,&Erina::OnHit);
 
-	characterType = CharacterType::Player;
+	actorType = ActorType::Player;
 }
 
 Erina::~Erina()

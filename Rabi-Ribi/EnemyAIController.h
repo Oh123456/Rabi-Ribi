@@ -13,7 +13,7 @@ public:
 	void Render()	override;
 
 	void SetTaget(class Actor* object) { taget = object; }
-private:
+protected:
 	class Actor* taget;
 };
 

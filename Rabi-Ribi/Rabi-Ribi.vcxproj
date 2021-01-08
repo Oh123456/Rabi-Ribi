@@ -133,6 +133,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="D2DGraphic.cpp" />
+    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyAIController.cpp" />
     <ClCompile Include="Erina.cpp" />
@@ -167,7 +168,9 @@
     <ClCompile Include="Volume.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="Wizard.cpp" />
+    <ClCompile Include="WizardAIController.cpp" />
     <ClCompile Include="WizardAnimInstance.cpp" />
+    <ClCompile Include="WizardProjectileEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
@@ -182,6 +185,7 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="D2DGraphic.h" />
     <ClInclude Include="Delegate.h" />
+    <ClInclude Include="Effect.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyAIController.h" />
     <ClInclude Include="Erina.h" />
@@ -221,7 +225,9 @@
     <ClInclude Include="Volume.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="Wizard.h" />
+    <ClInclude Include="WizardAIController.h" />
     <ClInclude Include="WizardAnimInstance.h" />
+    <ClInclude Include="WizardProjectileEffect.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
