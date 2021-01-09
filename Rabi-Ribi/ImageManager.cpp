@@ -74,6 +74,8 @@ void ImageManager::ImageRander(const ImageInfo& imageInfo)
 
 void ImageManager::ImageRander(ID2D1Bitmap * image, const ImageInfo & imageInfo)
 {
+	if (imageInfo.imageEffect & D2DIE_NOIMAGE)
+		return;
 	UINT imageEffect = imageInfo.imageEffect;
 	ID2D1Effect* oldeffect = nullptr;
 	ID2D1Effect* effect = nullptr;

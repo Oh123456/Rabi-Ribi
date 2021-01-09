@@ -14,7 +14,7 @@
 #define D2DIE_SPOTDIFFUSELIGHTING				0x400			//0b 0100 0000 0000
 #define D2DIE_DEFAULT					(D2DIE_ATLAS | \
 										 D2DIE_AFFINE)
-//#define IE_CHECK	0b1111111111
+#define D2DIE_NOIMAGE							0x8000
 
 enum class EFFECTKIND : UINT
 {

@@ -121,17 +121,22 @@ void Wizard::Attack()
 				float angle = 30.0f - (15.0f * (float)(i));
 				if (angle <= 0.0f)
 					angle -= 360.0f;
-				projectile->MoveSetting(DegreeToRadian(angle), { 5.0f,5.0f }, MovePatten::Angle);
+				projectile->MoveSetting(DegreeToRadian(angle), { 2.0f,2.0f }, MovePatten::Angle);
 			}
 			else
-				projectile->MoveSetting(DegreeToRadian(210.0f + (15.0f * (float)(i - 5))), { 5.0f,5.0f }, MovePatten::Angle);
-			projectile->SetLocation(location);
-			projectile->SetGeomtryLocation(location);
+				projectile->MoveSetting(DegreeToRadian(210.0f + (15.0f * (float)(i - 5))), { 2.0f,2.0f }, MovePatten::Angle);
+			Location spawnLocation;
+			if (imageInfo.affineMatrix.m11 > 0 )
+				spawnLocation = { location.x + 18.0f, location.y - 50.0f };
+			else
+				spawnLocation = { location.x + 18.0f, location.y - 50.0f };
+			projectile->SetLocation(spawnLocation);
+			projectile->SetGeomtryLocation(spawnLocation);
 			projectile->SetIsValid(true);
 			projectile->SetOwner(this);
 			projectile->SetSize({31.0f, 31.0f});
 			ImageInfo* projectileInageinfo = Cast<ImageInfo>(projectile->GetImageInfo_ptr());
-			projectileInageinfo->imageEffect = 0;
+			projectileInageinfo->imageEffect = D2DIE_NOIMAGE;
 			projectile->CreateEffect();
 			projectile->GetEffect()->SetEffect(EffectKinds::Small_Blue_Effect);
 		}

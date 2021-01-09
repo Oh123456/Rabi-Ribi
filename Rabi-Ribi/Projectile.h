@@ -64,7 +64,7 @@ protected:
 	MovePatten movePatten;
 
 	vector<Funptr> vcMovePatten;
-
+	Location worldLocation;
 	_INTERFACE IEffect* effect;
 };
 

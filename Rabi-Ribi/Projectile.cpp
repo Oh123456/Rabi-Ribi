@@ -43,6 +43,12 @@ void Projectile::Release()
 void Projectile::Update()
 {
 	Super::Update();
+	Location cameraLocation = CAMERA->GetLocation();
+	location.x = { worldLocation.x - cameraLocation.x };
+	location.y = { worldLocation.y - cameraLocation.y };
+	geomtryLocation.x = { worldLocation.x - cameraLocation.x };
+	geomtryLocation.y = { worldLocation.y - cameraLocation.y };
+
 	if (vcMovePatten[Cast<int>(movePatten)])
 		(this->*vcMovePatten[Cast<int>(movePatten)])();
 	imageInfo.imageLocation = location;
