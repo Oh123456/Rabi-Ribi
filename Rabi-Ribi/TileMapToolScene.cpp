@@ -619,7 +619,10 @@ void TileMapToolScene::Render()
 		// 公炼扒 昏力饶 积己???
 		d2d->GetD2DFactory()->CreatePathGeometry(&geometry);
 		GetGeomrtyPoint(geometryinfo);
-		brush->SetColor(ColorF(1.0f, 1.0f, 1.0f, 0.7f));
+		if ((geometryinfo.geometrykind == GeometryKinds::Square) & (geometryinfo._width == 2.0f))
+			brush->SetColor(ColorF(1.0f, 0.0f, 0.0f, 0.7f));
+		else
+			brush->SetColor(ColorF(1.0f, 1.0f, 1.0f, 0.7f));
 		renderTarget->FillGeometry(geometry, brush);
 		geometry->Release();
 		UINT32 segmentCount =0;
@@ -629,6 +632,10 @@ void TileMapToolScene::Render()
 			for (int j = 0; j < tile_Render_X; j++)
 			{
 				index = (tile_X * (i + tileCamePos.y)) + (j + tileCamePos.x);
+				if ((tiles[index].geometryinfo.geometrykind == GeometryKinds::Square) & (tiles[index].geometryinfo._width == 2.0f))
+					brush->SetColor(ColorF(1.0f, 0.0f, 0.0f, 0.7f));
+				else
+					brush->SetColor(ColorF(1.0f, 1.0f, 1.0f, 0.7f));
 				if (tilesgeometry[index])
 				{
 					tilesgeometry[index]->GetSegmentCount(&segmentCount);
@@ -878,7 +885,10 @@ void TileMapToolScene::LayerTileRender()
 					TilesDrawinfo.atlasInfo.frame.x = layerTile->tiles[index].frameX;
 					TilesDrawinfo.atlasInfo.frame.y = layerTile->tiles[index].frameY;
 					//if (layerTile->tiles[index].rotation != 0.0f)
-					TilesDrawinfo.affineMatrix = Matrix3x2F::Rotation(layerTile->tiles[index].rotation, { (float)SelectTile_Size.cx / 2, (float)SelectTile_Size.cy / 2 });
+					if (layerTile->tiles[index].isReverse)
+						TilesDrawinfo.affineMatrix = Matrix3x2F::Rotation(layerTile->tiles[index].rotation, { (float)SelectTile_Size.cx / 2, (float)SelectTile_Size.cy / 2 }) * (Matrix3x2F::Scale({-1.0f,1.0f}, { (float)SelectTile_Size.cx / 2, (float)SelectTile_Size.cy / 2 }));
+					else 
+						TilesDrawinfo.affineMatrix = Matrix3x2F::Rotation(layerTile->tiles[index].rotation, { (float)SelectTile_Size.cx / 2, (float)SelectTile_Size.cy / 2 })* (Matrix3x2F::Scale({ 1.0f,1.0f }, { (float)SelectTile_Size.cx / 2, (float)SelectTile_Size.cy / 2 }));
 					IMAGEMANAGER->ImageRander(TilesDrawinfo);
 				}
 			}
@@ -1731,8 +1741,8 @@ void TileMapToolScene::ReDrawGeometry()
 	{
 		if (tilesgeometry[i])
 		{
-			tilesgeometry[i]->Release();
-			tilesgeometry[i] = nullptr;
+			//tilesgeometry[i]->Release();
+			//tilesgeometry[i] = nullptr;
 		}
 	}
 	int index;
@@ -1741,8 +1751,8 @@ void TileMapToolScene::ReDrawGeometry()
 		for (int j = 0; j < tile_Render_X; j++)
 		{
 			index = (tile_X * (i + tileCamePos.y)) + (j + tileCamePos.x);
-			if (tilesgeometry[index])
-				tilesgeometry[index]->Release();
+			//if (tilesgeometry[index])
+			//	tilesgeometry[index]->Release();
 			D2D::GetSingleton()->GetD2DFactory()->CreatePathGeometry(&tilesgeometry[index]);
 			GetGeomrtyPoint(tilesgeometry[index],tiles[index].geometryinfo, tiles[i * tile_X + j].rc);
 		}
@@ -1754,6 +1764,16 @@ void TileMapToolScene::GeometryInfoKeyInput()
 	KeyManager* key = KEYMANAGER;
 	if (isCollisionLayer)
 	{
+		if (key->IsOnceKeyDown(VK_OEM_3))
+		{
+			if (geometryinfo.geometrykind == GeometryKinds::Square)
+			{
+				if (geometryinfo._width == 2.0f)
+					geometryinfo._width = 0.0f;
+				else
+					geometryinfo._width = 2.0f;
+			}
+		}
 		if (key->IsOnceKeyDown(_1Key))
 			SetGeometry(GeometryKinds::Triangle);
 		if (key->IsOnceKeyDown(_2Key))

@@ -70,6 +70,7 @@ public:
 	virtual void SetIsValid(bool value);
 	inline bool GetIsValid() { return isValid; }
 
+	void DeleteChild(Object* child);
 	void SetIsRender(bool value);
 
 	const Object* GetParentsObject() { return parentsObject; }

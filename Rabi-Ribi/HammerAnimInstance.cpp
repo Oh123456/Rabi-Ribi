@@ -41,15 +41,15 @@ void HammerAnimInstance::Update()
 		return;
 	Hammer* pikoHammer = Cast<Hammer>(owner);
 	Erina* erina = Cast<Erina>(pikoHammer->GetOwner());
-	const Location& erinaLocation = erina->GetLocation();
+	const Location& erinaLocation = erina->GetWorldLocation(); // { erina->GetWorldLocation().x - CAMERA->GetLocation().x, erina->GetWorldLocation().y - CAMERA->GetLocation().y };
 	ImageInfo* pikoHammerImageInfo = Cast<ImageInfo>(pikoHammer->GetImageInfo_ptr());
 	switch (pikoHammer->GetAnimationKinds())
 	{
 	case HammerAnimationKinds::Attack_1:
 		if (ownerimageInfo->affineMatrix.m11 > 0.0f)
-			pikoHammer->SetLocation({ erinaLocation.x - 18.0f, erinaLocation.y - 2.0f });
+			pikoHammer->SetWorldLocation({ erinaLocation.x - 18.0f, erinaLocation.y - 2.0f });
 		else 
-			pikoHammer->SetLocation({ erinaLocation.x + 18.0f, erinaLocation.y - 2.0f });
+			pikoHammer->SetWorldLocation({ erinaLocation.x + 18.0f, erinaLocation.y - 2.0f });
 		pikoHammerImageInfo->imageLocation = pikoHammer->GetLocation();
 		PlayingAnimation("Attack1");
 		if (playingAnimation->IsEnd())
@@ -71,7 +71,7 @@ void HammerAnimInstance::Update()
 		}
 		break;
 	case HammerAnimationKinds::Attack_2:
-		pikoHammer->SetLocation({ erinaLocation.x , erinaLocation.y });
+		pikoHammer->SetWorldLocation({ erinaLocation.x , erinaLocation.y });
 		pikoHammerImageInfo->imageLocation = pikoHammer->GetLocation();
 		PlayingAnimation("Attack2");
 		if (playingAnimation->IsEnd())
@@ -94,7 +94,7 @@ void HammerAnimInstance::Update()
 		}
 		break;
 	case HammerAnimationKinds::Attack_3:
-		pikoHammer->SetLocation({ erinaLocation.x, erinaLocation.y  });
+		pikoHammer->SetWorldLocation({ erinaLocation.x, erinaLocation.y  });
 		pikoHammerImageInfo->imageLocation = pikoHammer->GetLocation();
 		PlayingAnimation("Attack3");
 		if (playingAnimation->IsEnd())
@@ -117,9 +117,9 @@ void HammerAnimInstance::Update()
 		break;
 	case HammerAnimationKinds::Attack_4:
 		if (ownerimageInfo->affineMatrix.m11 > 0.0f)
-			pikoHammer->SetLocation({ erinaLocation.x - 18.0f, erinaLocation.y - 2.0f });
+			pikoHammer->SetWorldLocation({ erinaLocation.x - 18.0f, erinaLocation.y - 2.0f });
 		else
-			pikoHammer->SetLocation({ erinaLocation.x + 18.0f, erinaLocation.y - 2.0f });
+			pikoHammer->SetWorldLocation({ erinaLocation.x + 18.0f, erinaLocation.y - 2.0f });
 		pikoHammerImageInfo->imageLocation = pikoHammer->GetLocation();
 		PlayingAnimation("Attack1");
 		break;

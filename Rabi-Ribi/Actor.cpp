@@ -3,6 +3,18 @@
 #include "D2DGraphic.h"
 
 
+void Actor::Update()
+{
+	Super::Update();
+	if ((worldLocation.x == 0.0f) & (worldLocation.y == 0.0f))
+		worldLocation = location;
+	cameraLocation = CAMERA->GetLocation();
+	location.x = { worldLocation.x - cameraLocation.x };
+	location.y = { worldLocation.y - cameraLocation.y };
+	geomtryLocation.x = { worldLocation.x - cameraLocation.x };
+	geomtryLocation.y = { worldLocation.y - cameraLocation.y };
+}
+
 void Actor::Release()
 {
 	Super::Release();

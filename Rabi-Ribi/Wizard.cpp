@@ -9,7 +9,7 @@
 #include "D2DGraphic.h"
 
 Wizard::Wizard() :
-	wizardType(WizardType::Blue)
+	wizardType(WizardType::Blue) , attackTime(0.0f), attackCount(0)
 {
 	animmation = CreateObject<WizardAnimInstance>();
 	animmation->SetOwner(this);
@@ -29,7 +29,7 @@ HRESULT Wizard::Init()
 {
 	Super::Init();
 
-	location = { 500.0f,0.0f };
+	location = { 500.0f,200.0f };
 	IMAGEMANAGER->LoadPng(L"oldboss3_a", L"Chacter/Enemy/oldboss3_a");
 	imageInfo.imageName = L"oldboss3_a";
 	imageInfo.atlasInfo.frameSize = { 48.0f,48.0f};
@@ -101,17 +101,15 @@ void Wizard::MoveCharacter(Vector2_F speed)
 
 void Wizard::Attack()
 {
-	static float Test = 0.0f;
-	Test += TIMERMANAGER->GettimeElapsed();
+	attackTime += TIMERMANAGER->GettimeElapsed();
 	noAnimChange = true;
 
 	PlayScene* playScene = Cast<PlayScene>(SceneManager::currScene);
 
-	if (Test >= 2.0f)
+	if ((attackTime >= 0.5f))
 	{
-		Test = 0.0f;
-		isMoveLock = false;
-		noAnimChange = false;
+		attackTime = 0.0f;
+		attackCount++;
 		for (int i = 0; i < 10; i++)
 		{
 
@@ -127,9 +125,9 @@ void Wizard::Attack()
 				projectile->MoveSetting(DegreeToRadian(210.0f + (15.0f * (float)(i - 5))), { 2.0f,2.0f }, MovePatten::Angle);
 			Location spawnLocation;
 			if (imageInfo.affineMatrix.m11 > 0 )
-				spawnLocation = { location.x + 18.0f, location.y - 50.0f };
+				spawnLocation = { worldLocation.x - 18.0f, worldLocation.y - 30.0f };
 			else
-				spawnLocation = { location.x + 18.0f, location.y - 50.0f };
+				spawnLocation = { worldLocation.x + 18.0f, worldLocation.y - 30.0f };
 			projectile->SetLocation(spawnLocation);
 			projectile->SetGeomtryLocation(spawnLocation);
 			projectile->SetIsValid(true);
@@ -141,4 +139,14 @@ void Wizard::Attack()
 			projectile->GetEffect()->SetEffect(EffectKinds::Small_Blue_Effect);
 		}
 	}
+	if (attackCount == 5)
+	{
+		attackCount = 0;
+		attackTime = 0.0f;
+		isMoveLock = false;
+		noAnimChange = false;
+		animKinds = AnimationKinds::Idle;
+	}
+	else
+		animKinds = AnimationKinds::Attack1;
 }

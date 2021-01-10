@@ -39,6 +39,8 @@ private:
 	void OnFire();
 
 	void AttackEndTimer();
+
+	void MoveMent() override;
 private:
 	bool isAttack;
 	bool isChargeAttack;

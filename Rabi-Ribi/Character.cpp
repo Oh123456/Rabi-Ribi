@@ -71,8 +71,10 @@ void Character::MoveCharacter()
 	{
 		CAMERA->Update();
 		// 카메라 이동에 따른 충돌박스 이동으로 캐릭터 좌표한번더 이동
-		location = geomtryLocation;
+		//location = geomtryLocation;
 	}
+	location = geomtryLocation;
+	worldLocation = { geomtryLocation.x + cameraLocation.x, geomtryLocation.y + cameraLocation.y };
 }
 
 void Character::MoveCancel(bool isSide, bool isUp)

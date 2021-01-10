@@ -20,7 +20,9 @@ public:
 private:
 	ImageInfo testbg;
 	class Actor* player;
-	class TileMap* test;
+	class TileMap* mainTile;
+	class TileMap* middleTile;
+	class TileMap* backTile;
 	class ProjectileManager* projectileManager;
 };
 

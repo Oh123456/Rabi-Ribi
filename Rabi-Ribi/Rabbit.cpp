@@ -29,7 +29,7 @@ HRESULT Rabbit::Init()
 {
 	Super::Init();
 	IMAGEMANAGER->LoadPng(L"enemy1",L"Chacter/Enemy/enemy1_a");
-	location = { 350.0f,100.0f };
+	location = { 350.0f,200.0f };
 	worldLocation = location;
 	size = { 20.0f * 1.5f,20.0f * 1.5f};
 	hitBoxSize = size;

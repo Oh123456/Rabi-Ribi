@@ -25,7 +25,7 @@ HRESULT Hammer::Init()
 	imageInfo.atlasInfo.frame = { 0,0 };
 	imageInfo.atlasInfo.frameSize = { 64.0,64.0f };
 	size = { 64.0f  ,64.0f };
-
+	worldLocation = { 0.0f,0.0f };
 	SetGeomtryCollsion();
 	hitobjects.clear();
 

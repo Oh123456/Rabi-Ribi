@@ -31,6 +31,7 @@ public:
 protected:
 	ImageInfo bunnyBand;
 	WizardType wizardType;
-private:
+	float attackTime;
+	float attackCount;
 };
 

@@ -204,17 +204,25 @@ void CollisionManager::TerrainBottomCollision(Actor* actor, UINT tileX_Size, Loc
 	CollisionIndexInfo begin = c_it->first;
 	CollisionIndexInfo find;
 	int LT_x = (int)((actor->GetLocation().x + CAMERA->GetLocation().x)/ (32.0f - 0.8f));
-	int LT_y = (int)((actor->GetLocation().y + CAMERA->GetLocation().y)/ (32.0f - 0.8f));
+	int LT_y = (int)((actor->GetLocation().y + CAMERA->GetLocation().y)/ (32.0f + 0.8f));
 	for (int i = 0; i < 4; i++)
 	{
 		if (i == 3)
-			find.index = (LT_x) + (LT_y) * tileX_Size;
+			find.index = (LT_x) + (LT_y + 1) * tileX_Size;
 		else
-			find.index = (LT_x - 1 + i) + (LT_y + 1 ) * tileX_Size;
+			find.index = (LT_x - 1 + i) + (LT_y + 2 ) * tileX_Size;
 		c_it = collisionlist.find(find);
 		battomCollosion[i] = nullptr;
 		if (c_it != collisionlist.end())
 			battomCollosion[i] = c_it->second;
+	}
+	if (battomCollosion[3] != nullptr)
+	{ 
+		if (battomCollosion[3]->GetGeometryInfo().geometrykind == GeometryKinds::Square)
+		{
+			if (battomCollosion[3]->GetGeometryInfo()._width == 1)
+				battomCollosion[3] = nullptr;
+		}
 	}
 	// 처리부는 TerrainSideCollision으로 이동
 
@@ -237,11 +245,16 @@ bool CollisionManager::TerrainSideCollision(Actor * actor, UINT tileX_Size, Loca
 	for (int i = 0; i < 2; i++)
 	{
 
-		find.index = (LT_x + (i % 2) * 2  -1) + (LT_y) * tileX_Size;
+		find.index = (LT_x + (i % 2) * 2 - 1) + (LT_y)* tileX_Size;
 		c_it = collisionlist.find(find);
 		SideCollosion[i] = nullptr;
 		if (c_it != collisionlist.end())
-			SideCollosion[i] = c_it->second;
+		{
+			if ((c_it->second->GetGeometryInfo().geometrykind == GeometryKinds::Square) & (c_it->second->GetGeometryInfo()._width == 1.0f))
+				SideCollosion[i] = nullptr;
+			else
+				SideCollosion[i] = c_it->second;
+		}
 	}
 	// 벽아래는 갈수없기에 충돌 영역제거
 	for (int i = 0; i < 2; i++)
@@ -378,6 +391,11 @@ bool CollisionManager::TerrainTopCollision(class Actor* actor, UINT tileX_Size, 
 	{
 		if (topCollosion[i])
 		{
+			if (topCollosion[i]->GetGeometryInfo().geometrykind == GeometryKinds::Square)
+			{
+				if (topCollosion[i]->GetGeometryInfo()._width == 1)
+					return false;
+			}
 	
 			//D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(Cast<TILE_F>(topCollosion[i]->GetOwner())->rc, D2D::GetSingleton()->GetBrush());
 

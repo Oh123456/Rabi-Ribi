@@ -2,6 +2,7 @@
 #include "ProjectileAnimInstance.h"
 #include "Character.h"
 #include "Effect.h"
+#include "D2DGraphic.h"
 
 Projectile::Projectile() : 
 	angle(0.0f), speed(0.0f,0.0f) , animKinds(ProjectileAnimationKinds::Circle_Red)
@@ -43,28 +44,18 @@ void Projectile::Release()
 void Projectile::Update()
 {
 	Super::Update();
-	Location cameraLocation = CAMERA->GetLocation();
-	location.x = { worldLocation.x - cameraLocation.x };
-	location.y = { worldLocation.y - cameraLocation.y };
-	geomtryLocation.x = { worldLocation.x - cameraLocation.x };
-	geomtryLocation.y = { worldLocation.y - cameraLocation.y };
-
-	if (vcMovePatten[Cast<int>(movePatten)])
-		(this->*vcMovePatten[Cast<int>(movePatten)])();
-	imageInfo.imageLocation = location;
 }
 
 void Projectile::Render()
 {
 	Super::Render();
-
 }
 
 void Projectile::SetIsValid(bool value)
 {
 	Super::SetIsValid(value);
 	// 생성된 이펙트를 제거한다.
-	Object::Release();
+	DeleteChild(Cast<Effect>(effect));
 }
 
 void Projectile::MoveSetting(float angle, Vector2_F speed, MovePatten movePatten)
@@ -92,6 +83,16 @@ void Projectile::OnHit(Object* object)
 			character->TakeDamage(100);
 	}
 }
+
+void Projectile::MoveMent()
+{
+	if (vcMovePatten[Cast<int>(movePatten)])
+		(this->*vcMovePatten[Cast<int>(movePatten)])();
+	if ((geomtryLocation.x < -50.0f) | (geomtryLocation.x > (D2D::GetSingleton()->GetD2DRenderTarget()->GetPixelSize().width / CAMERA->GetZoom().x)) |
+		(geomtryLocation.y < -50.0f) | (geomtryLocation.y > (D2D::GetSingleton()->GetD2DRenderTarget()->GetPixelSize().height / CAMERA->GetZoom().y)))
+		this->SetIsValid(false);
+}
+
 
 void Projectile::NomalMovePatten()
 {

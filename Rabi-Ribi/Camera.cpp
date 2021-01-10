@@ -32,14 +32,14 @@ void Camera::Update()
 			//location.x += moveSpeed;
 			if (location.x >= mapMaxLocation.x)
 				location.x = mapMaxLocation.x;
-			focusActor->SetGeomtryLocation({ xSize,focusActorLocation.y});
+			//focusActor->SetGeomtryLocation({ xSize,focusActorLocation.y});
 		}
 		else if ((focusActorLocation.x < xSize) & (location.x > 0.0f))
 		{
 			location.x += focusActorLocation.x - xSize;
 			if (location.x <= 0.0f)
 				location.x = 0.0f;
-			focusActor->SetGeomtryLocation({ xSize,focusActorLocation.y });
+			//focusActor->SetGeomtryLocation({ xSize,focusActorLocation.y });
 		}
 
 	}

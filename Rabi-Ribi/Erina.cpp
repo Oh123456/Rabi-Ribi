@@ -32,7 +32,8 @@ Erina::~Erina()
 HRESULT Erina::Init()
 {
 	Super::Init();
-	location = { 350.0f,100.0f };                           
+	location = { 350.0f,200.0f };      
+	worldLocation = location;
 	size = { 10.0f * 1.5f ,34.0f*1.5f  };
 	hitBoxSize = { 0.0f,0.0f };
 	imageInfo.imageName = L"Erina";
@@ -99,7 +100,7 @@ void Erina::MoveUP()
 		this->isFalling = true;
 		animKinds = AnimationKinds::Jum;
 		//location.y -= 12.8f;
-		acceleration = (-98.0f * TIMERMANAGER->GettimeElapsed() * 1.8f);
+		acceleration = (-98.0f * TIMERMANAGER->GettimeElapsed() * 2.3f);
 		//MoveUpValue((-9.8f  * 50.f));
 		//this->geomtryLocation.y -= (9.8f * TIMERMANAGER->GettimeElapsed() * 1.8f);
 		jumKeyDownTime += TIMERMANAGER->GettimeElapsed();

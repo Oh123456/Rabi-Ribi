@@ -37,11 +37,9 @@ void Rebbon_Weapon::Release()
 void Rebbon_Weapon::Update()
 {
 	Super::Update();
-	if (!isAttack & !isChargeAttack)
-		MoveToDefaultLocation();
-	else
-		MoveToAttackLocation();
-	imageInfo.imageLocation = location;
+
+	//location = geomtryLocation;
+
 }
 
 void Rebbon_Weapon::Render()
@@ -202,8 +200,8 @@ void Rebbon_Weapon::OnFire()
 			projectileImage->affineMatrix.m11 *= -1.0f;
 	}
 	projectile->MoveSetting(angle, speed, movePatten);
-	projectile->SetLocation({ location.x + 25.0f,location.y });
-	projectile->SetGeomtryLocation({ location.x + 25.0f,location.y });
+	projectile->SetLocation({ worldLocation.x + 25.0f,worldLocation.y });
+	projectile->SetGeomtryLocation({ worldLocation.x + 25.0f,worldLocation.y });
 	projectile->SetIsValid(true);
 	projectile->SetOwner(owner);
 	TIMERMANAGER->SetTimer(attackEndTimer,this,&Rebbon_Weapon::AttackEndTimer, 0.5f);
@@ -219,4 +217,12 @@ void Rebbon_Weapon::AttackEndTimer()
 		//isAttackend = false;
 		TIMERMANAGER->DeleteTimer(attackEndTimer);
 	}
+}
+
+void Rebbon_Weapon::MoveMent()
+{
+	if (!isAttack & !isChargeAttack)
+		MoveToDefaultLocation();
+	else
+		MoveToAttackLocation();
 }

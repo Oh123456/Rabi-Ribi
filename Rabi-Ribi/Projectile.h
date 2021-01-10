@@ -54,6 +54,7 @@ public:
 
 private:
 	void OnHit(Object* object);
+	void MoveMent() override;
 	void NomalMovePatten();
 	void AngleMovePatten();
 protected:

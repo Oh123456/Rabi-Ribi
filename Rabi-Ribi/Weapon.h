@@ -7,6 +7,8 @@ public:
 	Weapon();
 	~Weapon();
 
+	void Update()	override;
+
 	inline void SetOwner(Actor* actor)		{ owner = actor; }
 	inline void SetSocket(const Location& location) { socketLocation = location; }
 
@@ -16,5 +18,8 @@ protected:
 	Actor* owner;
 	// 주인 객채의 부착 위치
 	Location socketLocation;
+private:
+	virtual void MoveMent();
+	virtual void MoveEnd();
 };
 

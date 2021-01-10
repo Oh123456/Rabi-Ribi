@@ -96,7 +96,7 @@ void ImageManager::ImageRander(ID2D1Bitmap * image, const ImageInfo & imageInfo)
 		D2D1_RECT_F drawrc = { imageInfo.imageLocation.x - bitmapSize.width / 2 ,imageInfo.imageLocation.y - bitmapSize.height / 2,
 								imageInfo.imageLocation.x + bitmapSize.width / 2, imageInfo.imageLocation.y + bitmapSize.height / 2 };
 		if ((drawrc.right < 0.0f) | (drawrc.bottom < 0.0f) |
-			(drawrc.left > d2d->GetD2DRenderTarget()->GetPixelSize().width) | (drawrc.top > d2d->GetD2DRenderTarget()->GetPixelSize().height))
+			(drawrc.left > (d2d->GetD2DRenderTarget()->GetPixelSize().width / CAMERA->GetZoom().x)) | (drawrc.top > d2d->GetD2DRenderTarget()->GetPixelSize().height / CAMERA->GetZoom().y))
 			return;
 		d2d->GetDeviceContext()->DrawBitmap(bitmap, drawrc);
 		return;
@@ -137,7 +137,7 @@ void ImageManager::ImageRander(ID2D1Bitmap * image, const ImageInfo & imageInfo)
 				}
 				drawLocation = { imageInfo.imageLocation.x - size.width / 2 ,imageInfo.imageLocation.y - size.height / 2 };
 				if (((drawLocation.x + size.width) < 0.0f) | ((drawLocation.y + size.height) < 0.0f) | 
-					((drawLocation.x ) > d2d->GetD2DRenderTarget()->GetPixelSize().width) | ((drawLocation.y ) > d2d->GetD2DRenderTarget()->GetPixelSize().height))
+					((drawLocation.x ) > d2d->GetD2DRenderTarget()->GetPixelSize().width / CAMERA->GetZoom().x) | ((drawLocation.y ) > d2d->GetD2DRenderTarget()->GetPixelSize().height / CAMERA->GetZoom().y))
 					return;
 				//atlasSize.z -= 0.5f;
 				//atlasSize.w -= 0.5f;

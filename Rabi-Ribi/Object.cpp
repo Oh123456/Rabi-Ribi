@@ -133,6 +133,45 @@ void Object::SetIsValid(bool value)
 	}
 }
 
+void Object::DeleteChild(Object* child)
+{
+	if (child)
+	{
+		ObjectList_Iterator uit;
+		multimap<ZOrder, Object*, greater<ZOrder>>::const_iterator it;
+		it = object.lower_bound(child->GetZOrder());
+		//Object* fineObject;
+
+		for (; it != object.upper_bound(this->zOrder); it++)
+		{
+			if (it->second == this)
+			{
+				object.erase(it);
+				break;
+			}
+		}
+
+		for (uit = object_UPdateList.begin(); uit != object_UPdateList.end(); uit++)
+		{
+			if (*uit == this)
+			{
+				object_UPdateList.erase(uit);
+				break;
+			}
+		}
+
+		for (uit = allClass.begin(); uit != allClass.end(); uit++)
+		{
+			if (*uit == this)
+			{
+				allClass.erase(uit);
+				break;
+			}
+		}
+		SAFE_RELEASE(child);
+	}
+}
+
 void Object::SetIsRender(bool value)
 {
 	if (value & !this->isRender)

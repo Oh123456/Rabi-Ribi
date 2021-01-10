@@ -22,8 +22,12 @@ PlayScene::~PlayScene()
 
 HRESULT PlayScene::Init()
 {
-	test =CreateObject<TileMap>();
-	test->LoadTile("Save/CameTest.map");
+	backTile = CreateObject<TileMap>();
+	backTile->LoadTile("Save/StartMap_Back.map");
+	middleTile = CreateObject<TileMap>();
+	middleTile->LoadTile("Save/StartMap_Middle.map");
+	mainTile =CreateObject<TileMap>();
+	mainTile->LoadTile("Save/StartMap.map");
 	CollisionManager* collision = CreateObject<CollisionManager>(true);
 	player = CreateObject<Erina>();
 	CreateObject<Rabbit>();
@@ -41,10 +45,6 @@ HRESULT PlayScene::Init()
 	projectileManager = CreateObject<ProjectileManager>();
 	collision->SettingActor(this);
 
-	IEffect* test123 = CreateObject<Effect>();
-	test123->SetSocketLocation({ 300.0f,300.f });
-	test123->SetEffect(EffectKinds::Small_Blue_Effect);
-
 
 	CAMERA->SetFocusActor(player);
 	return S_OK;
@@ -53,7 +53,8 @@ HRESULT PlayScene::Init()
 void PlayScene::Release()
 {
 	Super::Release();
-	D2D::GetSingleton()->GetD2DRenderTarget()->SetTransform(Matrix3x2F::Scale({ 1.0f,1.0f }));
+	CAMERA->SetZoom({1.0f,1.0f});
+	//D2D::GetSingleton()->GetD2DRenderTarget()->SetTransform(Matrix3x2F::Scale({ 1.0f,1.0f }));
 }
 
 void PlayScene::Update()

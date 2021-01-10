@@ -19,11 +19,6 @@ Enemy::~Enemy()
 void Enemy::Update()
 {
 	Super::Update();
-	cameraLocation = CAMERA->GetLocation();
-	location.x = { worldLocation.x - cameraLocation.x };
-	location.y = { worldLocation.y - cameraLocation.y };
-	geomtryLocation.x = { worldLocation.x - cameraLocation.x };
-	geomtryLocation.y = { worldLocation.y - cameraLocation.y };
 }
 
 void Enemy::MoveCharacter()

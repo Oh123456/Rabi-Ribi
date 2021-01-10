@@ -14,7 +14,7 @@ HRESULT ProjectileManager::Init()
 	for (int i = 0; i < 200; i++)
 	{
 		Projectile* projectile = CreateObject<Projectile>();// ->SetIsValid(true);
-		//projectile->SetIsValid(true);
+		projectile->SetIsValid(false);
 		projectiles.push_back(projectile);
 	}
 	return S_OK;
