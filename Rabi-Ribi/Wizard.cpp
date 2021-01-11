@@ -128,7 +128,7 @@ void Wizard::Attack()
 				spawnLocation = { worldLocation.x - 18.0f, worldLocation.y - 30.0f };
 			else
 				spawnLocation = { worldLocation.x + 18.0f, worldLocation.y - 30.0f };
-			projectile->SetLocation(spawnLocation);
+			projectile->SetWorldLocation(spawnLocation);
 			projectile->SetGeomtryLocation(spawnLocation);
 			projectile->SetIsValid(true);
 			projectile->SetOwner(this);

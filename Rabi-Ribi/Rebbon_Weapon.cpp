@@ -23,7 +23,7 @@ HRESULT Rebbon_Weapon::Init()
 	imageInfo.atlasInfo.frame = { 0,0 };
 	imageInfo.atlasInfo.frameSize = { 48.0,48.0f };
 	size = { 48.0f  ,48.0f };
-	moveSpeed = 1.0f;
+	moveSpeed = 100.0f;
 	chargeTiem = 0.0f;
 	isAttackend = false;
 	return S_OK;
@@ -52,7 +52,7 @@ void Rebbon_Weapon::Attack()
 	isAttack = true;
 	isAttackend = false;
 	isChargeAttack = false;
-	moveSpeed = 3.0f;
+	moveSpeed = 300.0f;
 }
 
 void Rebbon_Weapon::ChargeAttack()
@@ -66,7 +66,7 @@ void Rebbon_Weapon::ChargeAttackFire()
 	{
 		isChargeAttack = true;
 		isAttackend = false;
-		moveSpeed = 10.f;
+		moveSpeed = 1000.f;
 	}
 	chargeTiem = 0.0f;
 }
@@ -89,24 +89,24 @@ void Rebbon_Weapon::MoveToDefaultLocation()
 	Vector2_F thisLocation = location;
 	Vector2_F goalLocation = thisLocation - ownerLocation;
 
-	if ((goalLocation.x < 1.5f) & (goalLocation.x > -1.5f))
+	if ((goalLocation.x < 10.5f) & (goalLocation.x > -1.5f))
 	{
-		moveSpeed = 1.0f;
+		moveSpeed = 100.0f;
 		goalLocation.x = 0.0f;
 	}
-	if ((goalLocation.y < 1.5f) & (goalLocation.y > -1.5f))
+	if ((goalLocation.y < 10.5f) & (goalLocation.y > -10.5f))
 	{
 		//moveSpeed = 1.0f;
 		goalLocation.y = 0.0f;
 	}
 	if (goalLocation.x > 0)
-		location.x -= moveSpeed;
+		location.x -= moveSpeed * TIMERMANAGER->GettimeElapsed();
 	else if (goalLocation.x < 0)
-		location.x += moveSpeed;
+		location.x += moveSpeed * TIMERMANAGER->GettimeElapsed();
 	if (goalLocation.y > 0)
-		location.y -= moveSpeed;
+		location.y -= moveSpeed * TIMERMANAGER->GettimeElapsed();
 	else if (goalLocation.y < 0)
-		location.y += moveSpeed;
+		location.y += moveSpeed * TIMERMANAGER->GettimeElapsed();
 	
 
 }
@@ -140,13 +140,13 @@ void Rebbon_Weapon::MoveToAttackLocation()
 		goalCount++;
 	}
 	if (goalLocation.x > 0)
-		location.x -= moveSpeed;
+		location.x -= moveSpeed * TIMERMANAGER->GettimeElapsed();
 	else if (goalLocation.x < 0)
-		location.x += moveSpeed;
+		location.x += moveSpeed * TIMERMANAGER->GettimeElapsed();
 	if (goalLocation.y > 0)
-		location.y -= moveSpeed;
+		location.y -= moveSpeed * TIMERMANAGER->GettimeElapsed();
 	else if (goalLocation.y < 0)
-		location.y += moveSpeed;
+		location.y += moveSpeed * TIMERMANAGER->GettimeElapsed();
 
 
 	if (goalCount == 2)
@@ -206,7 +206,7 @@ void Rebbon_Weapon::OnFire()
 	projectile->SetOwner(owner);
 	TIMERMANAGER->SetTimer(attackEndTimer,this,&Rebbon_Weapon::AttackEndTimer, 0.5f);
 	isAttackend = true;
-	moveSpeed = 3.0f;
+	moveSpeed = 300.0f;
 }
 
 void Rebbon_Weapon::AttackEndTimer()
