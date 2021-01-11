@@ -7,6 +7,7 @@
 #include "GeometryCollision.h"
 #include "D2DGraphic.h"
 #include "Weapon.h"
+#include "Projectile.h"
 
 CollisionManager::CollisionManager() : 
 	tileMap(nullptr) 
@@ -106,6 +107,9 @@ void CollisionManager::SettingActor(Object * secen)
 			this->tileMap = tileMap;
 			continue;
 		}
+		//actor = Cast<Projectile>(object);
+		//if (actor)
+		//	continue;
 		actor = Cast<Actor>(object);
 		if (actor)
 		{
@@ -162,17 +166,29 @@ void CollisionManager::TerrainCollisionCheck()
 			CollisionIndexInfo begin = c_it->first;
 			UINT tileX_Size = begin.tileX_Size;
 			cplayer = Cast<Character>(actor);
-			//D2D::GetSingleton()->BeginDraw();
-			TerrainBottomCollision(actor, tileX_Size, actorLT);
-			bool side = TerrainSideCollision(actor, tileX_Size, actorLT);
-			bool up = TerrainTopCollision(actor, tileX_Size, actorLT);
-			//D2D::GetSingleton()->EndDraw();
-			if (cplayer)
+			Projectile* projectile = Cast<Projectile>(actor);
+			if (projectile)
+				TerrainProjetileleCollision(projectile, tileX_Size);
+			else
 			{
-				cplayer->MoveToNewGeomtryLocation(actorLT);
-				cplayer->MoveCancel(side);
-				cplayer->MoveCancel(up, up);
-				//cplayer->MoveCharacter();
+				TerrainBottomCollision(actor, tileX_Size, actorLT);
+				bool side = TerrainSideCollision(actor, tileX_Size, actorLT);
+				bool up = TerrainTopCollision(actor, tileX_Size, actorLT);
+				if (cplayer)
+				{
+					cplayer->MoveToNewGeomtryLocation(actorLT);
+					cplayer->MoveCancel(side);
+					cplayer->MoveCancel(up, up);
+					if (up)
+					{
+						if (cplayer->GetAcceleration() < 0.0f)
+						{
+							cplayer->SetAcceleration(0.0f);
+							cplayer->SetAnimKinds(AnimationKinds::Falling);
+						}
+					}
+					//cplayer->MoveCharacter();
+				}
 			}
 		}
 
@@ -203,6 +219,7 @@ void CollisionManager::TerrainBottomCollision(Actor* actor, UINT tileX_Size, Loc
 		return;
 	CollisionIndexInfo begin = c_it->first;
 	CollisionIndexInfo find;
+	Character* charactor = Cast<Character>(actor);
 	int LT_x = (int)((actor->GetLocation().x + CAMERA->GetLocation().x)/ (32.0f - 0.8f));
 	int LT_y = (int)((actor->GetLocation().y + CAMERA->GetLocation().y)/ (32.0f + 0.8f));
 	for (int i = 0; i < 4; i++)
@@ -215,12 +232,13 @@ void CollisionManager::TerrainBottomCollision(Actor* actor, UINT tileX_Size, Loc
 		battomCollosion[i] = nullptr;
 		if (c_it != collisionlist.end())
 			battomCollosion[i] = c_it->second;
+
 	}
 	if (battomCollosion[3] != nullptr)
 	{ 
 		if (battomCollosion[3]->GetGeometryInfo().geometrykind == GeometryKinds::Square)
 		{
-			if (battomCollosion[3]->GetGeometryInfo()._width == 1)
+			if ((battomCollosion[3]->GetGeometryInfo()._width == 1) & (charactor->GetFalling()))
 				battomCollosion[3] = nullptr;
 		}
 	}
@@ -292,6 +310,7 @@ bool CollisionManager::TerrainSideCollision(Actor * actor, UINT tileX_Size, Loca
 						isFalling = false;
 						while (battomCollosion[i]->CollisionHitCheck(Cast<ID2D1PathGeometry>(actor->GetCollisionPathGeomtry()), player_LTLocation))
 							player_LTLocation.y -= 0.1f;
+						player_LTLocation.y += 0.1f;
 					}
 				}
 				if (weapon)
@@ -485,9 +504,9 @@ void CollisionManager::ActorCollision(list<Actor*>& splitCollision)
 		Actor* nextActor = nullptr;
 		Enemy* enemy = nullptr;
 
-		GeometryCollision* nowGeimetryCollision = nullptr;
-		GeometryCollision* nextGeimetryCollision = nullptr;
-		GeometryCollision* seeAreaGeimetryCollision = nullptr;
+		GeometryCollision* nowGeometryCollision = nullptr;
+		GeometryCollision* nextGeometryCollision = nullptr;
+		GeometryCollision* seeAreaGeometryCollision = nullptr;
 
 
 		c_it = splitCollision.begin();
@@ -496,7 +515,7 @@ void CollisionManager::ActorCollision(list<Actor*>& splitCollision)
 		for (c_nowit = splitCollision.begin(); c_nowit != splitCollision.end();)
 		{
 			nowActor = *c_nowit;
-			nowGeimetryCollision = nowActor->GetHitBoxCollisionGeomtry();
+			nowGeometryCollision = nowActor->GetHitBoxCollisionGeomtry();
 			c_nowit++;
 			if (nowActor == nullptr)
 				continue;
@@ -506,8 +525,8 @@ void CollisionManager::ActorCollision(list<Actor*>& splitCollision)
 				if (nextActor == nullptr)
 					continue;
 
-				nextGeimetryCollision = nextActor->GetHitBoxCollisionGeomtry();
-				bool isHit = nowGeimetryCollision->CollisionHitCheck(nextGeimetryCollision->GetGeometry(), nextActor->GetLTLocation());
+				nextGeometryCollision = nextActor->GetHitBoxCollisionGeomtry();
+				bool isHit = nowGeometryCollision->CollisionHitCheck(nextGeometryCollision->GetGeometry(), nextActor->GetLTLocation());
 				if (isHit)
 				{
 					nowActor->onHit.Execute(nextActor);
@@ -517,11 +536,11 @@ void CollisionManager::ActorCollision(list<Actor*>& splitCollision)
 				enemy = Cast<Enemy>(nowActor);
 				if (enemy)
 				{
-					seeAreaGeimetryCollision = enemy->GetSeeArea();
-					if (seeAreaGeimetryCollision)
+					seeAreaGeometryCollision = enemy->GetSeeArea();
+					if (seeAreaGeometryCollision)
 					{
-						nextGeimetryCollision = nextActor->GetCollisionGeomtry();
-						bool isSee = seeAreaGeimetryCollision->CollisionHitCheck(nextGeimetryCollision->GetGeometry(), nextActor->GetLTLocation());
+						nextGeometryCollision = nextActor->GetCollisionGeomtry();
+						bool isSee = seeAreaGeometryCollision->CollisionHitCheck(nextGeometryCollision->GetGeometry(), nextActor->GetLTLocation());
 						if (isSee)
 							enemy->onSee.Execute(nextActor);
 					}
@@ -530,11 +549,11 @@ void CollisionManager::ActorCollision(list<Actor*>& splitCollision)
 				enemy = Cast<Enemy>(nextActor);
 				if (enemy)
 				{
-					seeAreaGeimetryCollision = enemy->GetSeeArea();
-					if (seeAreaGeimetryCollision)
+					seeAreaGeometryCollision = enemy->GetSeeArea();
+					if (seeAreaGeometryCollision)
 					{
-						nowGeimetryCollision = nowActor->GetCollisionGeomtry();
-						bool isSee = seeAreaGeimetryCollision->CollisionHitCheck(nowGeimetryCollision->GetGeometry(), nowActor->GetLTLocation());
+						nowGeometryCollision = nowActor->GetCollisionGeomtry();
+						bool isSee = seeAreaGeometryCollision->CollisionHitCheck(nowGeometryCollision->GetGeometry(), nowActor->GetLTLocation());
 						if (isSee)
 							enemy->onSee.Execute(nowActor);
 					}
@@ -565,7 +584,7 @@ void CollisionManager::SplitScreen()
 		ZeroMemory(&quadrant, sizeof(bool) * 4);
 		actor = nullptr;
 		actor = c_it->actor;
-		if ((actor == nullptr) | (!actor->GetIsValid()) | (actor->GetCollisionGeomtry() == nullptr))
+		if ((actor == nullptr) | (!actor->GetIsValid()) | (actor->GetCollisionGeomtry() == nullptr)/* | (Cast<Projectile>(actor) != nullptr)*/)
 			continue;
 		actorlocation = actor->GetLocation();
 		actorCollisionSize = actor->GetSize();
@@ -633,4 +652,33 @@ void CollisionManager::SplitScreen()
 
 
 
-}							
+}
+
+void CollisionManager::TerrainProjetileleCollision(Projectile* projectile, UINT tileX_Size)
+{
+	CollisionIndexInfo find;
+	map<CollisionIndexInfo, GeometryCollision*> collisionlist = tileMap->GetcollisionList();
+	map<CollisionIndexInfo, GeometryCollision*>::const_iterator c_it;
+	int LT_x = (int)((projectile->GetLocation().x + CAMERA->GetLocation().x) / (32.0f));
+	int LT_y = (int)((projectile->GetLocation().y + CAMERA->GetLocation().y) / (32.0f));
+	for (int i = 0; i < 9; i++)
+	{
+		find.index = (LT_x + ((i % 3 ) - 1)) + (LT_y + (( i / 3 ) - 1)) * tileX_Size;
+		c_it = collisionlist.find(find);
+		if (c_it != collisionlist.end())
+		{
+			if (c_it->second)
+			{
+				
+				//RECT rc = { (LONG)c_it->second->GetOwner()->GetLocation().x, (LONG)c_it->second->GetOwner()->GetLocation().y, (LONG)c_it->second->GetOwner()->GetLocation().x + 32,(LONG)c_it->second->GetOwner()->GetLocation().y +32};
+				//POINT point = { (LONG)c_it->second->GetOwner()->GetLocation().x, (LONG)c_it->second->GetOwner()->GetLocation().y };
+				//if (PtInRect(&rc,point))
+				if (c_it->second->CollisionHitCheck(Cast<ID2D1PathGeometry>(projectile->GetCollisionPathGeomtry()), projectile->GetLTLocation()))
+				{
+					projectile->onHit.Execute(nullptr/*Cast<Object>(c_it->second->GetOwner())*/);
+					return;
+				}
+			}
+		}
+	}
+}

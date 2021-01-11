@@ -12,6 +12,7 @@ POINT		g_ptMouse;
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 D2D_SIZE_U	g_defaultWindowSize;
 DEVMODE g_dmSaved;  // 현재 해상도를 저장.. 왜냐 게임 끝나면 원래대로 돌려야 하니깐
+char DefaultDirectory[MAX_PATH];
 
 MainGame mainGame;
 
@@ -57,6 +58,9 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpsz
 	// 윈도우 출력
 	ShowWindow(g_hWnd, nCmdShow);
 	UpdateWindow(g_hWnd);
+
+	GetCurrentDirectory(MAX_PATH, DefaultDirectory);
+
 	D2D* d2d = D2D::GetSingleton();
 	d2d->Init(g_hWnd);
 	d2d->FontCreate(L"궁서체");

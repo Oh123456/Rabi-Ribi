@@ -16,6 +16,7 @@
 										 D2DIE_AFFINE)
 #define D2DIE_NOIMAGE							0x8000
 
+#define AFFINEMATRIX_3X2_SCALE(Size,Point) Matrix3x2F::Scale({Size,Size},{Point,Point})
 enum class EFFECTKIND : UINT
 {
 	BEGIN,
@@ -139,7 +140,7 @@ public:
 	void LoadPng(LPCWSTR imageName);
 	void LoadPng(LPCWSTR keyValue ,LPCWSTR imageName);
 	ID2D1Bitmap* FindImage(LPCWSTR keyValue);
-	void SetDefaultDirectory(LPCWSTR directory = L"Image");
+	void SetDefaultDirectory(LPCWSTR directory = L"\\Image\\");
 private:
 	ImageMap images;
 	EffectMap effects;

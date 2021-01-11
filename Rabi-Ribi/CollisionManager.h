@@ -44,6 +44,7 @@ private:
 	void ActorCollision(list<Actor*>& splitCollision);
 	// 4분할
 	void SplitScreen();
+	void TerrainProjetileleCollision(class Projectile* projectile, UINT tileX_Size);
 private:
 	// 충돌 검사할 액터
 	set<ActorKey_Value> actors;

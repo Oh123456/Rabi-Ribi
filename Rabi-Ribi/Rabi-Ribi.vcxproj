@@ -128,8 +128,12 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Animinstance.cpp" />
     <ClCompile Include="BunnyBand.cpp" />
+    <ClCompile Include="BunnyBandAnimInstance.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Cocoa.cpp" />
+    <ClCompile Include="CocoaAIController.cpp" />
+    <ClCompile Include="CocoaAnimInstance.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="D2DGraphic.cpp" />
@@ -178,9 +182,13 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Animinstance.h" />
     <ClInclude Include="BunnyBand.h" />
+    <ClInclude Include="BunnyBandAnimInstance.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Cast.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="Cocoa.h" />
+    <ClInclude Include="CocoaAIController.h" />
+    <ClInclude Include="CocoaAnimInstance.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="D2DGraphic.h" />

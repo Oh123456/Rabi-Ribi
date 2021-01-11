@@ -115,6 +115,15 @@
     <Filter Include="Effect">
       <UniqueIdentifier>{0edc561e-e40b-4731-a811-074fa05867a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Manager\Projectile">
+      <UniqueIdentifier>{9ce88b79-842b-44f7-9e0d-96738c1a5833}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Actor\Character\Enemy\BunnyBand">
+      <UniqueIdentifier>{5ca8c116-a637-4cc3-a56e-0b83c110946a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Actor\Character\Enemy\Cocoa">
+      <UniqueIdentifier>{f16fc4c1-fddb-4c59-a722-e702b8149dcb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -231,9 +240,6 @@
     <ClCompile Include="ProjectileAnimInstance.cpp">
       <Filter>Object\Actor\Weapone\Projectile</Filter>
     </ClCompile>
-    <ClCompile Include="ProjectileManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="PlayScene.cpp">
       <Filter>Object\Map</Filter>
     </ClCompile>
@@ -246,19 +252,34 @@
     <ClCompile Include="Wizard.cpp">
       <Filter>Object\Actor\Character\Enemy\Wizard</Filter>
     </ClCompile>
-    <ClCompile Include="BunnyBand.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="WizardAnimInstance.cpp">
       <Filter>Object\Actor\Character\Enemy\Wizard</Filter>
     </ClCompile>
     <ClCompile Include="WizardAIController.cpp">
       <Filter>AI</Filter>
     </ClCompile>
-    <ClCompile Include="Effect.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="ProjectileManager.cpp">
+      <Filter>Manager\Projectile</Filter>
     </ClCompile>
     <ClCompile Include="WizardProjectileEffect.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="BunnyBand.cpp">
+      <Filter>Object\Actor\Character\Enemy\BunnyBand</Filter>
+    </ClCompile>
+    <ClCompile Include="Cocoa.cpp">
+      <Filter>Object\Actor\Character\Enemy\Cocoa</Filter>
+    </ClCompile>
+    <ClCompile Include="BunnyBandAnimInstance.cpp">
+      <Filter>Object\Actor\Character\Enemy\BunnyBand</Filter>
+    </ClCompile>
+    <ClCompile Include="CocoaAnimInstance.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CocoaAIController.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -398,9 +419,6 @@
     <ClInclude Include="ProjectileAnimInstance.h">
       <Filter>Object\Actor\Weapone\Projectile</Filter>
     </ClInclude>
-    <ClInclude Include="ProjectileManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="PlayScene.h">
       <Filter>Object\Map</Filter>
     </ClInclude>
@@ -413,19 +431,34 @@
     <ClInclude Include="Wizard.h">
       <Filter>Object\Actor\Character\Enemy\Wizard</Filter>
     </ClInclude>
-    <ClInclude Include="BunnyBand.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="WizardAnimInstance.h">
       <Filter>Object\Actor\Character\Enemy\Wizard</Filter>
     </ClInclude>
     <ClInclude Include="WizardAIController.h">
       <Filter>AI</Filter>
     </ClInclude>
-    <ClInclude Include="Effect.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="ProjectileManager.h">
+      <Filter>Manager\Projectile</Filter>
     </ClInclude>
     <ClInclude Include="WizardProjectileEffect.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="BunnyBand.h">
+      <Filter>Object\Actor\Character\Enemy\BunnyBand</Filter>
+    </ClInclude>
+    <ClInclude Include="Cocoa.h">
+      <Filter>Object\Actor\Character\Enemy\Cocoa</Filter>
+    </ClInclude>
+    <ClInclude Include="BunnyBandAnimInstance.h">
+      <Filter>Object\Actor\Character\Enemy\BunnyBand</Filter>
+    </ClInclude>
+    <ClInclude Include="CocoaAnimInstance.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CocoaAIController.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

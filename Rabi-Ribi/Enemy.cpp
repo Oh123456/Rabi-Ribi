@@ -31,9 +31,17 @@ void Enemy::Render()
 {
 	Super::Render();
 #ifdef _DEBUG
+
+	ID2D1SolidColorBrush* brush = D2D::GetSingleton()->GetBrush();
+	brush->SetColor(D2D1::ColorF(0xf0f00f, 1.0f));
+	D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle({ location.x - size.width / 2, location.y - size.height / 2 ,
+																location.x + size.width / 2, location.y + size.height / 2 }, brush);
 	if (seeArea)
 	{
-		ID2D1SolidColorBrush* brush = D2D::GetSingleton()->GetBrush();
+
+		brush->SetColor(D2D1::ColorF(0x0000ff, 1.0f));
+
+		brush = D2D::GetSingleton()->GetBrush();
 		brush->SetColor(D2D1::ColorF(0xff23ff, 1.0f));
 		D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle(seeArea->GetGeometryRect(), brush);
 	}

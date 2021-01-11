@@ -7,7 +7,7 @@ HRESULT MainGame::Init()
 {
 	ImageManager* imageManager = IMAGEMANAGER;
 	imageManager->Init();
-	imageManager->SetDefaultDirectory(L"Image/");
+	imageManager->SetDefaultDirectory(L"\\Image\\");
 	KEYMANAGER->Init();
 	TIMERMANAGER->Init();
 	SOUNDMANAGER->Init();
@@ -52,12 +52,12 @@ void MainGame::Update()
 	TIMERMANAGER->Update();
 	if (KEYMANAGER->IsOnceKeyUP(VK_F1))
 		isFPS = !isFPS;
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	if (KEYMANAGER->IsOnceKeyUP(VK_F2))
 		SCENEMANAGER->ChangeScene("¸ÊÅø¾À");
 	if (KEYMANAGER->IsOnceKeyUP(VK_F3))
 		SCENEMANAGER->ChangeScene("Å×½ºÆ®·ë");
-#endif // _DEBUG
+//#endif // _DEBUG
 }
 
 

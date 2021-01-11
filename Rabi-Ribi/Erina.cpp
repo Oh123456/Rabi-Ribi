@@ -62,7 +62,6 @@ void Erina::Release()
 void Erina::Update()
 {
 	Super::Update();
-
 }
 
 void Erina::Render()
@@ -73,17 +72,17 @@ void Erina::Render()
 void Erina::PlayerInputSetting(PlayerInput* playerInput)
 {
 	Super::PlayerInputSetting(playerInput);
-
-	playerInput->BindInputKey(VK_UP, KeyInputKinds::StayKey_Down, this, &Erina::MoveUP);
-	playerInput->BindInputKey(XKey, KeyInputKinds::StayKey_Down, this, &Erina::MoveUP);
+	//playerInput->BindInputKey(VK_UP, KeyInputKinds::StayKey_Down, this, &Erina::MoveUP);
+	playerInput->BindInputKey(ZKey, KeyInputKinds::StayKey_Down, this, &Erina::MoveUP);
+	playerInput->BindInputKey(ZKey, KeyInputKinds::Key_UP, this, &Erina::MoveUP_KeyUP);
 
 	playerInput->BindInputKey(VK_LEFT, KeyInputKinds::StayKey_Down, this, &Erina::MoveSide);
 	playerInput->BindInputKey(VK_RIGHT, KeyInputKinds::StayKey_Down, this, &Erina::MoveSide);
 
 	playerInput->BindInputKey(CKey, KeyInputKinds::Key_Down, this, &Erina::AttackPikoHammer);
-	playerInput->BindInputKey(ZKey, KeyInputKinds::Key_Down, this, &Erina::RebbonAttack);
-	playerInput->BindInputKey(ZKey, KeyInputKinds::StayKey_Down, this, &Erina::RebbonChargeAttack);
-	playerInput->BindInputKey(ZKey, KeyInputKinds::Key_UP, this, &Erina::RebbonChagetAttackFire);
+	playerInput->BindInputKey(XKey, KeyInputKinds::Key_Down, this, &Erina::RebbonAttack);
+	playerInput->BindInputKey(XKey, KeyInputKinds::StayKey_Down, this, &Erina::RebbonChargeAttack);
+	playerInput->BindInputKey(XKey, KeyInputKinds::Key_UP, this, &Erina::RebbonChagetAttackFire);
 }
 
 void Erina::MoveUP()
@@ -91,22 +90,28 @@ void Erina::MoveUP()
 	if (isMoveLock)
 		return;
 	// 점프가 끝났으면 초기화
-	if (((animKinds != AnimationKinds::Jum) &
+	if (((animKinds != AnimationKinds::Jump) &
 		(animKinds != AnimationKinds::Falling)) & (jumKeyDownTime >= JUM_KEYDOWN_TIME))
+	{
 		jumKeyDownTime = 0.0f;
-
-	if (KEYMANAGER->GetKeyDown()[XKey] & (jumKeyDownTime <= JUM_KEYDOWN_TIME))
+		acceleration = 0.0f;
+	}
+	if (KEYMANAGER->GetKeyDown()[ZKey] & (jumKeyDownTime <= JUM_KEYDOWN_TIME))
 	{
 		this->isFalling = true;
-		animKinds = AnimationKinds::Jum;
-		//location.y -= 12.8f;
-		acceleration = (-98.0f * TIMERMANAGER->GettimeElapsed() * 2.3f);
-		//MoveUpValue((-9.8f  * 50.f));
-		//this->geomtryLocation.y -= (9.8f * TIMERMANAGER->GettimeElapsed() * 1.8f);
-		jumKeyDownTime += TIMERMANAGER->GettimeElapsed();
+		animKinds = AnimationKinds::Jump;
+		if (acceleration == 0.0f)
+			acceleration = -9.8f * 0.5f;//(-98.0f * TIMERMANAGER->GetTimeElapsed() * 2.0f);
+		else
+			acceleration += -9.8f* 0.5f *TIMERMANAGER->GetTimeElapsed();
+		jumKeyDownTime += TIMERMANAGER->GetTimeElapsed();
+		DEBUG_MASSAGE("%f , %f \n",jumKeyDownTime, acceleration);
 	}
-	//else if (KEYMANAGER->GetKeyDown()[VK_DOWN])
-	//	this->geomtryLocation.y += moveSpeed * (TIMERMANAGER->GettimeElapsed() * 100.0f);
+}
+
+void Erina::MoveUP_KeyUP()
+{
+	jumKeyDownTime = 10.0f;
 }
 
 void Erina::MoveSide()

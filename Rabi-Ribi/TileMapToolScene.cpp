@@ -216,7 +216,8 @@ void TileMapToolScene::Update()
 			selectTile.terrain = TERRAIN::SPAWN;
 	}
 
-
+	if (key->IsOnceKeyDown(VK_HOME))
+		this->CleanUP();
 	if ((key->IsStayKeyDown(VK_CONTROL)))
 	{
 		if (key->IsOnceKeyDown(VK_TAB))
@@ -562,6 +563,8 @@ void TileMapToolScene::Render()
 			for (int j = 0; j < tile_Render_X; j++)
 			{
 				index = (tile_X * (i + tileCamePos.y)) + (j + tileCamePos.x);
+				if (index == 527)
+					index = 527;
 				if (!tiles[index].GetisRender())
 					continue;
 				tilerc = tiles[(tile_X * i) + j].rc;
@@ -1197,6 +1200,27 @@ void TileMapToolScene::CleanAll()
 	
 }
 
+void TileMapToolScene::CleanUP()
+{
+	for (int i = 0; (UINT)i < tile_Y * tile_X; i++)
+	{
+		if ((tiles[i].frameX == defaultFrame) & (tiles[i].frameY == defaultFrame))
+		{
+			tiles[i].geometryinfo.ReSet();
+			tiles[i].terrain = TERRAIN::NOAML;
+		}
+		else if ((tiles[i].frameX < 0.0f) & (tiles[i].frameY < 0.0f))
+		{
+			tiles[i].frameX = defaultFrame;
+			tiles[i].frameY = defaultFrame;
+			tiles[i].geometryinfo.ReSet();
+			tiles[i].rotation = 0.0f;
+			tiles[i].terrain = TERRAIN::NOAML;
+			tiles[i].isReverse = false;
+		}
+	}
+}
+
 void TileMapToolScene::SampleTileMoveSide(bool isLeft)
 {
 	if (isLeft)
@@ -1664,6 +1688,7 @@ void TileMapToolScene::Resize(UINT width, UINT height)
 	tile_Y = tempHeight;
 	// 카메라위치 초기화 
 	tileCamePos = { 0,0 };
+	CleanUP();
 }
 
 void TileMapToolScene::NumberKeyInput(bool isSizex)

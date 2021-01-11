@@ -74,7 +74,7 @@ void TimerManager::Render()
 	}
 }
 
-float TimerManager::GettimeElapsed()
+float TimerManager::GetTimeElapsed()
 {
 	return timer->GettimeElapsed();
 }

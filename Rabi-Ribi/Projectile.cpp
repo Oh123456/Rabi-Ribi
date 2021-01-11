@@ -54,8 +54,14 @@ void Projectile::Render()
 void Projectile::SetIsValid(bool value)
 {
 	Super::SetIsValid(value);
+	if (!value)
+		location = { -10.0f,-10.0f };
+	else
+		worldLocation = { 0.0f,0.0f };
 	// 생성된 이펙트를 제거한다.
 	DeleteChild(Cast<Effect>(effect));
+	if (imageInfo.imageEffect & D2DIE_NOIMAGE)
+		RemoveImageEffect(imageInfo,D2DIE_NOIMAGE);
 }
 
 void Projectile::MoveSetting(float angle, Vector2_F speed, MovePatten movePatten)
@@ -74,14 +80,18 @@ void Projectile::CreateEffect()
 
 void Projectile::OnHit(Object* object)
 {
-
-	if ((this != object) & (owner != object) & (Cast<Actor>(object)->GetActorType() != ActorType::Weapone))
+	if (object)
 	{
-		this->SetIsValid(false);
-		Character* character = Cast<Character>(object);
-		if (character)
-			character->TakeDamage(100);
+		if ((this != object) & (owner != object) & (Cast<Actor>(object)->GetActorType() != ActorType::Weapone))
+		{
+			this->SetIsValid(false);
+			Character* character = Cast<Character>(object);
+			if (character)
+				character->TakeDamage(100);
+		}
 	}
+	else
+		this->SetIsValid(false);
 }
 
 void Projectile::MoveMent()

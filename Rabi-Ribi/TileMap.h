@@ -65,7 +65,7 @@ private:
 	list<TILE_F*> renderList;
 	//list<class GeometryCollision*> collisionList;
 	map<CollisionIndexInfo, class GeometryCollision*> collisionList;
-
+	const string DefaultStagePath = "\\Save\\";
 #ifdef _DEBUG
 	ID2D1PathGeometry** debug_Tilesgeometry;
 	

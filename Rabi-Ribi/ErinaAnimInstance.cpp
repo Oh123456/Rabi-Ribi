@@ -77,7 +77,7 @@ void ErinaAnimInstance::Update()
 	case AnimationKinds::Move_Left:
 		PlayingAnimation("Left");
 		break;
-	case AnimationKinds::Jum:
+	case AnimationKinds::Jump:
 		PlayingAnimation("Jum");
 		if (playingAnimation->IsEnd())
 			erina->SetAnimKinds(AnimationKinds::Falling);

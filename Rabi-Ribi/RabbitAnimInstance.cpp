@@ -63,7 +63,7 @@ void RabbitAnimInstance::Update()
 		//	}
 		//}
 		break;
-	case AnimationKinds::Jum:
+	case AnimationKinds::Jump:
 	case AnimationKinds::Falling:
 	case AnimationKinds::Attack1:
 	case AnimationKinds::Attack2:

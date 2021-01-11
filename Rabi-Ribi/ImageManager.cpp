@@ -320,9 +320,12 @@ void ImageManager::ImageRander(ID2D1Bitmap * image, const ImageInfo & imageInfo)
 
 void ImageManager::LoadPng(LPCWSTR imageName)
 {
+	string defaultstr = DefaultDirectory;
+	wstring wdefaultstr;// = DefaultDirectory;
+	wdefaultstr.assign(defaultstr.begin(), defaultstr.end());
 	wstring png = L".png";
 	wstring imageFullName = imageName + png;
-	imageFullName = defaultDirectory + imageFullName;
+	imageFullName = wdefaultstr + defaultDirectory + imageFullName;
 
 	//LPCWSTR imageFullName = wcscat((wchar_t*)(imageName),L"_png");
 	ID2D1Bitmap* loadBitmap = D2D::GetSingleton()->LoadImage_Png(imageFullName.c_str());
@@ -333,9 +336,12 @@ void ImageManager::LoadPng(LPCWSTR keyValue, LPCWSTR imageName)
 {
 	if (images.find(keyValue) != images.end())
 		return;
+	string defaultstr = DefaultDirectory;
+	wstring wdefaultstr;// = DefaultDirectory;
+	wdefaultstr.assign(defaultstr.begin(), defaultstr.end());
 	wstring png = L".png";
 	wstring imageFullName = imageName + png;
-	imageFullName = defaultDirectory + imageFullName;
+	imageFullName = wdefaultstr + defaultDirectory + imageFullName;
 
 	//LPCWSTR imageFullName = wcscat((wchar_t*)(imageName),L"_png");
 	ID2D1Bitmap* loadBitmap = D2D::GetSingleton()->LoadImage_Png(imageFullName.c_str());

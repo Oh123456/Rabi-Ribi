@@ -10,6 +10,7 @@
 #include "Projectile.h"
 #include "ProjectileManager.h"
 #include "Effect.h"
+#include "Cocoa.h"
 
 
 PlayScene::PlayScene()
@@ -23,13 +24,14 @@ PlayScene::~PlayScene()
 HRESULT PlayScene::Init()
 {
 	backTile = CreateObject<TileMap>();
-	backTile->LoadTile("Save/StartMap_Back.map");
+	backTile->LoadTile("StartMap_Back.map");
 	middleTile = CreateObject<TileMap>();
-	middleTile->LoadTile("Save/StartMap_Middle.map");
+	middleTile->LoadTile("StartMap_Middle.map");
 	mainTile =CreateObject<TileMap>();
-	mainTile->LoadTile("Save/StartMap.map");
+	mainTile->LoadTile("StartMap.map");
 	CollisionManager* collision = CreateObject<CollisionManager>(true);
 	player = CreateObject<Erina>();
+	CreateObject<Cocoa>();
 	CreateObject<Rabbit>();
 	CreateObject<Wizard>();
 	IMAGEMANAGER->LoadPng(L"테스트배경",L"forest3_a");

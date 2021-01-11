@@ -63,10 +63,13 @@ void TileMap::Release()
 
 }
 
-void TileMap::LoadTile(const char * fileName)
+void TileMap::LoadTile(const char* fileName)
 {
+	string openFileName;
+	openFileName = DefaultDirectory + DefaultStagePath + fileName;
+
 	DWORD readByte;
-	HANDLE hFile = CreateFile(fileName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE hFile = CreateFile(openFileName.c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	TILE* tempTile;
 
 	int size[2];
@@ -88,6 +91,8 @@ void TileMap::LoadTile(const char * fileName)
 		for (int j = 0; (UINT)j < tile_X; j++)
 		{
 			index = i * tile_X + j;
+			if (index == 527)
+				index = 527;
 			// 맵툴에서는 64 *64 사이즈엿으나  인겜에서는 32*32 사이즈로 변경
 			SetRect(&tempTile[index].rc,
 				j * TILESIZE , i * TILESIZE,
@@ -105,7 +110,8 @@ void TileMap::LoadTile(const char * fileName)
 			tiles[index].SetSize({32.0f,32.0f});
 			if (tempTile[index].GetisRender())
 				renderList.push_back(&tiles[i * tile_X + j]);
-			if (tempTile[index].geometryinfo.geometrykind != GeometryKinds::None)
+			int geomttykind = Cast<int>(tempTile[index].geometryinfo.geometrykind);
+			if ((tempTile[index].geometryinfo.geometrykind != GeometryKinds::None) & (geomttykind > 0))
 			{
 				pathGeometry = nullptr;
 				d2dFactory->CreatePathGeometry(&pathGeometry);

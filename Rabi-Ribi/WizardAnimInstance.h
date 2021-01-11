@@ -1,8 +1,9 @@
 #pragma once
-#include "Animinstance.h"
-class WizardAnimInstance : public Animinstance
+#include "BunnyBandAnimInstance.h"
+
+class WizardAnimInstance : public BunnyBandAnimInstance
 {
-	SUPER(Animinstance);
+	SUPER(BunnyBandAnimInstance);
 public:
 	WizardAnimInstance();
 	~WizardAnimInstance();

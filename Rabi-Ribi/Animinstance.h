@@ -14,7 +14,7 @@ public:
 	virtual void Update();
 	virtual void Render();
 	
-	void SetOwner(class Actor* owner);
+	virtual void SetOwner(class Actor* owner);
 	const IAnimation* GetPlayingAnimation() const { return playingAnimation; }
 	const IAnimation* GetAnimation(string KeyValue);
 

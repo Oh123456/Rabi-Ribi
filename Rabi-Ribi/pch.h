@@ -52,6 +52,10 @@ extern POINT g_ptMouse;
 // 기본 윈도우 작업영역
 extern D2D_SIZE_U g_defaultWindowSize;
 extern DEVMODE g_dmSaved;
+// 파일을 한번열었는지 파일을 열면 기본  경로가 바뀌여서 넣엇다
+extern char DefaultDirectory[MAX_PATH];
+
+
 
 #define WINSIZE_X 1280
 #define WINSIZE_Y 800
@@ -66,13 +70,13 @@ inline void SetWindowSize(int startX, int startY, int sizeX, int sizeY)
 	rc.top = 0;
 	rc.right = sizeX;
 	rc.bottom = sizeY;
-#ifdef _DEBUG
-#else
-	int width = GetSystemMetrics(SM_CXSCREEN);
-	int height = GetSystemMetrics(SM_CYSCREEN);
-	rc.right = width;
-	rc.bottom = height;
-#endif // _DEBUG
+//#ifdef _DEBUG
+//#else
+//	int width = GetSystemMetrics(SM_CXSCREEN);
+//	int height = GetSystemMetrics(SM_CYSCREEN);
+//	rc.right = width;
+//	rc.bottom = height;
+//#endif // _DEBUG
 	// 실제 윈도우 크기 받아오기
 	AdjustWindowRect(&rc, WS_POPUPWINDOW, false);
 
@@ -137,6 +141,7 @@ inline SIZE_F_CompareResult SIZE_FCompare(const SIZE_F& destination, const SIZE_
 #include "Cast.h"
 #include "GeometryInfo.h"
 #include "SafeRelease.h"
+
 
 
 #define GETMANAGER(x) x::GetSingleton()

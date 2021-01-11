@@ -51,7 +51,7 @@ protected:
 	template<class UserClass>
 	Object* CreateAIController()
 	{
-		AIController = CreateObject<UserClass>();
+		AIController = CreateObject<UserClass>(false);
 		AIController->SetOwner(this);
 		return AIController;
 	}

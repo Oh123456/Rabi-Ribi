@@ -70,6 +70,7 @@ void WizardAnimInstance::Update()
 	string animKeyValue = "";
 	if (wizard == nullptr)
 		return;
+	Location ownerLocation = wizard->GetLocation();
 	switch (wizard->GetAnimKinds())
 	{
 	case AnimationKinds::Idle:
@@ -81,7 +82,7 @@ void WizardAnimInstance::Update()
 		animKeyValue = "Move" + suffix[(int)(wizard->GetWizardType())];
 		PlayingAnimation(animKeyValue);
 		break;
-	case AnimationKinds::Jum:
+	case AnimationKinds::Jump:
 		animKeyValue = "Jum" + suffix[(int)(wizard->GetWizardType())];
 		PlayingAnimation(animKeyValue);
 		break;

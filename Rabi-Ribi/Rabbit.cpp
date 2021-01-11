@@ -138,7 +138,7 @@ void Rabbit::Jum()
 {
 	TimerManager* tiemrManager = TIMERMANAGER;
 	jumTimerCount++;
-	acceleration = (-98.0f * tiemrManager->GettimeElapsed() * 1.8f);
+	acceleration = (-98.0f * tiemrManager->GetTimeElapsed() * 1.8f);
 	if (jumTimerCount >= 3)
 	{
 		jumTimerCount = 0;

@@ -129,6 +129,8 @@ private:
 	// 스포이드 영문단어
 	void Dropper(const RECT& tileRc);
 	void CleanAll();
+	// 쓰레기값 청소
+	void CleanUP();
 
 	void SampleTileMoveSide(bool isLeft = true);
 	void SampleTileMoveUp(bool isUp = true);

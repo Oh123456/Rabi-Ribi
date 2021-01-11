@@ -45,7 +45,7 @@ public:
 	void Render();
 
 	// 월드 타이머의 간격
-	float GettimeElapsed();
+	float GetTimeElapsed();
 
 	// 모든 타이머 삭제
 	void AllDeleteTimer();

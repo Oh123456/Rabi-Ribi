@@ -8,7 +8,7 @@ Character::Character() :
 	moveSideValue(0.0f), moveUpValue(0.0f), delayTime(0.0f), noAnimChange(false),
 	animKinds(AnimationKinds::Idle), isInvincible(false), invincibleTime(2.0f)
 { 
-	timerInterval = (1.0f / 120.0f);
+	timerInterval = (1.0f / 60.0f);
 	TIMERMANAGER->SetTimer(movementTimer, this, &Character::CharaterMove, timerInterval, false);
 	imageInfo.exposureEffectInfo = 0.7f;
 };
@@ -32,11 +32,11 @@ void Character::Update()
 	if (isFalling)
 	{
 		// 채공시간이 0.1초 이상이면 추락상태이다
-		delayTime += TIMERMANAGER->GettimeElapsed();
+		delayTime += TIMERMANAGER->GetTimeElapsed();
 		if (delayTime > 0.17f)
 		{
 			if ((animKinds != AnimationKinds::Falling) &
-				(animKinds != AnimationKinds::Jum) & (animKinds != AnimationKinds::Hit))
+				(animKinds != AnimationKinds::Jump) & (animKinds != AnimationKinds::Hit))
 				animKinds = AnimationKinds::Falling;
 		}
 	}
@@ -56,6 +56,30 @@ void Character::Update()
 		AddImageEffect(imageInfo, D2DIE_EXPOSUREEFFECT);
 	}
 
+}
+
+void Character::Jump()
+{
+	if (isMoveLock)
+		return;
+	// 점프가 끝났으면 초기화
+	if (((animKinds != AnimationKinds::Jump) &
+		(animKinds != AnimationKinds::Falling)) | (jumKeyDownTime >= JUM_KEYDOWN_TIME))
+	{
+		acceleration = 0.0f;
+		jumKeyDownTime = 0.0f;
+	}
+
+	if ((jumKeyDownTime <= JUM_KEYDOWN_TIME))
+	{
+		this->isFalling = true;
+		animKinds = AnimationKinds::Jump;
+		if (acceleration == 0.0f)
+			acceleration = -9.8f * 0.5f;//(-98.0f * TIMERMANAGER->GetTimeElapsed() * 2.0f);
+		else
+			acceleration += -9.8f* 0.5f *TIMERMANAGER->GetTimeElapsed();
+		jumKeyDownTime += TIMERMANAGER->GetTimeElapsed();
+	}
 }
 
 void Character::MoveGeomtry(Location a)
@@ -135,9 +159,9 @@ void Character::CharaterMove()
 	if (isFalling)
 	{
 		if (acceleration == 0.0f)
-			acceleration = (98.0f * TIMERMANAGER->GettimeElapsed() );
+			acceleration = (98.0f * TIMERMANAGER->GetTimeElapsed() );
 		else
-			acceleration += (9.8f * TIMERMANAGER->GettimeElapsed());
+			acceleration += (9.8f * TIMERMANAGER->GetTimeElapsed());
 		if (acceleration >= 8.0f)
 			acceleration = 8.0f;
 		//moveUpValue = acceleration;
@@ -145,10 +169,11 @@ void Character::CharaterMove()
 	}
 	if (!isMoveLock)
 	{
-		this->geomtryLocation.x += (moveSideValue * TIMERMANAGER->GettimeElapsed());
-		this->geomtryLocation.y += (moveUpValue * TIMERMANAGER->GettimeElapsed());
+		this->geomtryLocation.x += (moveSideValue * TIMERMANAGER->GetTimeElapsed());
+		this->geomtryLocation.y += (moveUpValue * TIMERMANAGER->GetTimeElapsed());
 
 	}
+	//DEBUG_MASSAGE("%f \n",acceleration);
 	moveSideValue = 0.0f;
 	moveUpValue = 0.0f;
 }

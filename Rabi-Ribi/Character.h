@@ -8,7 +8,7 @@ enum class AnimationKinds
 	Idle,
 	Move_Right,
 	Move_Left,
-	Jum,
+	Jump,
 	Falling,
 	Hit,
 	Attack1,
@@ -17,7 +17,7 @@ enum class AnimationKinds
 	Attack4,
 };
 
-
+#define JUM_KEYDOWN_TIME 0.30f
 class Character :public Actor
 {
 	SUPER(Actor);
@@ -42,6 +42,7 @@ public:
 	inline void SetFalling(bool value) { this->isFalling = value; }
 	inline bool GetFalling() { return this->isFalling; }
 
+	void Jump();
 	void MoveGeomtry(Location a);
 	virtual void MoveCharacter();
 	void MoveCancel(bool isSide , bool isUp);
@@ -63,6 +64,7 @@ public:
 	void SetMoveLock(bool value) { isMoveLock = value; noAnimChange = value; }
 	bool GetMoveLocl() const { return isMoveLock; }
 
+	void SetAcceleration(float value) { acceleration = value; }
 	float GetAcceleration() { return acceleration; }
 
 	int GetDamage() { return damage; }
@@ -90,6 +92,7 @@ protected:
 	float acceleration;
 	float delayTime;
 	AnimationKinds animKinds;
+	float jumKeyDownTime;
 private:
 	float moveSideValue;
 	float moveUpValue;
