@@ -1,6 +1,7 @@
 #include "CocoaAIController.h"
 #include "Cocoa.h"
 #include "PlayScene.h"
+#include "BlackBomb.h"
 
 CocoaAIController::CocoaAIController()
 {
@@ -43,6 +44,7 @@ void CocoaAIController::Update()
 
 	if (KEYMANAGER->IsOnceKeyDown(VK_HOME))
 	{
+		CreateObject<BlackBomb>()->SetWorldLocation(taget->GetWorldLocation());
 		if (!jumpCheck)
 		{
 			jumpDelayTime = (float)(rand() % 15) * 0.01f;

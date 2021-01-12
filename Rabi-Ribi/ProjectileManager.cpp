@@ -1,6 +1,7 @@
 #include "ProjectileManager.h"
 #include "Projectile.h"
 #include "CarrotBomb.h"
+#include "BlackBomb.h"
 
 ProjectileManager::ProjectileManager()
 {

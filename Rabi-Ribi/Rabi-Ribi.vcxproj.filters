@@ -321,10 +321,13 @@
     <ClCompile Include="ExplosionEffect.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="BombExplosionEffect.cpp">
+    <ClCompile Include="CarrotBombExplosionEffect.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="CarrotBombExplosionEffect.cpp">
+    <ClCompile Include="BlackBombExplosionEffect.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="BlackBomb.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -527,10 +530,13 @@
     <ClInclude Include="ExplosionEffect.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="BombExplosionEffect.h">
+    <ClInclude Include="CarrotBombExplosionEffect.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="CarrotBombExplosionEffect.h">
+    <ClInclude Include="BlackBombExplosionEffect.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BlackBomb.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

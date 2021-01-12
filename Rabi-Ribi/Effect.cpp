@@ -2,6 +2,8 @@
 #include "WizardProjectileEffect.h"
 #include "CarrotBombEffect.h"
 #include "CarrotBombExplosionEffect.h"
+#include "BlackBombEffect.h"
+#include "BlackBombExplosionEffect.h"
 #include "D2DGraphic.h"
 
 void Effect::SetEffect(EffectKinds effectKinds)
@@ -20,6 +22,14 @@ void Effect::SetEffect(EffectKinds effectKinds)
 	case EffectKinds::Carrot_Bomb_Explosion:
 		SAFE_RELEASE(body, imageInfo);
 		body = new CarrotBombExplosionEffect;
+		break;
+	case EffectKinds::Black_Bomb:
+		SAFE_RELEASE(body, imageInfo);
+		body = new BlackBombEffect;
+		break;
+	case EffectKinds::Black_Bomb_Explosion:
+		SAFE_RELEASE(body, imageInfo);
+		body = new BlackBombExplosionEffect;
 		break;
 	}
 

@@ -8,6 +8,8 @@ enum class EffectKinds : DWORD
 	Small_Blue_Effect,
 	Carrot_Bomb,
 	Carrot_Bomb_Explosion,
+	Black_Bomb,
+	Black_Bomb_Explosion,
 };
 
 
@@ -64,6 +66,7 @@ protected:
 		Carrot_Bomb_Frame = EFFECTKINDS(0, 1),
 		Black_Bomb_Frame = EFFECTKINDS(7, 1),
 		Red_Explosion_Frame = EFFECTKINDS(1, 2),
+		Blue_Explosion_Frame = EFFECTKINDS(5, 2),
 		White_Explosion_Frame = EFFECTKINDS(0, 2),
 	};
 };

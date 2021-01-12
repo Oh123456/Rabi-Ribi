@@ -2,6 +2,7 @@
 
 CarrotBombExplosionEffect::CarrotBombExplosionEffect()
 {
+	effectFrame = EffectFrame::Red_Explosion_Frame;
 }
 
 CarrotBombExplosionEffect::~CarrotBombExplosionEffect()

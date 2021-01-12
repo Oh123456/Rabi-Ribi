@@ -70,7 +70,7 @@ void ExplosionEffect::CreateExplosionImage()
 	newImageInfo.imageEffect = D2DIE_DEFAULT | D2DIE_TINT | D2DIE_EXPOSUREEFFECT;
 	if (rand() % 2)
 	{
-		DWORD effectValue = Cast<DWORD>(EffectFrame::Red_Explosion_Frame);
+		DWORD effectValue = Cast<DWORD>(effectFrame);
 		newImageInfo.atlasInfo.frame = { HIWORD(effectValue), LOWORD(effectValue) };
 	}
 	else
@@ -90,7 +90,7 @@ void ExplosionEffect::CreateExplosionImage()
 		newImageInfo.imageEffect = D2DIE_DEFAULT | D2DIE_TINT | D2DIE_EXPOSUREEFFECT;
 		if (rand() % 2)
 		{
-			DWORD effectValue = Cast<DWORD>(EffectFrame::Red_Explosion_Frame);
+			DWORD effectValue = Cast<DWORD>(effectFrame);
 			newImageInfo.atlasInfo.frame = { HIWORD(effectValue), LOWORD(effectValue) };
 		}
 		else

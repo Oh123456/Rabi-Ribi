@@ -127,9 +127,10 @@
     <ClCompile Include="AIBase.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Animinstance.cpp" />
+    <ClCompile Include="BlackBomb.cpp" />
     <ClCompile Include="BlackBombEffect.cpp" />
+    <ClCompile Include="BlackBombExplosionEffect.cpp" />
     <ClCompile Include="Bomb.cpp" />
-    <ClCompile Include="BombExplosionEffect.cpp" />
     <ClCompile Include="BunnyBand.cpp" />
     <ClCompile Include="BunnyBandAnimInstance.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -190,9 +191,10 @@
     <ClInclude Include="AIBase.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Animinstance.h" />
+    <ClInclude Include="BlackBomb.h" />
     <ClInclude Include="BlackBombEffect.h" />
+    <ClInclude Include="BlackBombExplosionEffect.h" />
     <ClInclude Include="Bomb.h" />
-    <ClInclude Include="BombExplosionEffect.h" />
     <ClInclude Include="BunnyBand.h" />
     <ClInclude Include="BunnyBandAnimInstance.h" />
     <ClInclude Include="Camera.h" />

@@ -19,10 +19,11 @@ protected:
 	deque<ImageInfo> explosionEffctImage;
 	TimerHandle explosionTimer;
 	int count;
-protected:
 	bool isEnd;
+	EffectFrame effectFrame;
 private:
 	bool isOneTime;
 	float createExplosinTime;
+
 };
 
