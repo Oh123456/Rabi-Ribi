@@ -1,5 +1,6 @@
 #include "ProjectileManager.h"
 #include "Projectile.h"
+#include "CarrotBomb.h"
 
 ProjectileManager::ProjectileManager()
 {
@@ -17,6 +18,9 @@ HRESULT ProjectileManager::Init()
 		projectile->SetIsValid(false);
 		projectiles.push_back(projectile);
 	}
+
+	carrotBomb = CreateObject<CarrotBomb>();
+	carrotBomb->SetIsValid(false);
 	return S_OK;
 }
 
@@ -60,4 +64,12 @@ Projectile * ProjectileManager::SpawnProjectile()
 
 	activeProjectiles.push_back(projectile);
 	return projectile;
+}
+
+Projectile * ProjectileManager::SpawnCarrotBomb()
+{
+	if (carrotBomb->GetIsValid())
+		return nullptr;
+	carrotBomb->SetIsValid(true);
+	return carrotBomb;
 }

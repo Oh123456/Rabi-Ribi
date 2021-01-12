@@ -11,6 +11,8 @@
 #include "ProjectileManager.h"
 #include "Effect.h"
 #include "Cocoa.h"
+#include "CarrotBomb.h"
+#include "EnemyAIController.h"
 
 
 PlayScene::PlayScene()
@@ -31,9 +33,9 @@ HRESULT PlayScene::Init()
 	mainTile->LoadTile("StartMap.map");
 	CollisionManager* collision = CreateObject<CollisionManager>(true);
 	player = CreateObject<Erina>();
-	CreateObject<Cocoa>();
-	CreateObject<Rabbit>();
-	CreateObject<Wizard>();
+	cocoa = CreateObject<Cocoa>();
+	//CreateObject<Rabbit>();
+	//CreateObject<Wizard>();
 	IMAGEMANAGER->LoadPng(L"테스트배경",L"forest3_a");
 	IMAGEMANAGER->LoadPng(L"Erina", L"Chacter/player_a");
 
@@ -62,6 +64,9 @@ void PlayScene::Release()
 void PlayScene::Update()
 {
 	Super::Update();
+	EnemyAIController* ai = Cast<EnemyAIController>(Cast<Enemy>(cocoa)->GetAIController());
+	if (ai->GetTaget() == nullptr)
+		ai->SetTaget(player);
 }
 
 

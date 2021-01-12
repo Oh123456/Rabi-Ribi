@@ -82,7 +82,16 @@ public:
 		else
 		{
 			TDelegate<UserClass>* delegate = dynamic_cast<TDelegate<UserClass>*>(Tdelegate);
-			Tdelegate = delegate->Bind(InUserObject, InFunc);
+			if (delegate)
+				Tdelegate = delegate->Bind(InUserObject, InFunc);
+			else
+			{
+				Tdelegate->UnBind();
+				delete Tdelegate;
+
+				TDelegate<UserClass>* delegate = new TDelegate<UserClass>;
+				Tdelegate = delegate->Bind(InUserObject, InFunc);
+			}
 		}
 	}
 

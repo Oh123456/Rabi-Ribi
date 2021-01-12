@@ -1,5 +1,7 @@
 #include "Effect.h"
 #include "WizardProjectileEffect.h"
+#include "CarrotBombEffect.h"
+#include "CarrotBombExplosionEffect.h"
 #include "D2DGraphic.h"
 
 void Effect::SetEffect(EffectKinds effectKinds)
@@ -9,6 +11,14 @@ void Effect::SetEffect(EffectKinds effectKinds)
 	case EffectKinds::Small_Blue_Effect:
 		SAFE_RELEASE(body,imageInfo);
 		body = new WizardProjectileEffect;
+		break;
+	case EffectKinds::Carrot_Bomb:
+		SAFE_RELEASE(body, imageInfo);
+		body = new CarrotBombEffect;
+		break;
+	case EffectKinds::Carrot_Bomb_Explosion:
+		SAFE_RELEASE(body, imageInfo);
+		body = new CarrotBombExplosionEffect;
 		break;
 	}
 
@@ -44,4 +54,6 @@ void Effect::Render()
 {
 	Super::Render();
 	IMAGEMANAGER->ImageRander(imageInfo);
+	if (body)
+		body->Render(imageInfo);
 }

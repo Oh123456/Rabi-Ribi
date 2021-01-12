@@ -20,6 +20,6 @@ protected:
 	Location socketLocation;
 private:
 	virtual void MoveMent();
-	virtual void MoveEnd();
+	virtual void MoveEnd(Location& wolrdLocation);
 };
 

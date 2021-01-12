@@ -1,8 +1,8 @@
 #pragma once
 #include "Effect.h"
-class WizardProjectileEffect : public EffectBoday
+class WizardProjectileEffect : public EffectBody
 {
-	SUPER(EffectBoday);
+	SUPER(EffectBody);
 public:
 	WizardProjectileEffect();
 	~WizardProjectileEffect();

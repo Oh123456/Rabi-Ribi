@@ -13,9 +13,8 @@ Weapon::~Weapon()
 void Weapon::Update()
 {
 	Super::Update();
-	MoveMent();
-	MoveEnd();
-
+	this->MoveMent();
+	this->MoveEnd(worldLocation);
 }
 
 void Weapon::MoveMent()
@@ -23,7 +22,7 @@ void Weapon::MoveMent()
 
 }
 
-void Weapon::MoveEnd()
+void Weapon::MoveEnd(Location& worldLocation)
 {
 	worldLocation = { location.x + cameraLocation.x, location.y + cameraLocation.y };
 	imageInfo.imageLocation = location;

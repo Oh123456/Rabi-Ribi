@@ -72,9 +72,13 @@ D2D_RECT_F GeometryCollision::GetGeometryRect()
 
 D2D1_GEOMETRY_RELATION GeometryCollision::CollisionCheck(ID2D1PathGeometry* geometry, const Location& objectLocation)
 {
-	D2D1_GEOMETRY_RELATION reuslt;
-	this->geometry->CompareWithGeometry(geometry, GetTranslationMatrix3x2F(objectLocation), &reuslt);
-	return reuslt;
+	if (geometry)
+	{
+		D2D1_GEOMETRY_RELATION reuslt;
+		this->geometry->CompareWithGeometry(geometry, GetTranslationMatrix3x2F(objectLocation), &reuslt);
+		return reuslt;
+	}
+	return D2D1_GEOMETRY_RELATION_UNKNOWN;
 }
 
 bool GeometryCollision::CollisionHitCheck(ID2D1PathGeometry* geometry, const Location& objectLocation)

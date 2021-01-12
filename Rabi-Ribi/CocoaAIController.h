@@ -1,8 +1,12 @@
 #pragma once
-#include "AIBase.h"
-class CocoaAIController : public AIBase
+#include "EnemyAIController.h"
+class CocoaAIController : public EnemyAIController
 {
-	SUPER(AIBase);
+	SUPER(EnemyAIController);
+
+	// 점프 방향
+	const bool Left = true;
+	const bool Right = false;
 public:
 	CocoaAIController();
 	~CocoaAIController();
@@ -12,9 +16,14 @@ public:
 	void Update()	override;
 	void Render()	override;
 
+	void SetJumpDelayTime(float value = 0.15f) { jumpDelayTime = value; }
+
 private:
 	void BackJumpMove();
-
-	bool jumptest;
+	float jumpDelayTime;
+	float jumpTime;
+	bool jumpCheck;
+	// 좌측 true 우측 false
+	bool jumpBackDirection;
 };
 

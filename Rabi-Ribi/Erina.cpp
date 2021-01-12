@@ -5,6 +5,9 @@
 #include "ErinaAnimInstance.h"
 #include "Hammer.h"
 #include "Rebbon_Weapon.h"
+#include "PlayScene.h"
+#include "ProjectileManager.h"
+#include "Projectile.h"
 
 Erina::Erina()
 {
@@ -78,6 +81,7 @@ void Erina::PlayerInputSetting(PlayerInput* playerInput)
 
 	playerInput->BindInputKey(VK_LEFT, KeyInputKinds::StayKey_Down, this, &Erina::MoveSide);
 	playerInput->BindInputKey(VK_RIGHT, KeyInputKinds::StayKey_Down, this, &Erina::MoveSide);
+	playerInput->BindInputKey(VK_DOWN, KeyInputKinds::StayKey_Down, this, &Erina::CarrotBomb);
 
 	playerInput->BindInputKey(CKey, KeyInputKinds::Key_Down, this, &Erina::AttackPikoHammer);
 	playerInput->BindInputKey(XKey, KeyInputKinds::Key_Down, this, &Erina::RebbonAttack);
@@ -136,6 +140,8 @@ void Erina::MoveSide()
 
 void Erina::AttackPikoHammer()
 {
+	if (KEYMANAGER->GetKeyDown()[VK_DOWN])
+		return;
 	if (!isMoveLock)
 	{
 		animKinds = AnimationKinds::Attack1;
@@ -204,6 +210,21 @@ void Erina::RebbonChagetAttackFire()
 		break;
 	}
 
+}
+
+void Erina::CarrotBomb()
+{
+	if (KEYMANAGER->IsOnceKeyUP(CKey))
+	{
+		PlayScene* playScene = Cast<PlayScene>(SceneManager::currScene);
+		Projectile* carrotBomb = playScene->GetProjectileManager()->SpawnCarrotBomb();
+		if (carrotBomb)
+		{
+			carrotBomb->Init();
+			carrotBomb->SetLocation(worldLocation);
+			carrotBomb->SetSpeed({2.0f,-10.0f});
+		}
+	}
 }
 
 

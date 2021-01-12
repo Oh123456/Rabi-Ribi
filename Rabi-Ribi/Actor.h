@@ -12,6 +12,11 @@ enum class ActorType
 	None,
 };
 
+enum class ActorDirection
+{
+	left,
+	Right
+};
 
 // 게임에 소환되에 그려지는 객체들
 class Actor : public Object
@@ -23,6 +28,8 @@ public:
 
 	void Update()	override;
 	void Release()	override;
+
+	void ChangeDirection(ActorDirection actorDirection);
 
 	void SetCollisionGeometry(const ID2D1PathGeometry* const collisionGeomtry);
 	inline void SetWorldLocation(const Location& location)												{ this->worldLocation = location; }
@@ -45,6 +52,7 @@ public:
 	inline bool GetIgnoreTerrain()																	const { return IgnoreTerrain; }
 	inline class Animinstance* GetAnimInstance()												const { return animmation; }
 	inline ActorType GetActorType()																const { return actorType; }
+	inline const Object* GetAIController()														const { return AIController; }
 protected:
 	void SetGeomtryCollsion();
 

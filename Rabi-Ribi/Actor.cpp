@@ -22,6 +22,24 @@ void Actor::Release()
 	SAFE_RELEASE(hitBoxCollisionGeomtry);
 }
 
+void Actor::ChangeDirection(ActorDirection actorDirection)
+{
+
+	switch (actorDirection)
+	{
+	case ActorDirection::left:
+		if (imageInfo.affineMatrix.m11 < 0.0f)
+			imageInfo.affineMatrix = imageInfo.affineMatrix * Matrix3x2F::Scale({ -1.0f,1.0f }, { imageInfo.atlasInfo.frameSize.width / 2.0f,imageInfo.atlasInfo.frameSize.height / 2.0f });
+		break;
+	case ActorDirection::Right:
+		if (imageInfo.affineMatrix.m11 > 0.0f)
+			imageInfo.affineMatrix = imageInfo.affineMatrix * Matrix3x2F::Scale({ -1.0f,1.0f }, { imageInfo.atlasInfo.frameSize.width / 2.0f,imageInfo.atlasInfo.frameSize.height / 2.0f });
+		break;
+	default:
+		break;
+	}
+}
+
 void Actor::SetCollisionGeometry(const ID2D1PathGeometry * const collisionGeomtry)
 {
 	this->collisionGeomtry->SetCollision(Cast<ID2D1PathGeometry>(collisionGeomtry),this);
@@ -35,7 +53,9 @@ void Actor::SetGeomtryLocation(const Location & letfTopLocation, const SIZE_F & 
 
 const ID2D1PathGeometry* Actor::GetCollisionPathGeomtry()
 {
-	return this->collisionGeomtry->GetGeometry();
+	if (collisionGeomtry)
+		return this->collisionGeomtry->GetGeometry();
+	return nullptr;
 }
 
 Location Actor::GetLTLocation()
@@ -45,6 +65,12 @@ Location Actor::GetLTLocation()
 
 void Actor::SetGeomtryCollsion()
 {
+	if (collisionGeomtry)
+	{
+		SAFE_RELEASE(collisionGeomtry);
+		SAFE_RELEASE(hitBoxCollisionGeomtry);
+		hitBoxSize = { -1.0f, -1.0f };
+	}
 	ID2D1PathGeometry* collsion;
 	D2D::GetSingleton()->GetD2DFactory()->CreatePathGeometry(&collsion);
 	ID2D1GeometrySink* sink = NULL;

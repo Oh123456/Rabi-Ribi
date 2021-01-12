@@ -65,11 +65,14 @@ void TileMap::Release()
 
 void TileMap::LoadTile(const char* fileName)
 {
-	string openFileName;
-	openFileName = DefaultDirectory + DefaultStagePath + fileName;
+	string sfileName = fileName;
+	wstring wfileName;
+	wfileName.assign(sfileName.begin(), sfileName.end());
+	wstring openFileName;
+	openFileName = DefaultDirectory + DefaultStagePath + wfileName;
 
 	DWORD readByte;
-	HANDLE hFile = CreateFile(openFileName.c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE hFile = CreateFileW(openFileName.c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	TILE* tempTile;
 
 	int size[2];

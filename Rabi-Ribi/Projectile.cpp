@@ -3,6 +3,7 @@
 #include "Character.h"
 #include "Effect.h"
 #include "D2DGraphic.h"
+#include "TileMap.h"
 
 Projectile::Projectile() : 
 	angle(0.0f), speed(0.0f,0.0f) , animKinds(ProjectileAnimationKinds::Circle_Red)
@@ -24,7 +25,7 @@ HRESULT Projectile::Init()
 {
 	IMAGEMANAGER->LoadPng(L"projectile", L"Projectile/projectile_a");
 	imageInfo.imageName = L"projectile";
-	imageInfo.imageLocation = { 300.f,300.f };
+	imageInfo.imageLocation = { 0,0 };
 	imageInfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE;
 	imageInfo.atlasInfo.frame = { 0,0 };
 	imageInfo.atlasInfo.frameSize = { 62.0,31.0f };
@@ -80,7 +81,9 @@ void Projectile::CreateEffect()
 
 void Projectile::OnHit(Object* object)
 {
-	if (object)
+	if (Cast<TILE_F>(object))
+		this->SetIsValid(false);
+	else
 	{
 		if ((this != object) & (owner != object) & (Cast<Actor>(object)->GetActorType() != ActorType::Weapone))
 		{
@@ -90,8 +93,7 @@ void Projectile::OnHit(Object* object)
 				character->TakeDamage(100);
 		}
 	}
-	else
-		this->SetIsValid(false);
+
 }
 
 void Projectile::MoveMent()

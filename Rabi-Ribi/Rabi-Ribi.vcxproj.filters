@@ -103,9 +103,6 @@
     <Filter Include="AI">
       <UniqueIdentifier>{e9780bc5-ea0e-4d48-871e-83198591ea2e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Actor\Weapone\Projectile">
-      <UniqueIdentifier>{f51227a8-aa81-492d-a421-3536a0c40fbf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object\Actor\Character\Enemy\Rabbit">
       <UniqueIdentifier>{2cac679f-0e9b-46c6-b46b-aa0233afc91c}</UniqueIdentifier>
     </Filter>
@@ -123,6 +120,27 @@
     </Filter>
     <Filter Include="Object\Actor\Character\Enemy\Cocoa">
       <UniqueIdentifier>{f16fc4c1-fddb-4c59-a722-e702b8149dcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect\Rotation">
+      <UniqueIdentifier>{99f960a3-377e-4abd-8da3-4cecae7708f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect\Boomb">
+      <UniqueIdentifier>{190f99bb-fe15-40cb-b8e8-8ed9a935f0da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AI\Cocoa">
+      <UniqueIdentifier>{9d401d1f-57ec-4db2-90b4-37078547c321}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AI\Wizard">
+      <UniqueIdentifier>{ebb6c5cb-5143-4d0a-8597-b07bf26ff04c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Actor\Projectile">
+      <UniqueIdentifier>{f51227a8-aa81-492d-a421-3536a0c40fbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Actor\Projectile\Falling">
+      <UniqueIdentifier>{fc7341ec-f916-4239-8e39-562befb3dbe9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Actor\Projectile\Bomb">
+      <UniqueIdentifier>{5471b98c-3636-4d52-94c6-4980f1721373}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -235,10 +253,10 @@
       <Filter>Object\Actor\Weapone\Rebbon</Filter>
     </ClCompile>
     <ClCompile Include="Projectile.cpp">
-      <Filter>Object\Actor\Weapone\Projectile</Filter>
+      <Filter>Object\Actor\Projectile</Filter>
     </ClCompile>
     <ClCompile Include="ProjectileAnimInstance.cpp">
-      <Filter>Object\Actor\Weapone\Projectile</Filter>
+      <Filter>Object\Actor\Projectile</Filter>
     </ClCompile>
     <ClCompile Include="PlayScene.cpp">
       <Filter>Object\Map</Filter>
@@ -254,9 +272,6 @@
     </ClCompile>
     <ClCompile Include="WizardAnimInstance.cpp">
       <Filter>Object\Actor\Character\Enemy\Wizard</Filter>
-    </ClCompile>
-    <ClCompile Include="WizardAIController.cpp">
-      <Filter>AI</Filter>
     </ClCompile>
     <ClCompile Include="ProjectileManager.cpp">
       <Filter>Manager\Projectile</Filter>
@@ -276,10 +291,40 @@
     <ClCompile Include="BunnyBandAnimInstance.cpp">
       <Filter>Object\Actor\Character\Enemy\BunnyBand</Filter>
     </ClCompile>
-    <ClCompile Include="CocoaAnimInstance.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="RotationEffect.cpp">
+      <Filter>Effect\Rotation</Filter>
+    </ClCompile>
+    <ClCompile Include="CarrotBombEffect.cpp">
+      <Filter>Effect\Boomb</Filter>
+    </ClCompile>
+    <ClCompile Include="BlackBombEffect.cpp">
+      <Filter>Effect\Boomb</Filter>
     </ClCompile>
     <ClCompile Include="CocoaAIController.cpp">
+      <Filter>AI\Cocoa</Filter>
+    </ClCompile>
+    <ClCompile Include="WizardAIController.cpp">
+      <Filter>AI\Wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="CocoaAnimInstance.cpp">
+      <Filter>Object\Actor\Character\Enemy\Cocoa</Filter>
+    </ClCompile>
+    <ClCompile Include="FallingProjectile.cpp">
+      <Filter>Object\Actor\Projectile\Falling</Filter>
+    </ClCompile>
+    <ClCompile Include="CarrotBomb.cpp">
+      <Filter>Object\Actor\Projectile\Bomb</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>Object\Actor\Projectile\Bomb</Filter>
+    </ClCompile>
+    <ClCompile Include="ExplosionEffect.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="BombExplosionEffect.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CarrotBombExplosionEffect.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -414,10 +459,10 @@
       <Filter>Object\Actor\Weapone\Rebbon</Filter>
     </ClInclude>
     <ClInclude Include="Projectile.h">
-      <Filter>Object\Actor\Weapone\Projectile</Filter>
+      <Filter>Object\Actor\Projectile</Filter>
     </ClInclude>
     <ClInclude Include="ProjectileAnimInstance.h">
-      <Filter>Object\Actor\Weapone\Projectile</Filter>
+      <Filter>Object\Actor\Projectile</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene.h">
       <Filter>Object\Map</Filter>
@@ -433,9 +478,6 @@
     </ClInclude>
     <ClInclude Include="WizardAnimInstance.h">
       <Filter>Object\Actor\Character\Enemy\Wizard</Filter>
-    </ClInclude>
-    <ClInclude Include="WizardAIController.h">
-      <Filter>AI</Filter>
     </ClInclude>
     <ClInclude Include="ProjectileManager.h">
       <Filter>Manager\Projectile</Filter>
@@ -455,10 +497,40 @@
     <ClInclude Include="BunnyBandAnimInstance.h">
       <Filter>Object\Actor\Character\Enemy\BunnyBand</Filter>
     </ClInclude>
-    <ClInclude Include="CocoaAnimInstance.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="RotationEffect.h">
+      <Filter>Effect\Rotation</Filter>
+    </ClInclude>
+    <ClInclude Include="CarrotBombEffect.h">
+      <Filter>Effect\Boomb</Filter>
+    </ClInclude>
+    <ClInclude Include="BlackBombEffect.h">
+      <Filter>Effect\Boomb</Filter>
     </ClInclude>
     <ClInclude Include="CocoaAIController.h">
+      <Filter>AI\Cocoa</Filter>
+    </ClInclude>
+    <ClInclude Include="WizardAIController.h">
+      <Filter>AI\Wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="CocoaAnimInstance.h">
+      <Filter>Object\Actor\Character\Enemy\Cocoa</Filter>
+    </ClInclude>
+    <ClInclude Include="FallingProjectile.h">
+      <Filter>Object\Actor\Projectile\Falling</Filter>
+    </ClInclude>
+    <ClInclude Include="CarrotBomb.h">
+      <Filter>Object\Actor\Projectile\Bomb</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>Object\Actor\Projectile\Bomb</Filter>
+    </ClInclude>
+    <ClInclude Include="ExplosionEffect.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BombExplosionEffect.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CarrotBombExplosionEffect.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

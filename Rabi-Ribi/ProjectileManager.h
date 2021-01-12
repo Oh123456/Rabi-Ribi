@@ -17,11 +17,13 @@ public:
 	void Render() override;
 
 	class Projectile* SpawnProjectile();
+	class Projectile* SpawnCarrotBomb();
 
 	const list <class Projectile*>& GetProjectile()			const { return projectiles; }
 	const list <class Projectile*>& GetActiveProjectiles()	const { return activeProjectiles;}
 private:
 	list <class Projectile*> projectiles;
 	list <class Projectile*> activeProjectiles;
+	class Projectile* carrotBomb;
 };
 

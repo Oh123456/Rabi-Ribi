@@ -20,6 +20,7 @@ public:
 private:
 	ImageInfo testbg;
 	class Actor* player;
+	class Actor* cocoa;
 	class TileMap* mainTile;
 	class TileMap* middleTile;
 	class TileMap* backTile;

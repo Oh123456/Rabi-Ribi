@@ -238,7 +238,7 @@ void CollisionManager::TerrainBottomCollision(Actor* actor, UINT tileX_Size, Loc
 	{ 
 		if (battomCollosion[3]->GetGeometryInfo().geometrykind == GeometryKinds::Square)
 		{
-			if ((battomCollosion[3]->GetGeometryInfo()._width == 1) & (charactor->GetFalling()))
+			if ((battomCollosion[3]->GetGeometryInfo()._width == 1)/* & (charactor->GetFalling())*/)
 				battomCollosion[3] = nullptr;
 		}
 	}
@@ -675,7 +675,7 @@ void CollisionManager::TerrainProjetileleCollision(Projectile* projectile, UINT 
 				//if (PtInRect(&rc,point))
 				if (c_it->second->CollisionHitCheck(Cast<ID2D1PathGeometry>(projectile->GetCollisionPathGeomtry()), projectile->GetLTLocation()))
 				{
-					projectile->onHit.Execute(nullptr/*Cast<Object>(c_it->second->GetOwner())*/);
+					projectile->onHit.Execute(Cast<Object>(c_it->second->GetOwner()));
 					return;
 				}
 			}

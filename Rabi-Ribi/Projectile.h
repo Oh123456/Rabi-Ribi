@@ -39,7 +39,7 @@ public:
 	 void MoveSetting(float angle, Vector2_F speed, MovePatten movePatten);
 
 	 void SetAngle(float angle)								{ this->angle = angle; }
-	 void SetSpeed(Vector2_F speed)							{ this->speed = speed; }
+	 virtual void SetSpeed(Vector2_F speed)							{ this->speed = speed; }
 	 void SetMovePatten(MovePatten movePatten)			{ this->movePatten = movePatten; }
 
 	 float GetAngle()										const { return this->angle; }

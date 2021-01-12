@@ -53,7 +53,7 @@ extern POINT g_ptMouse;
 extern D2D_SIZE_U g_defaultWindowSize;
 extern DEVMODE g_dmSaved;
 // 파일을 한번열었는지 파일을 열면 기본  경로가 바뀌여서 넣엇다
-extern char DefaultDirectory[MAX_PATH];
+extern wchar_t DefaultDirectory[MAX_PATH];
 
 
 

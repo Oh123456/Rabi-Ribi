@@ -34,6 +34,7 @@ private:
 	void RebbonAttack();
 	void RebbonChargeAttack();
 	void RebbonChagetAttackFire();
+	void CarrotBomb();
 
 	void OnHit(Object* object);
 private:
