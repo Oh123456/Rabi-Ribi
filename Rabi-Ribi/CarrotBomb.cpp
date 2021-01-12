@@ -13,19 +13,16 @@ CarrotBomb::~CarrotBomb()
 
 HRESULT CarrotBomb::Init()
 {
-	FallingProjectile::Init();
-	imageInfo.imageName = L"projectile";
-	imageInfo.imageLocation = { 300.f,300.f };
-	imageInfo.imageEffect = D2DIE_NOIMAGE;
+	Super::Init();
+	worldLocation = { 0.0f,0.0f };
 	size = { 31.0f * 0.5f ,31.0f * 0.5f };
-	location = { 0.f,0.f };
-	worldLocation = location;
-	geomtryLocation = { 0.0f,0.0f };
 	hitBoxSize = size;
 	SetGeomtryCollsion();
+
 	CreateEffect();
 	effect->SetEffect(EffectKinds::Carrot_Bomb);
 	isExplosion = false;
+	imageInfo.imageLocation = { 0.0f,0.0f };
 	return S_OK;
 }
 

@@ -221,8 +221,12 @@ void Erina::CarrotBomb()
 		if (carrotBomb)
 		{
 			carrotBomb->Init();
-			carrotBomb->SetLocation(worldLocation);
-			carrotBomb->SetSpeed({2.0f,-10.0f});
+			carrotBomb->SetWorldLocation(worldLocation);
+			carrotBomb->SetLocation(location);
+			if (imageInfo.affineMatrix.m11 < 0.0f)
+				carrotBomb->SetSpeed({ 1.0f,-3.0f});
+			else
+				carrotBomb->SetSpeed({ -1.0f,-3.0f });
 		}
 	}
 }

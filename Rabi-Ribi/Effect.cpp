@@ -6,6 +6,7 @@
 
 void Effect::SetEffect(EffectKinds effectKinds)
 {
+	imageInfo.imageLocation = { -10.f,-10.0f };
 	switch (effectKinds)
 	{
 	case EffectKinds::Small_Blue_Effect:
@@ -28,6 +29,7 @@ HRESULT Effect::Init()
 {
 	IMAGEMANAGER->LoadPng(L"effect_a",L"Effect/effect_a");
 	imageInfo.imageName = L"effect_a";
+	imageInfo.imageLocation = { -10.0f,-10.f };
 	imageInfo.atlasInfo.frameSize = { 31.0f,31.0f };
 	imageInfo.imageEffect = D2DIE_DEFAULT | D2DIE_EXPOSUREEFFECT;
 	return S_OK;

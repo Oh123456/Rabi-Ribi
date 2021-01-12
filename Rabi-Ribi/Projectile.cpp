@@ -60,7 +60,8 @@ void Projectile::SetIsValid(bool value)
 	else
 		worldLocation = { 0.0f,0.0f };
 	// 생성된 이펙트를 제거한다.
-	DeleteChild(Cast<Effect>(effect));
+	if (!value)
+		DeleteChild(Cast<Effect>(effect));	
 	if (imageInfo.imageEffect & D2DIE_NOIMAGE)
 		RemoveImageEffect(imageInfo,D2DIE_NOIMAGE);
 }
