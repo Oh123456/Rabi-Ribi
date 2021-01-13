@@ -6,7 +6,8 @@
 Character::Character() :
 	isFalling(true), hp(0), maxHP(0), damage(0), moveSpeed(0.0f), jumSpeed(0.0f),
 	moveSideValue(0.0f), moveUpValue(0.0f), delayTime(0.0f), noAnimChange(false),
-	animKinds(AnimationKinds::Idle), isInvincible(false), invincibleTime(2.0f)
+	animKinds(AnimationKinds::Idle), isInvincible(false), invincibleTime(2.0f),
+	isKeyLock(false) , jumpPower(0.5f) , isCanFly(false)
 { 
 	timerInterval = (1.0f / 60.0f);
 	TIMERMANAGER->SetTimer(movementTimer, this, &Character::CharaterMove, timerInterval, false);
@@ -35,8 +36,8 @@ void Character::Update()
 		delayTime += TIMERMANAGER->GetTimeElapsed();
 		if (delayTime > 0.17f)
 		{
-			if ((animKinds != AnimationKinds::Falling) &
-				(animKinds != AnimationKinds::Jump) & (animKinds != AnimationKinds::Hit))
+			if ((animKinds != AnimationKinds::Falling) & (animKinds != AnimationKinds::DoubleJum) &
+				(animKinds != AnimationKinds::Jump) & (animKinds != AnimationKinds::Hit) & (!noAnimChange))
 				animKinds = AnimationKinds::Falling;
 		}
 	}
@@ -64,21 +65,21 @@ void Character::Jump()
 		return;
 	// 점프가 끝났으면 초기화
 	if (((animKinds != AnimationKinds::Jump) &
-		(animKinds != AnimationKinds::Falling)) | (jumKeyDownTime >= JUM_KEYDOWN_TIME))
+		(animKinds != AnimationKinds::Falling)) )
 	{
 		acceleration = 0.0f;
 		jumKeyDownTime = 0.0f;
 	}
 
-	if ((jumKeyDownTime <= JUM_KEYDOWN_TIME))
+	/*if ((jumKeyDownTime <= JUM_KEYDOWN_TIME))*/
 	{
 		this->isFalling = true;
 		animKinds = AnimationKinds::Jump;
 		if (acceleration == 0.0f)
-			acceleration = -9.8f * 0.5f;//(-98.0f * TIMERMANAGER->GetTimeElapsed() * 2.0f);
+			acceleration = -9.8f * jumpPower;//(-98.0f * TIMERMANAGER->GetTimeElapsed() * 2.0f);
 		else
-			acceleration += -9.8f* 0.5f *TIMERMANAGER->GetTimeElapsed();
-		jumKeyDownTime += TIMERMANAGER->GetTimeElapsed();
+			acceleration += -9.8f * jumpPower * TIMERMANAGER->GetTimeElapsed();
+	
 	}
 }
 
@@ -156,7 +157,7 @@ void Character::SetInvincibleTimer()
 
 void Character::CharaterMove()
 {
-	if (isFalling)
+	if (isFalling & (!isCanFly))
 	{
 		if (acceleration == 0.0f)
 			acceleration = (98.0f * TIMERMANAGER->GetTimeElapsed() );

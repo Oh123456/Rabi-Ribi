@@ -2,7 +2,8 @@
 #include "Animation.h"
 #include "Actor.h"
 
-Animinstance::Animinstance()
+Animinstance::Animinstance() :
+	isNoAnimation(false)
 {
 }
 
@@ -31,6 +32,11 @@ void Animinstance::Render()
 	if (playingAnimation)
 	{
 		playingAnimation->Render(ownerimageInfo);
+	}
+	else
+	{
+		if (isNoAnimation)
+			IMAGEMANAGER->ImageRander(*ownerimageInfo);
 	}
 }
 

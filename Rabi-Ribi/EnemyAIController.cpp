@@ -29,7 +29,7 @@ void EnemyAIController::Update()
 		Actor* a_taget = Cast<Actor>(taget);
 		Vector2_F tagetLocation = a_taget->GetLocation();
 		Vector2_F ownerLocation = Cast<Actor>(owner)->GetLocation();
-		Vector2_F moveLocation = ownerLocation - tagetLocation;
+		moveLocation = ownerLocation - tagetLocation;
 
 		Cast<Enemy>(owner)->MoveCharacter(moveLocation);
 		taget = nullptr;
@@ -37,8 +37,18 @@ void EnemyAIController::Update()
 	}
 	else
 	{
-		Vector2_F moveLocation( 0.0f,0.0f );
-		Cast<Enemy>(owner)->MoveCharacter(moveLocation);
+		if (isMoveLocation)
+		{
+			Vector2_F ownerLocation = Cast<Actor>(owner)->GetWorldLocation();
+			Vector2_F moveLocation = ownerLocation - this->moveLocation;
+			Cast<Enemy>(owner)->MoveCharacter(moveLocation);
+		}
+
+		else
+		{
+			moveLocation = { 0.0f, 0.0f };
+			Cast<Enemy>(owner)->MoveCharacter(moveLocation);
+		}
 	}
 	
 }
@@ -46,4 +56,10 @@ void EnemyAIController::Update()
 void EnemyAIController::Render()
 {
 	Super::Render();
+}
+
+void EnemyAIController::MoveToLocation(Vector2_F location)
+{
+	isMoveLocation = true;
+	moveLocation = location;
 }

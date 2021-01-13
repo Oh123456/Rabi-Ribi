@@ -14,7 +14,6 @@ public:
 
 	inline void SetOwner(const Object* owner) { this->owner = Cast<Object>(owner); }
 
-	void MoveToLoation(Location location) {};
 protected:
 	Object* owner;
 };

@@ -13,6 +13,7 @@
 #include "Cocoa.h"
 #include "CarrotBomb.h"
 #include "EnemyAIController.h"
+#include "CatHelicopter.h"
 
 
 PlayScene::PlayScene()
@@ -34,6 +35,7 @@ HRESULT PlayScene::Init()
 	CollisionManager* collision = CreateObject<CollisionManager>(true);
 	player = CreateObject<Erina>();
 	cocoa = CreateObject<Cocoa>();
+	CreateObject<CatHelicopter>();
 	//CreateObject<Rabbit>();
 	//CreateObject<Wizard>();
 	IMAGEMANAGER->LoadPng(L"테스트배경",L"forest3_a");

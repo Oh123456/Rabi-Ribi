@@ -53,6 +53,9 @@ public:
 	inline class Animinstance* GetAnimInstance()												const { return animmation; }
 	inline ActorType GetActorType()																const { return actorType; }
 	inline const Object* GetAIController()														const { return AIController; }
+
+	GetSetFunction(Angle,float, angle);
+	const float* const GetAngle_ptr() { return &angle; }
 protected:
 	void SetGeomtryCollsion();
 
@@ -90,7 +93,8 @@ protected:
 	//변함으로 실제 위치와 다르게 되서 처음 위치구했을때의 
 	//값을 저장해둔 변수
 	Location cameraLocation;
-
+	// 회전값
+	float angle;
 
 };
 

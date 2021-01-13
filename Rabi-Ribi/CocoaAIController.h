@@ -1,5 +1,15 @@
 #pragma once
 #include "EnemyAIController.h"
+
+enum class JumpStat
+{
+	Jump,
+	Faillng,
+	End,
+};
+
+
+
 class CocoaAIController : public EnemyAIController
 {
 	SUPER(EnemyAIController);
@@ -19,7 +29,11 @@ public:
 	void SetJumpDelayTime(float value = 0.15f) { jumpDelayTime = value; }
 
 private:
-	void BackJumpMove();
+	JumpStat BackJumpMove();
+	void BackJumpShot();
+
+private:
+
 	float jumpDelayTime;
 	float jumpTime;
 	bool jumpCheck;

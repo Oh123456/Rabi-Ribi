@@ -667,6 +667,9 @@ void CollisionManager::TerrainProjetileleCollision(Projectile* projectile, UINT 
 		c_it = collisionlist.find(find);
 		if (c_it != collisionlist.end())
 		{
+			if (c_it->second->GetGeometryInfo().geometrykind == GeometryKinds::Square)
+				if (c_it->second->GetGeometryInfo()._width == 1.0f)
+					continue;
 			if (c_it->second)
 			{
 				

@@ -142,6 +142,18 @@
     <Filter Include="Object\Actor\Projectile\Bomb">
       <UniqueIdentifier>{5471b98c-3636-4d52-94c6-4980f1721373}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Effect\Boomb\Black">
+      <UniqueIdentifier>{57f69afc-3e26-4bc6-80b9-28b07c6abbb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect\Boomb\Carrot">
+      <UniqueIdentifier>{d2b8e982-4590-475e-b3f8-c6ae8ad1cd74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Actor\Projectile\Bomb\Black">
+      <UniqueIdentifier>{201c8add-eabd-4065-8e0e-17b86ca94943}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Actor\Projectile\Bomb\Carrot">
+      <UniqueIdentifier>{b54a5e62-5f6d-4e07-b968-b89cc021318d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -294,12 +306,6 @@
     <ClCompile Include="RotationEffect.cpp">
       <Filter>Effect\Rotation</Filter>
     </ClCompile>
-    <ClCompile Include="CarrotBombEffect.cpp">
-      <Filter>Effect\Boomb</Filter>
-    </ClCompile>
-    <ClCompile Include="BlackBombEffect.cpp">
-      <Filter>Effect\Boomb</Filter>
-    </ClCompile>
     <ClCompile Include="CocoaAIController.cpp">
       <Filter>AI\Cocoa</Filter>
     </ClCompile>
@@ -312,22 +318,40 @@
     <ClCompile Include="FallingProjectile.cpp">
       <Filter>Object\Actor\Projectile\Falling</Filter>
     </ClCompile>
-    <ClCompile Include="CarrotBomb.cpp">
-      <Filter>Object\Actor\Projectile\Bomb</Filter>
-    </ClCompile>
     <ClCompile Include="Bomb.cpp">
       <Filter>Object\Actor\Projectile\Bomb</Filter>
     </ClCompile>
     <ClCompile Include="ExplosionEffect.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Effect</Filter>
     </ClCompile>
-    <ClCompile Include="CarrotBombExplosionEffect.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="BlackBombEffect.cpp">
+      <Filter>Effect\Boomb\Black</Filter>
     </ClCompile>
     <ClCompile Include="BlackBombExplosionEffect.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Effect\Boomb\Black</Filter>
+    </ClCompile>
+    <ClCompile Include="CarrotBombEffect.cpp">
+      <Filter>Effect\Boomb\Carrot</Filter>
+    </ClCompile>
+    <ClCompile Include="CarrotBombExplosionEffect.cpp">
+      <Filter>Effect\Boomb\Carrot</Filter>
     </ClCompile>
     <ClCompile Include="BlackBomb.cpp">
+      <Filter>Object\Actor\Projectile\Bomb\Black</Filter>
+    </ClCompile>
+    <ClCompile Include="CarrotBomb.cpp">
+      <Filter>Object\Actor\Projectile\Bomb\Carrot</Filter>
+    </ClCompile>
+    <ClCompile Include="CatHelicopter.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CatHelicopterAnimInstance.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CatAIController.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PulsateEffect.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -503,12 +527,6 @@
     <ClInclude Include="RotationEffect.h">
       <Filter>Effect\Rotation</Filter>
     </ClInclude>
-    <ClInclude Include="CarrotBombEffect.h">
-      <Filter>Effect\Boomb</Filter>
-    </ClInclude>
-    <ClInclude Include="BlackBombEffect.h">
-      <Filter>Effect\Boomb</Filter>
-    </ClInclude>
     <ClInclude Include="CocoaAIController.h">
       <Filter>AI\Cocoa</Filter>
     </ClInclude>
@@ -521,23 +539,45 @@
     <ClInclude Include="FallingProjectile.h">
       <Filter>Object\Actor\Projectile\Falling</Filter>
     </ClInclude>
-    <ClInclude Include="CarrotBomb.h">
-      <Filter>Object\Actor\Projectile\Bomb</Filter>
-    </ClInclude>
     <ClInclude Include="Bomb.h">
       <Filter>Object\Actor\Projectile\Bomb</Filter>
     </ClInclude>
     <ClInclude Include="ExplosionEffect.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="CarrotBombExplosionEffect.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Effect</Filter>
     </ClInclude>
     <ClInclude Include="BlackBombExplosionEffect.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Effect\Boomb\Black</Filter>
+    </ClInclude>
+    <ClInclude Include="BlackBombEffect.h">
+      <Filter>Effect\Boomb\Black</Filter>
+    </ClInclude>
+    <ClInclude Include="CarrotBombExplosionEffect.h">
+      <Filter>Effect\Boomb\Carrot</Filter>
+    </ClInclude>
+    <ClInclude Include="CarrotBombEffect.h">
+      <Filter>Effect\Boomb\Carrot</Filter>
     </ClInclude>
     <ClInclude Include="BlackBomb.h">
+      <Filter>Object\Actor\Projectile\Bomb\Black</Filter>
+    </ClInclude>
+    <ClInclude Include="CarrotBomb.h">
+      <Filter>Object\Actor\Projectile\Bomb\Carrot</Filter>
+    </ClInclude>
+    <ClInclude Include="CatHelicopter.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="CatHelicopterAnimInstance.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CatAIController.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PulsateEffect.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

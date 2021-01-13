@@ -14,6 +14,8 @@ public:
 	Vector2_F& operator-(const Vector2_F& v2);
 	Vector2_F& operator+(const Location& v2);
 	Vector2_F& operator-(const Location& v2);
+	bool operator==(const Vector2_F& v2);
+	bool operator==(const Location& v2);
 
 	Location ToLocation();
 };

@@ -3,6 +3,7 @@
 
 enum class ProjectileAnimationKinds
 {
+	None,
 	Circle_Red,
 	Circle_Blue,
 	Circle_Green,
@@ -16,6 +17,7 @@ enum class MovePatten : int
 {
 	Nomal,
 	Angle,
+	AngleTun,
 	End,
 };
 
@@ -57,9 +59,11 @@ private:
 	void MoveMent() override;
 	void NomalMovePatten();
 	void AngleMovePatten();
+	void AngleTunMovePatten();
+	void AngleTun();
 protected:
 	ProjectileAnimationKinds animKinds;
-	float angle;
+	//float angle;
 	Vector2_F speed;
 
 	MovePatten movePatten;
@@ -67,5 +71,8 @@ protected:
 	vector<Funptr> vcMovePatten;
 	Location worldLocation;
 	_INTERFACE IEffect* effect;
+
+	ImageInfo defaultImageInfo;
+	TimerHandle angleTunTimer;
 };
 

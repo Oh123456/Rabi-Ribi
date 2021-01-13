@@ -18,12 +18,15 @@ public:
 
 	class Projectile* SpawnProjectile();
 	class Projectile* SpawnCarrotBomb();
+	class Projectile** SpawnBlackBomb();
 
 	const list <class Projectile*>& GetProjectile()			const { return projectiles; }
 	const list <class Projectile*>& GetActiveProjectiles()	const { return activeProjectiles;}
 private:
 	list <class Projectile*> projectiles;
 	list <class Projectile*> activeProjectiles;
-	class Projectile* carrotBomb;
+	list <class Projectile*> carrotBombs;
+	//class Projectile* carrotBomb; 
+	class Projectile* blackBomb[2];
 };
 

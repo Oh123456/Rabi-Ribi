@@ -25,6 +25,9 @@ public:
 	bool GetNextAttack() const { return isNextAttack; }
 
 	class Hammer* GetPikoHammer() { return pikoHammer; }
+
+	// 테스트 용
+	GetSetFunction(IsDoubleJump,bool, isDoubleJump)
 private:
 	void MoveUP();
 	void MoveUP_KeyUP();
@@ -41,5 +44,7 @@ private:
 	class Hammer* pikoHammer;
 	class Rebbon_Weapon* rebbon;
 	bool isNextAttack;
+	bool isDoubleJump;
+	float carrotBombHoldTime;
 };
 

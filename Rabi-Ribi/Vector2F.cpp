@@ -48,6 +48,20 @@ Vector2_F& Vector2_F::operator-(const Location & v2)
 	return *this;
 }
 
+bool Vector2_F::operator==(const Vector2_F & v2)
+{
+	if ((this->x == v2.x)&(this->y == v2.y))
+		return true;
+	return false;
+}
+
+bool Vector2_F::operator==(const Location & v2)
+{
+	if ((this->x == v2.x)&(this->y == v2.y))
+		return true;
+	return false;
+}
+
 Location Vector2_F::ToLocation()
 {
 	return { x,y };

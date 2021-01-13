@@ -9,12 +9,18 @@ enum class AnimationKinds
 	Move_Right,
 	Move_Left,
 	Jump,
+	DoubleJum,
 	Falling,
 	Hit,
 	Attack1,
 	Attack2,
 	Attack3,
 	Attack4,
+	Attack5,
+	BombCharge,
+	Bomb,
+	Sliding,
+
 };
 
 #define JUM_KEYDOWN_TIME 0.30f
@@ -59,7 +65,7 @@ public:
 	void SetInvincibleTimer();
 	void SetInvincible(bool value)		{ isInvincible = value; }
 	bool GetInvincible()		const	{ return isInvincible; }
-	float GetInvincibleTime()			{ return invincibleTime; };
+	float GetInvincibleTime()	const   { return invincibleTime; };
 
 	void SetMoveLock(bool value) { isMoveLock = value; noAnimChange = value; }
 	bool GetMoveLocl() const { return isMoveLock; }
@@ -67,7 +73,13 @@ public:
 	void SetAcceleration(float value) { acceleration = value; }
 	float GetAcceleration() { return acceleration; }
 
+	void SetKeyLock(bool value) { isKeyLock = value; }
+	bool GetKeyLock() const		{ return isKeyLock; }
+
 	int GetDamage() { return damage; }
+
+	GetSetFunction(JumpPower,float, jumpPower);
+	GetSetFunction(NoAnimChange, bool, noAnimChange);
 protected:
 	void MoveSideValue(float value) { moveSideValue = value; }
 	void MoveUpValue(float value) { moveUpValue = value; }
@@ -88,9 +100,12 @@ protected:
 	bool noAnimChange;
 	bool isMoveLock;
 	bool isInvincible;
+	bool isKeyLock;
+	bool isCanFly;
 	float invincibleTime;
 	float acceleration;
 	float delayTime;
+	float jumpPower;
 	AnimationKinds animKinds;
 	float jumKeyDownTime;
 private:

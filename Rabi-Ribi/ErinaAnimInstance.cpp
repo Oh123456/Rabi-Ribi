@@ -23,6 +23,10 @@ ErinaAnimInstance::ErinaAnimInstance()
 	JumAnim->Setting({ 0,2 }, { 3,2 }, 0.10f,false);
 	animations.insert(make_pair("Jum", JumAnim));
 
+	Animation* DoubleJumAnim = new Animation;
+	DoubleJumAnim->Setting({ 0,3 }, { 5,3 }, 0.07f, false);
+	animations.insert(make_pair("DoubleJumAnim", DoubleJumAnim));
+
 	Animation* FallingAnim = new Animation;
 	FallingAnim->Setting({ 0,4 }, { 3,4 }, 0.10f);
 	FallingAnim->SettingLoopIndex({ 1,4 }, { 3,4 });
@@ -43,6 +47,19 @@ ErinaAnimInstance::ErinaAnimInstance()
 	Animation* HitAnim = new Animation;
 	HitAnim->Setting({ 0,8 }, { 1,8 }, 0.10f, false);
 	animations.insert(make_pair("Hit", HitAnim));
+
+	Animation* CrrotBoomChargeAnim = new Animation;
+	CrrotBoomChargeAnim->Setting({ 0,6 }, { 2,6 }, 0.10f, false);
+	animations.insert(make_pair("CrrotBoomChargeAnim", CrrotBoomChargeAnim));
+
+	Animation* CrrotBoomAnim = new Animation;
+	CrrotBoomAnim->Setting({ 3,6 }, { 9,6 }, 0.10f, false);
+	animations.insert(make_pair("CrrotBoomAnim", CrrotBoomAnim));
+
+	Animation* SlidingAnim = new Animation;
+	SlidingAnim->Setting({ 0,5 }, { 3,5 }, 0.10f);
+	SlidingAnim->SettingLoopIndex({ 1,5 }, { 3,5 });
+	animations.insert(make_pair("SlidingAnim", SlidingAnim));
 }
 
 ErinaAnimInstance::~ErinaAnimInstance()
@@ -79,6 +96,11 @@ void ErinaAnimInstance::Update()
 		break;
 	case AnimationKinds::Jump:
 		PlayingAnimation("Jum");
+		if (playingAnimation->IsEnd())
+			erina->SetAnimKinds(AnimationKinds::Falling);
+		break;
+	case AnimationKinds::DoubleJum:
+		PlayingAnimation("DoubleJumAnim");
 		if (playingAnimation->IsEnd())
 			erina->SetAnimKinds(AnimationKinds::Falling);
 		break;
@@ -135,7 +157,17 @@ void ErinaAnimInstance::Update()
 			erina->SetAnimKinds(AnimationKinds::Idle);
 		}
 		break;
-
+	case AnimationKinds::BombCharge:
+		PlayingAnimation("CrrotBoomChargeAnim");
+		break;
+	case AnimationKinds::Bomb:
+		PlayingAnimation("CrrotBoomAnim");
+		if (playingAnimation->IsEnd())
+			erina->SetMoveLock(false);
+		break;
+	case AnimationKinds::Sliding:
+		PlayingAnimation("SlidingAnim");
+		break;
 	}
 }
 

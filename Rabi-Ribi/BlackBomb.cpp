@@ -37,7 +37,7 @@ void BlackBomb::Update()
 	if (isExplosion)
 	{
 		Effect* effectBody = Cast<Effect>(effect);
-		CarrotBombExplosionEffect* bombEffect = Cast<CarrotBombExplosionEffect>(effectBody->GetEffect());
+		ExplosionEffect* bombEffect = Cast<ExplosionEffect>(effectBody->GetEffect());
 		if (bombEffect->GetIsEnd())
 			SetIsValid(false);
 	}

@@ -4,6 +4,7 @@
 #include "CarrotBombExplosionEffect.h"
 #include "BlackBombEffect.h"
 #include "BlackBombExplosionEffect.h"
+#include "PulsateEffect.h"
 #include "D2DGraphic.h"
 
 void Effect::SetEffect(EffectKinds effectKinds)
@@ -30,6 +31,16 @@ void Effect::SetEffect(EffectKinds effectKinds)
 	case EffectKinds::Black_Bomb_Explosion:
 		SAFE_RELEASE(body, imageInfo);
 		body = new BlackBombExplosionEffect;
+		break;
+	case EffectKinds::Blue_Projectlie:
+		SAFE_RELEASE(body, imageInfo);
+		body = new PulsateEffect;
+		{
+			Actor* actor = Cast<Actor>(owner);
+			const float* asdf = actor->GetAngle_ptr();
+			if (actor)
+				Cast<PulsateEffect>(body)->SetonwerAngle(asdf);
+		}
 		break;
 	}
 

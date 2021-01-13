@@ -11,11 +11,6 @@ BlackBombExplosionEffect::~BlackBombExplosionEffect()
 
 void BlackBombExplosionEffect::Render(ImageInfo & imageInfo)
 {
-	Super::Render(imageInfo);
-}
-
-void BlackBombExplosionEffect::Update(ImageInfo & imageInfo)
-{
 	if (!explosionEffctImage.empty())
 	{
 		deque<ImageInfo>::const_iterator c_it = explosionEffctImage.begin();
@@ -26,6 +21,12 @@ void BlackBombExplosionEffect::Update(ImageInfo & imageInfo)
 			IMAGEMANAGER->ImageRander(image);
 		}
 	}
+}
+
+void BlackBombExplosionEffect::Update(ImageInfo & imageInfo)
+{
+	Super::Update(imageInfo);
+
 }
 
 void BlackBombExplosionEffect::Release(ImageInfo & imageInfo)

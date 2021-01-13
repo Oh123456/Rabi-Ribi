@@ -157,3 +157,10 @@ inline SIZE_F_CompareResult SIZE_FCompare(const SIZE_F& destination, const SIZE_
 #define DegreeToRadian(x)	(x * PI / 180.0f)
 #define RadianToDegree(x)	(x * 180.0f / PI)
 
+// Get Set 함수 간단히 값과 값반환을 해주는 함수의 매크로
+#define GetSetFunction(funName,dataType,data) \
+	void Set##funName(dataType value) {this->data = value;} \
+	dataType Get##funName() const {return this->data;}
+
+// Get Set 함수 간단히 값과 값반환을 해주는 함수의 매크로
+#define GetSet(dataType,data) GetSetFunction(data,dataType,data)

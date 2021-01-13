@@ -1,5 +1,6 @@
 #pragma once
 #include "Actor.h"
+#include "EffectIndex.h"
 
 #define EFFECTKINDS(x,y) ((x << 16)|(y))
 // HIWORD x축 , LOWORD y축
@@ -10,6 +11,7 @@ enum class EffectKinds : DWORD
 	Carrot_Bomb_Explosion,
 	Black_Bomb,
 	Black_Bomb_Explosion,
+	Blue_Projectlie,
 };
 
 
@@ -56,8 +58,10 @@ _INTERFACE IEffectBody
 
 class EffectBody : public IEffectBody
 {
+	
 public:
-	void Render(ImageInfo& imageInfo) override { };
+	template<typename T, typename U>
+	void SetValue(T index , U& vlaue) ;
 protected:
 	// HIWORD x축 , LOWORD y축
 	enum class EffectFrame : DWORD
@@ -68,5 +72,13 @@ protected:
 		Red_Explosion_Frame = EFFECTKINDS(1, 2),
 		Blue_Explosion_Frame = EFFECTKINDS(5, 2),
 		White_Explosion_Frame = EFFECTKINDS(0, 2),
+		Blue_Projectlie_Frame = EFFECTKINDS(25, 1),
+		Red_Projectlie_Frame = EFFECTKINDS(24, 1),
 	};
+public:
+	void Render(ImageInfo& imageInfo) override { };
+	void SetEffectFrame(EffectFrame frame) { effectframe = frame; }
+
+protected:
+	EffectFrame effectframe;
 };

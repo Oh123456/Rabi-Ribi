@@ -20,8 +20,18 @@ HRESULT ProjectileManager::Init()
 		projectiles.push_back(projectile);
 	}
 
-	carrotBomb = CreateObject<CarrotBomb>();
-	carrotBomb->SetIsValid(false);
+	Projectile* newCarrotBomb;
+	for (int i = 0; i < 10; i++)
+	{
+		newCarrotBomb = CreateObject<CarrotBomb>();
+		newCarrotBomb->SetIsValid(false);
+		carrotBombs.push_back(newCarrotBomb);
+	}
+	for (int i = 0; i < 2; i++)
+	{
+		blackBomb[i] = CreateObject<BlackBomb>();
+		blackBomb[i]->SetIsValid(false);
+	}
 	return S_OK;
 }
 
@@ -69,8 +79,20 @@ Projectile * ProjectileManager::SpawnProjectile()
 
 Projectile * ProjectileManager::SpawnCarrotBomb()
 {
+	Projectile* carrotBomb = carrotBombs.front();
 	if (carrotBomb->GetIsValid())
 		return nullptr;
 	carrotBomb->SetIsValid(true);
+	// 사용한것을 뒤로 넘겨 준다
+	carrotBombs.push_back(carrotBomb);
+	carrotBombs.pop_front();
 	return carrotBomb;
+}
+
+Projectile** ProjectileManager::SpawnBlackBomb()
+{
+	if (blackBomb[0]->GetIsValid())
+		return nullptr;
+	else 
+		return blackBomb;
 }

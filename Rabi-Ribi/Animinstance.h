@@ -22,6 +22,7 @@ protected:
 	void ChangeAnimation(IAnimation* findAnim);
 	void PlayingAnimation(string animkeyValue);
 protected:
+	bool isNoAnimation;
 	IAnimation* playingAnimation;
 	class Actor* owner;
 	ImageInfo* ownerimageInfo;

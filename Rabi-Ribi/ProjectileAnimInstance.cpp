@@ -39,10 +39,15 @@ void ProjectileAnimInstance::Release()
 
 void ProjectileAnimInstance::Update()
 {
+	isNoAnimation = false;
 	Super::Update();
 	Projectile* porjectile = Cast<Projectile>(owner);
 	switch (porjectile->GetProjectileAnimationKinds())
 	{
+	case ProjectileAnimationKinds::None:
+		playingAnimation = nullptr;
+		isNoAnimation = true;
+		break;
 	case ProjectileAnimationKinds::Circle_Red:
 		PlayingAnimation("Circle_Red");
 		break;

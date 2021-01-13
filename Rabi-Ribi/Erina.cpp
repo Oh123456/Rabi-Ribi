@@ -9,7 +9,8 @@
 #include "ProjectileManager.h"
 #include "Projectile.h"
 
-Erina::Erina()
+Erina::Erina() :
+	carrotBombHoldTime(0.0f), isNextAttack(false), rebbon(nullptr) , pikoHammer(nullptr) , isDoubleJump(false)
 {
 	animmation = CreateObject<ErinaAnimInstance>();
 	animmation->SetOwner(this);
@@ -25,6 +26,7 @@ Erina::Erina()
 	onHit.BindObject(this,&Erina::OnHit);
 
 	actorType = ActorType::Player;
+
 }
 
 Erina::~Erina()
@@ -94,22 +96,35 @@ void Erina::MoveUP()
 	if (isMoveLock)
 		return;
 	// 점프가 끝났으면 초기화
-	if (((animKinds != AnimationKinds::Jump) &
+	if (((animKinds != AnimationKinds::Jump) & (animKinds != AnimationKinds::DoubleJum) &
 		(animKinds != AnimationKinds::Falling)) & (jumKeyDownTime >= JUM_KEYDOWN_TIME))
 	{
 		jumKeyDownTime = 0.0f;
 		acceleration = 0.0f;
+		isDoubleJump = false;
 	}
-	if (KEYMANAGER->GetKeyDown()[ZKey] & (jumKeyDownTime <= JUM_KEYDOWN_TIME))
+	if (KEYMANAGER->GetKeyDown()[ZKey])
 	{
-		this->isFalling = true;
-		animKinds = AnimationKinds::Jump;
-		if (acceleration == 0.0f)
-			acceleration = -9.8f * 0.5f;//(-98.0f * TIMERMANAGER->GetTimeElapsed() * 2.0f);
-		else
-			acceleration += -9.8f* 0.5f *TIMERMANAGER->GetTimeElapsed();
-		jumKeyDownTime += TIMERMANAGER->GetTimeElapsed();
-		DEBUG_MASSAGE("%f , %f \n",jumKeyDownTime, acceleration);
+		if ((jumKeyDownTime == 10.0f) & (!isDoubleJump))
+		{
+			isDoubleJump = true;
+			jumKeyDownTime = 0.0f;
+			animKinds = AnimationKinds::DoubleJum;
+			acceleration = ( -9.8f * 0.5f);
+		}
+		if ((jumKeyDownTime <= JUM_KEYDOWN_TIME))
+		{
+			this->isFalling = true;
+			if (animKinds != AnimationKinds::DoubleJum)
+				animKinds = AnimationKinds::Jump;
+			if (acceleration == 0.0f)
+				acceleration = -9.8f * 0.5f;//(-98.0f * TIMERMANAGER->GetTimeElapsed() * 2.0f);
+			else
+				acceleration += -9.8f* 0.5f *TIMERMANAGER->GetTimeElapsed();
+			jumKeyDownTime += TIMERMANAGER->GetTimeElapsed();
+			// 점프 가속도 확인 
+			DEBUG_MASSAGE("%f , %f \n", jumKeyDownTime, acceleration);
+		}
 	}
 }
 
@@ -214,8 +229,17 @@ void Erina::RebbonChagetAttackFire()
 
 void Erina::CarrotBomb()
 {
+	if (KEYMANAGER->IsStayKeyDown(CKey))
+	{
+		noAnimChange = true;
+		animKinds = AnimationKinds::BombCharge;
+		if (carrotBombHoldTime < 2.0f)
+			carrotBombHoldTime += 0.05f;
+	}
 	if (KEYMANAGER->IsOnceKeyUP(CKey))
 	{
+		animKinds = AnimationKinds::Bomb;
+		noAnimChange = true;
 		PlayScene* playScene = Cast<PlayScene>(SceneManager::currScene);
 		Projectile* carrotBomb = playScene->GetProjectileManager()->SpawnCarrotBomb();
 		if (carrotBomb)
@@ -224,10 +248,11 @@ void Erina::CarrotBomb()
 			carrotBomb->SetWorldLocation(worldLocation);
 			carrotBomb->SetLocation(location);
 			if (imageInfo.affineMatrix.m11 < 0.0f)
-				carrotBomb->SetSpeed({ 1.0f,-3.0f});
+				carrotBomb->SetSpeed({ 1.0f + carrotBombHoldTime, -(3.0f + (carrotBombHoldTime / 2.0f))});
 			else
-				carrotBomb->SetSpeed({ -1.0f,-3.0f });
+				carrotBomb->SetSpeed({ -(1.0f + carrotBombHoldTime),-(3.0f + (carrotBombHoldTime / 2.0f))});
 		}
+		carrotBombHoldTime = 0.0f;
 	}
 }
 

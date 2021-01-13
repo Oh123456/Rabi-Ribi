@@ -1,9 +1,10 @@
 #include "WizardProjectileEffect.h"
 
 WizardProjectileEffect::WizardProjectileEffect() 
-	: exposureValue(exposureEffectValue)
+	: exposureValue(exposureEffectValue) 
 {
 	TIMERMANAGER->SetTimer(timerHandle,this,&WizardProjectileEffect::Effect , 0.016f*5.0f );
+	effectframe = EffectFrame::Small_Blue_Frame;
 }
 
 WizardProjectileEffect::~WizardProjectileEffect()
@@ -12,7 +13,7 @@ WizardProjectileEffect::~WizardProjectileEffect()
 
 void WizardProjectileEffect::Update(ImageInfo& imageInfo)
 {
-	DWORD effectValue = Cast<DWORD>(EffectFrame::Small_Blue_Frame);
+	DWORD effectValue = Cast<DWORD>(effectframe);
 	imageInfo.atlasInfo.frame = { HIWORD(effectValue), LOWORD(effectValue) };
 	AddImageEffect(imageInfo, D2DIE_EXPOSUREEFFECT);
 	AddImageEffect(imageInfo, D2DIE_TINT);

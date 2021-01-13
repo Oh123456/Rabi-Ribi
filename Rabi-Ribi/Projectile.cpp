@@ -6,7 +6,7 @@
 #include "TileMap.h"
 
 Projectile::Projectile() : 
-	angle(0.0f), speed(0.0f,0.0f) , animKinds(ProjectileAnimationKinds::Circle_Red)
+	speed(0.0f,0.0f) , animKinds(ProjectileAnimationKinds::Circle_Red)
 {
 	IgnoreTerrain = false;
 	animmation = CreateObject<ProjectileAnimInstance>();
@@ -19,6 +19,7 @@ Projectile::Projectile() :
 	int i = 0;
 	vcMovePatten[i++] = &Projectile::NomalMovePatten;
 	vcMovePatten[i++] = &Projectile::AngleMovePatten;
+	vcMovePatten[i++] = &Projectile::AngleTunMovePatten;
 }
 
 HRESULT Projectile::Init()
@@ -33,6 +34,7 @@ HRESULT Projectile::Init()
 	size = { 64.0f  ,31.0f };
 
 	SetGeomtryCollsion();
+	defaultImageInfo = imageInfo;
 	//projectile_a
 	return S_OK;
 }
@@ -61,7 +63,16 @@ void Projectile::SetIsValid(bool value)
 		worldLocation = { 0.0f,0.0f };
 	// 생성된 이펙트를 제거한다.
 	if (!value)
-		DeleteChild(Cast<Effect>(effect));	
+	{
+
+		imageInfo = defaultImageInfo;
+		DeleteChild(Cast<Effect>(effect));
+	}
+	if (TIMERMANAGER->ExistTimer(angleTunTimer))
+	{
+		TIMERMANAGER->DeleteTimer(angleTunTimer);
+		angleTunTimer.timerNum = 0;
+	}
 	if (imageInfo.imageEffect & D2DIE_NOIMAGE)
 		RemoveImageEffect(imageInfo,D2DIE_NOIMAGE);
 }
@@ -119,4 +130,20 @@ void Projectile::AngleMovePatten()
 	geomtryLocation.y += sinf(this->angle) * speed.y;
 	location = geomtryLocation;
 
+}
+
+void Projectile::AngleTunMovePatten()
+{
+	if (!TIMERMANAGER->ExistTimer(angleTunTimer))
+		TIMERMANAGER->SetTimer(angleTunTimer,this,&Projectile::AngleTun);
+	geomtryLocation.x += cosf(this->angle) * speed.x;
+	geomtryLocation.y += sinf(this->angle) * speed.y;
+	location = geomtryLocation;
+}
+
+void Projectile::AngleTun()
+{
+	angle += PI;
+	imageInfo.affineMatrix = imageInfo.affineMatrix * Matrix3x2F::Rotation(180.f, { imageInfo.atlasInfo.frameSize.width / 2.0f,imageInfo.atlasInfo.frameSize.height / 2.0f });
+	TIMERMANAGER->SetTimer(angleTunTimer, this, &Projectile::AngleTun,6000.0f);
 }

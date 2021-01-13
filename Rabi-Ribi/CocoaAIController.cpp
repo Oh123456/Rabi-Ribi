@@ -2,6 +2,8 @@
 #include "Cocoa.h"
 #include "PlayScene.h"
 #include "BlackBomb.h"
+#include "ProjectileManager.h"
+#include "Projectile.h"
 
 CocoaAIController::CocoaAIController()
 {
@@ -44,11 +46,15 @@ void CocoaAIController::Update()
 
 	if (KEYMANAGER->IsOnceKeyDown(VK_HOME))
 	{
-		CreateObject<BlackBomb>()->SetWorldLocation(taget->GetWorldLocation());
+		jumpDelayTime = 0.5f;
+		
+		// CreateObject<BlackBomb>()->SetWorldLocation(taget->GetWorldLocation());
 		if (!jumpCheck)
 		{
-			jumpDelayTime = (float)(rand() % 15) * 0.01f;
+			//jumpDelayTime = (float)(rand() % 15) * 0.01f;
 			Cocoa* cocoa = Cast<Cocoa>(owner);
+			cocoa->SetBackJumpShot();
+			//cocoa->BoomAttack();
 			if (cocoa->GetImageInfo_ptr()->affineMatrix.m11 > 0.0f)
 				jumpBackDirection = Left;
 			else
@@ -57,7 +63,7 @@ void CocoaAIController::Update()
 		jumpCheck = true;
 	}
 	if (jumpCheck)
-		BackJumpMove();
+		BackJumpShot(); 
 }
 
 void CocoaAIController::Render()
@@ -65,21 +71,26 @@ void CocoaAIController::Render()
 	Super::Render();
 }
 
-void CocoaAIController::BackJumpMove()
+JumpStat CocoaAIController::BackJumpMove()
 {
 	Super::Update();
+	JumpStat stat = JumpStat::Jump;
 	Cocoa* cocoa = Cast<Cocoa>(owner);
 	jumpTime += TIMERMANAGER->GetTimeElapsed();
+	if (cocoa->GetAcceleration() >= 0.0f)
+		stat = JumpStat::Faillng;
 	if (jumpTime <= jumpDelayTime)
 	{
 		cocoa->Jump();
 		if (cocoa->GetAnimKinds() != AnimationKinds::Hit)
 			cocoa->SetAnimKinds(AnimationKinds::Jump);
+		stat = JumpStat::Jump;
 	}
 	if ((cocoa->GetAnimKinds() != AnimationKinds::Jump) & (cocoa->GetAnimKinds() != AnimationKinds::Falling))
 	{
 		jumpCheck = false;
 		jumpTime = 0.0f;
+		stat = JumpStat::End;
 	}
 	else
 	{
@@ -88,4 +99,14 @@ void CocoaAIController::BackJumpMove()
 		else
 			cocoa->MoveCharacter({ 2.0f,2.0f });
 	}
+	return stat;
+}
+
+
+void CocoaAIController::BackJumpShot()
+{
+	JumpStat stat = BackJumpMove();
+	Cocoa* cocoa = Cast<Cocoa>(owner);
+	if (stat == JumpStat::Faillng)
+		cocoa->onBackJumpShot.Execute();
 }
