@@ -11,6 +11,7 @@ public:
 	void Release(ImageInfo& imageInfo) override;
 
 	void SetonwerAngle(const float* value) { onwerAngle = value; };
+	HRESULT  SetValue(UINT index, const void* data) override;
 private:
 	void Timer();
 private:
@@ -18,6 +19,9 @@ private:
 	float size;
 	float apha;
 	float exposureeffect;
+	float maxSize;
+	float maxApha;
+	float maxExposureeffect;
 	const float* onwerAngle;
 };
 

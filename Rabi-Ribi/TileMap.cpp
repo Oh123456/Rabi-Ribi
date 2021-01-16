@@ -22,6 +22,7 @@ TILE_F& TILE_F::operator = (TILE& tile)
 	this->frameY = tile.frameY;
 	this->rotation = tile.rotation;
 	this->isReverse = tile.isReverse;
+	this->terrain = tile.terrain;
 	return *this;
 }
 
@@ -47,7 +48,7 @@ HRESULT TileMap::Init()
 	TilesDrawinfo.scaleInfo.scaleCenterPoint= { TILESIZE / 3.0f,  TILESIZE / 3.0f };
 	TilesDrawinfo.affineMatrix = Matrix3x2F::Rotation(0, { 0.0f,0.0f });
 	location = { 0.0f,0.0f };
-
+	spawnTileList.clear();
 	return S_OK;
 }
 
@@ -94,8 +95,6 @@ void TileMap::LoadTile(const char* fileName)
 		for (int j = 0; (UINT)j < tile_X; j++)
 		{
 			index = i * tile_X + j;
-			if (index == 527)
-				index = 527;
 			// 맵툴에서는 64 *64 사이즈엿으나  인겜에서는 32*32 사이즈로 변경
 			SetRect(&tempTile[index].rc,
 				j * TILESIZE , i * TILESIZE,
@@ -105,6 +104,8 @@ void TileMap::LoadTile(const char* fileName)
 			tempTile[index].geometryinfo.height /= 2;
 			tempTile[index].geometryinfo._height /= 2;
 			tiles[index] = tempTile[index];
+			tiles[index].index.x = j;
+			tiles[index].index.y = i;
 			tiles[index].rc.left -= j *		0.8f;
 			tiles[index].rc.top -= i *		0.8f;
 			tiles[index].rc.right -= j *	0.8f;
@@ -113,6 +114,17 @@ void TileMap::LoadTile(const char* fileName)
 			tiles[index].SetSize({32.0f,32.0f});
 			if (tempTile[index].GetisRender())
 				renderList.push_back(&tiles[i * tile_X + j]);
+
+			switch (tiles[index].terrain)
+			{
+			case  TERRAIN::SPAWN:
+				spawnTileList.push_back(&tiles[index]);
+				break;
+			case  TERRAIN::MOVE:
+				moveTileList.push_back(&tiles[index]);
+				break;
+			}
+
 			int geomttykind = Cast<int>(tempTile[index].geometryinfo.geometrykind);
 			if ((tempTile[index].geometryinfo.geometrykind != GeometryKinds::None) & (geomttykind > 0))
 			{
@@ -136,15 +148,14 @@ void TileMap::LoadTile(const char* fileName)
 		}
 	}
 	CloseHandle(hFile);
-
-	CAMERA->SetMapMaxLocation({ (float)tile_X * 32.0f ,(float)tile_Y* 32.0f });
+	CAMERA->SetMapMaxLocation({ (float)tile_X * 32.0f - (0.8f*(float)tile_X) ,(float)tile_Y* 32.0f });
 }
 
 void TileMap::Update()
 {
 #ifdef _DEBUG
-	if (KEYMANAGER->IsOnceKeyDown(VK_TAB))
-		isDebug_Render = !isDebug_Render;
+	//if (KEYMANAGER->IsOnceKeyDown(VK_TAB))
+	//	isDebug_Render = !isDebug_Render;
 #endif
 
 }

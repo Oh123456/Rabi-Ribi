@@ -15,7 +15,7 @@ public:
 	void SetTaget(class Actor* object) { taget = object; }
 	const class Actor* GetTaget()				const { return taget; }
 
-	void MoveToLocation(Vector2_F location);
+	void MoveToLocation(Vector2_F location) override;
 protected:
 	class Actor* taget;
 	Vector2_F moveLocation;

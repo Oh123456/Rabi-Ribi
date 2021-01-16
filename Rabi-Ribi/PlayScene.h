@@ -22,8 +22,8 @@ private:
 	class Actor* player;
 	class Actor* cocoa;
 	class TileMap* mainTile;
-	class TileMap* middleTile;
-	class TileMap* backTile;
+	class Stage* stage;
 	class ProjectileManager* projectileManager;
+	class HUD* hud;
 };
 

@@ -2,7 +2,7 @@
 
 BlackBombExplosionEffect::BlackBombExplosionEffect()
 {
-	effectFrame = EffectFrame::Blue_Explosion_Frame;
+	effectframe = EffectFrame::Blue_Explosion_Frame;
 }
 
 BlackBombExplosionEffect::~BlackBombExplosionEffect()

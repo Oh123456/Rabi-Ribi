@@ -17,8 +17,11 @@ public:
 	void Update()	override;
 	void MoveCharacter(Vector2_F speed) override;
 	void NomalAttack(float ratio = 1.0f);
-	void Attack();
-	
+	void TunMoveAttack();
+	void TunMove_8Attack();
+	void TagetAttack();
+	void TagetMove();
+
 	GetSetFunction(CatHelicopterKinds, CatHelicopterKinds, kinds);
 protected:
 	CatHelicopterKinds kinds;

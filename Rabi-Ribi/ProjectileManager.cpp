@@ -13,7 +13,7 @@ ProjectileManager::~ProjectileManager()
 
 HRESULT ProjectileManager::Init()
 {
-	for (int i = 0; i < 200; i++)
+	for (int i = 0; i < 600; i++)
 	{
 		Projectile* projectile = CreateObject<Projectile>();// ->SetIsValid(true);
 		projectile->SetIsValid(false);
@@ -77,7 +77,7 @@ Projectile * ProjectileManager::SpawnProjectile()
 	return projectile;
 }
 
-Projectile * ProjectileManager::SpawnCarrotBomb()
+Projectile* ProjectileManager::SpawnCarrotBomb()
 {
 	Projectile* carrotBomb = carrotBombs.front();
 	if (carrotBomb->GetIsValid())

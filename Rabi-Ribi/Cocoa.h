@@ -18,10 +18,16 @@ public:
 	void Render()	override;
 
 	void MoveCharacter(Vector2_F speed) override;
-
+	void TakeDamage(int damage) override;
 	// 델리게이트 반인드
 	void SetBackJumpShot();
 	void BoomAttack();
+
+	void CallCatHelicoter();
+	void CallTwoCatHelicoter();
+
+	Vector2_F MoveFont();
+	class CatHelicopter** GetCatHelicopter() { return cat; }
 private:
 	void JumpShot();
 public:
@@ -30,5 +36,6 @@ public:
 	// 한번만 호출이 된다.
 	OnBackJumpShot onBackJumpShot;
 
+	class CatHelicopter* cat[2];
 };
 

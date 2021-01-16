@@ -26,7 +26,7 @@ void Camera::Update()
 		const Location& focusActorLocation = focusActor->GetLocation();
 		float moveSpeed = Cast<Character>(focusActor)->GetMoveSpeed() / 60.0f;
 		float xSize = WINSIZE_X / (zoomScale.x * 2.0f);
-		if ((focusActorLocation.x > xSize) & (location.x < mapMaxLocation.x))
+		if ((focusActorLocation.x > xSize) & (location.x < mapMaxLocation.x -  (WINSIZE_X / (zoomScale.x))))
 		{
 			location.x += focusActorLocation.x - xSize;
 			//location.x += moveSpeed;

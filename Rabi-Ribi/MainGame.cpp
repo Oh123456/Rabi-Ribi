@@ -2,9 +2,11 @@
 #include "D2DGraphic.h"
 #include "TileMapToolScene.h"
 #include "PlayScene.h"
+#include <ctime>
 
 HRESULT MainGame::Init()
 {
+	srand((UINT)time(NULL));
 	ImageManager* imageManager = IMAGEMANAGER;
 	imageManager->Init();
 	imageManager->SetDefaultDirectory(L"\\Image\\");

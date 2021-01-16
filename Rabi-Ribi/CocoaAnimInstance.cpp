@@ -25,6 +25,11 @@ CocoaAnimInstance::CocoaAnimInstance()
 	animations.insert(make_pair("Attack", nowAnim));
 
 	nowAnim = new Animation;
+	nowAnim->Setting({ 0,6 }, { 3, 6 }, 0.10f);
+	nowAnim->SettingLoopIndex({1 ,6 }, { 3, 6 });
+	animations.insert(make_pair("Attack2", nowAnim));
+
+	nowAnim = new Animation;
 	nowAnim->Setting({ 4,6 }, { 5,6 }, 0.10f);
 	animations.insert(make_pair("Hit", nowAnim));
 }
@@ -69,8 +74,30 @@ void CocoaAnimInstance::Update()
 		PlayingAnimation("Attack1");
 		break;
 	case AnimationKinds::Attack2:
+		PlayingAnimation("Attack2");
+		cocoa->SetNoAnimChange(true);
+		//if (playingAnimation->IsEnd())
+		{
+			if (!TIMERMANAGER->ExistTimer(timer))
+			{
+				TIMERMANAGER->SetTimer(timer, this, &CocoaAnimInstance::AnimationEnd);
+				cocoa->CallCatHelicoter();
+			}
+			
+		}
 		break;
 	case AnimationKinds::Attack3:
+		PlayingAnimation("Attack2");
+		cocoa->SetNoAnimChange(true);
+		//if (playingAnimation->IsEnd())
+		{
+			if (!TIMERMANAGER->ExistTimer(timer))
+			{
+				TIMERMANAGER->SetTimer(timer, this, &CocoaAnimInstance::AnimationEnd);
+				cocoa->CallTwoCatHelicoter();
+			}
+
+		}
 		break;
 	case AnimationKinds::Attack4:
 		break;
@@ -82,4 +109,12 @@ void CocoaAnimInstance::Update()
 void CocoaAnimInstance::Render()
 {
 	Super::Render();
+}
+
+void CocoaAnimInstance::AnimationEnd()
+{
+	Cocoa* cocoa = Cast<Cocoa>(owner);
+	cocoa->SetNoAnimChange(false);
+	cocoa->SetAnimKinds(AnimationKinds::Idle);
+	TIMERMANAGER->DeleteTimer(timer);
 }

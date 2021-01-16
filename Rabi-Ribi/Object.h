@@ -14,7 +14,7 @@ class Object : public ObjectBase
 	typedef ObjectList::iterator ObjectList_Iterator;
 
 public:
-	Object() : isValid(true), isRender(true), isNotUPdate(false),zOrder(10), parentsObject(nullptr) {};
+	Object() : isValid(true), isRender(true), isNotUPdate(false),zOrder(10), parentsObject(nullptr), isActivation(true) {};
 	virtual ~Object() {};
 
 	//  멤버 변수 초기화, 메모리 할당
@@ -55,6 +55,7 @@ public:
 		if (!isNotUPdate)
 			object_UPdateList->push_back(this);
 	}
+	void SetisActivation(bool value) {this->isActivation = value;}
 	bool GetisActivation() { return this->isActivation; }
 	// z 버퍼 설정
 	void SetZOrder(ZOrder z);
@@ -76,6 +77,7 @@ public:
 	const Object* GetParentsObject() { return parentsObject; }
 private:
 	void SetParentsObject(Object* object) { parentsObject = object; }
+	void Test(Object* asdf);
 protected:
 	// 모든 자식 클래스
 	list<Object*> allClass;

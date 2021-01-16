@@ -21,6 +21,7 @@ void BlackBombEffect::Update(ImageInfo& imageInfo)
 
 void BlackBombEffect::Release(ImageInfo& imageInfo)
 {
+	Super::Release(imageInfo);
 	imageInfo.affineMatrix = Matrix3x2F::Identity();
 	TIMERMANAGER->DeleteTimer(rotationTImer);
 }

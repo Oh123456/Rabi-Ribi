@@ -130,6 +130,15 @@ inline SIZE_F_CompareResult SIZE_FCompare(const SIZE_F& destination, const SIZE_
 	return result;
 }
 
+enum class TERRAIN
+{
+	NOAML,
+	BREAKING,
+	SPAWN,
+	MOVE,
+	END
+};
+
 #include "Vector2F.h"
 #include "ImageManager.h"
 #include "KeyManager.h"
@@ -164,3 +173,19 @@ inline SIZE_F_CompareResult SIZE_FCompare(const SIZE_F& destination, const SIZE_
 
 // Get Set 함수 간단히 값과 값반환을 해주는 함수의 매크로
 #define GetSet(dataType,data) GetSetFunction(data,dataType,data)
+
+template<typename T>
+inline bool Range(T _min, T checkValue, T _max)
+{
+	if ((_min < checkValue) & (checkValue < _max))
+		return true;
+	return false;
+}
+
+template<typename T>
+inline bool Range_Included(T _min, T checkValue, T _max)
+{
+	if ((_min <= checkValue) & (checkValue <= _max))
+		return true;
+	return false;
+}

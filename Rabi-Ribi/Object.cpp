@@ -1,6 +1,6 @@
 #include "Object.h"
 
-HRESULT Object::Init()
+HRESULT Object::Init() 
 {
 	return S_OK;
 }
@@ -140,12 +140,13 @@ void Object::DeleteChild(Object* child)
 		ObjectList_Iterator uit;
 		multimap<ZOrder, Object*, greater<ZOrder>>::const_iterator it;
 		it = object.lower_bound(child->GetZOrder());
-		//Object* fineObject;
+		Object* fineObject = nullptr;
 
-		for (; it != object.upper_bound(this->zOrder); it++)
+		for (; it != object.upper_bound(child->zOrder); it++)
 		{
-			if (it->second == this)
+			if (it->second == child)
 			{
+				fineObject = it->second;
 				object.erase(it);
 				break;
 			}
@@ -153,8 +154,9 @@ void Object::DeleteChild(Object* child)
 
 		for (uit = object_UPdateList.begin(); uit != object_UPdateList.end(); uit++)
 		{
-			if (*uit == this)
+			if (*uit == child)
 			{
+				fineObject = *uit;
 				object_UPdateList.erase(uit);
 				break;
 			}
@@ -162,13 +164,14 @@ void Object::DeleteChild(Object* child)
 
 		for (uit = allClass.begin(); uit != allClass.end(); uit++)
 		{
-			if (*uit == this)
+			if (*uit == child)
 			{
+				fineObject = *uit;
 				allClass.erase(uit);
 				break;
 			}
 		}
-		SAFE_RELEASE(child);
+		SAFE_RELEASE(fineObject);
 	}
 }
 
@@ -196,4 +199,43 @@ void Object::SetIsRender(bool value)
 		multimap<ZOrder, Object*, greater<ZOrder>>* childs = this->parentsObject->GetRenderChilds();
 		childs->insert(pair<ZOrder, Object*>(zOrder, this));
 	}
+}
+
+void Object::Test(Object * asdf)
+{
+	ObjectList_Iterator uit;
+	multimap<ZOrder, Object*, greater<ZOrder>>::const_iterator it;
+	it = object.lower_bound(asdf->GetZOrder());
+	Object* fineObject = nullptr;
+
+	for (; it != object.upper_bound(this->zOrder); it++)
+	{
+		if (it->second == this)
+		{
+			fineObject = it->second;
+			object.erase(it);
+			break;
+		}
+	}
+
+	for (uit = object_UPdateList.begin(); uit != object_UPdateList.end(); uit++)
+	{
+		if (*uit == this)
+		{
+			fineObject = *uit;
+			object_UPdateList.erase(uit);
+			break;
+		}
+	}
+
+	for (uit = allClass.begin(); uit != allClass.end(); uit++)
+	{
+		if (*uit == this)
+		{
+			fineObject = *uit;
+			allClass.erase(uit);
+			break;
+		}
+	}
+	SAFE_RELEASE(fineObject);
 }

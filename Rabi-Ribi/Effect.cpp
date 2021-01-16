@@ -5,6 +5,8 @@
 #include "BlackBombEffect.h"
 #include "BlackBombExplosionEffect.h"
 #include "PulsateEffect.h"
+#include "GradationEffect.h"
+#include "FlashingRotationEffect.h"
 #include "D2DGraphic.h"
 
 void Effect::SetEffect(EffectKinds effectKinds)
@@ -37,13 +39,37 @@ void Effect::SetEffect(EffectKinds effectKinds)
 		body = new PulsateEffect;
 		{
 			Actor* actor = Cast<Actor>(owner);
-			const float* asdf = actor->GetAngle_ptr();
+			const float* angle = actor->GetAngle_ptr();
 			if (actor)
-				Cast<PulsateEffect>(body)->SetonwerAngle(asdf);
+				Cast<PulsateEffect>(body)->SetonwerAngle(angle);
 		}
+		break;
+	case EffectKinds::Red_Projectlie:
+		SAFE_RELEASE(body, imageInfo);
+		body = new GradationEffect;
+		{
+			Actor* actor = Cast<Actor>(owner);
+			const float* angle = actor->GetAngle_ptr();
+			if (actor)
+				Cast<GradationEffect>(body)->SetonwerAngle(angle);
+		}
+		break;
+	case EffectKinds::Flashing_Rotation_Effect:
+		SAFE_RELEASE(body, imageInfo);
+		body = new FlashingRotationEffect;
+		break;
+	case EffectKinds::None:
+		SAFE_RELEASE(body, imageInfo);
+		imageInfo.imageEffect = D2DIE_NOIMAGE;
 		break;
 	}
 
+}
+
+void Effect::SetEffectFrame(EffectBody::EffectFrame frame)
+{
+	EffectBody* effectBody = Cast<EffectBody>(body);
+	effectBody->SetEffectFrame(frame);
 }
 
 HRESULT Effect::Init()
@@ -70,7 +96,6 @@ void Effect::Update()
 	if (body)
 		body->Update(imageInfo);
 	imageInfo.imageLocation = location;
-	
 }
 
 void Effect::Render()

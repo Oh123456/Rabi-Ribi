@@ -105,7 +105,7 @@ public:
 
 	RetType Execute(ParamTypes... param) 
 	{
-		if (Tdelegate)
+		if ((Tdelegate))
 			return Tdelegate->Execute(param...);
 		return RetType();
 	}

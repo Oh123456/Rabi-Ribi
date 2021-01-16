@@ -20,7 +20,6 @@ protected:
 	TimerHandle explosionTimer;
 	int count;
 	bool isEnd;
-	EffectFrame effectFrame;
 private:
 	bool isOneTime;
 	float createExplosinTime;

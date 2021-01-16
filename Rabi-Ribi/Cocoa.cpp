@@ -4,9 +4,13 @@
 #include "PlayScene.h"
 #include "Projectile.h"
 #include "ProjectileManager.h"
+#include "CatHelicopter.h"
+#include "AIBase.h"
 
 Cocoa::Cocoa()
 {
+	cat[0] = nullptr;
+	cat[1] = nullptr;
 	animmation = CreateObject<CocoaAnimInstance>();
 	animmation->SetOwner(this);
 
@@ -28,7 +32,7 @@ HRESULT Cocoa::Init()
 	imageInfo.affineMatrix = AFFINEMATRIX_3X2_SCALE(1.5f,24.0f);
 	imageInfo.imageLocation = location;
 	imageInfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE;
-
+	hp = 2000;
 	size = { 48.0f,48.0f};
 
 	SetGeomtryCollsion();
@@ -48,6 +52,17 @@ void Cocoa::Update()
 void Cocoa::Render()
 {
 	Super::Render();
+	for (int i = 0; i < 2; i++)
+	{
+		if (cat[i])
+		{
+			if ((cat[i]->GetWorldLocation().x < -30.0f) | (cat[i]->GetWorldLocation().y < -30.0f))
+			{
+				DeleteChild(cat[i]);
+				cat[i] = nullptr;
+			}
+		}
+	}
 }
 
 void Cocoa::MoveCharacter(Vector2_F speed)
@@ -84,7 +99,15 @@ void Cocoa::MoveCharacter(Vector2_F speed)
 			moveSpeed = 0.0f;
 		}
 	}
+
+
 	MoveSideValue(moveSpeed);
+}
+
+void Cocoa::TakeDamage(int damage)
+{
+	Super::TakeDamage(damage);
+	isMoveLock = false;
 }
 
 void Cocoa::SetBackJumpShot()
@@ -99,6 +122,8 @@ void Cocoa::BoomAttack()
 	{
 		ProjectileManager* projectileManager = playScene->GetProjectileManager();
 		Projectile** blackBomb = projectileManager->SpawnBlackBomb();
+		if (blackBomb == nullptr)
+			return;
 		Vector2_F bombSpeed;
 		if (imageInfo.affineMatrix.m11 > 0.0f)
 			bombSpeed = { -3.0f,-3.0f };
@@ -118,6 +143,47 @@ void Cocoa::BoomAttack()
 		blackBomb[1]->SetSpeed(bombSpeed);
 	}
 }
+
+void Cocoa::CallCatHelicoter()
+{
+	if (cat[0])
+	{
+		DeleteChild(cat[0]);
+		cat[0] = nullptr;
+	}
+	cat[0] = CreateObject<CatHelicopter>();
+	cat[0]->SetWorldLocation(worldLocation);
+	cat[0]->SetGeomtryLocation(worldLocation);
+	cat[0]->SetCatHelicopterKinds(CatHelicopterKinds::Yellow);
+	AIBase* ai = Cast<AIBase>(cat[0]->GetAIController());
+	ai->MoveToLocation({ worldLocation.x , worldLocation.y - 200.0f});
+}
+
+void Cocoa::CallTwoCatHelicoter()
+{
+	for (int i = 0; i < 2; i++)
+	{
+		if (cat[i])
+		{
+			DeleteChild(cat[i]);
+			cat[i] = nullptr;
+		}
+		cat[i] = CreateObject<CatHelicopter>();
+		cat[i]->SetWorldLocation({ (worldLocation.x - (20.f*i)), worldLocation.y - (20.f*i)});
+		cat[i]->SetGeomtryLocation({ worldLocation.x - (20.f*i), worldLocation.y - (20.f*i) });
+		AIBase* ai = Cast<AIBase>(cat[i]->GetAIController());
+		ai->MoveToLocation({ worldLocation.x - (20.f*i), worldLocation.y - 200.0f - (20.f*i) });
+	}
+}
+
+Vector2_F Cocoa::MoveFont()
+{
+	if (imageInfo.affineMatrix.m11 > 0.0f)
+		return { worldLocation.x - 50.f,worldLocation.y };
+	else
+		return { worldLocation.x + 50.f,worldLocation.y };
+}
+
 
 void Cocoa::JumpShot()
 {
@@ -150,6 +216,7 @@ void Cocoa::JumpShot()
 			AddImageEffect(*projectileImageinfo, D2DIE_EXPOSUREEFFECT);
 			projectileImageinfo->exposureEffectInfo = 1.0f;
 			projectile->MoveSetting(DegreeToRadian(angle), speed, MovePatten::Angle);
+			projectile->SetProjectileAnimationKinds(ProjectileAnimationKinds::Circle_Red);
 			projectile->SetWorldLocation(worldLocation);
 			projectile->SetGeomtryLocation(worldLocation);
 			projectile->SetOwner(this);

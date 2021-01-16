@@ -14,6 +14,8 @@
 #include "CarrotBomb.h"
 #include "EnemyAIController.h"
 #include "CatHelicopter.h"
+#include "HUD.h"
+#include "StartStage.h"
 
 
 PlayScene::PlayScene()
@@ -26,16 +28,12 @@ PlayScene::~PlayScene()
 
 HRESULT PlayScene::Init()
 {
-	backTile = CreateObject<TileMap>();
-	backTile->LoadTile("StartMap_Back.map");
-	middleTile = CreateObject<TileMap>();
-	middleTile->LoadTile("StartMap_Middle.map");
-	mainTile =CreateObject<TileMap>();
-	mainTile->LoadTile("StartMap.map");
+	stage = CreateObject<StartStage>();
+	mainTile = stage->GetMainTile();
 	CollisionManager* collision = CreateObject<CollisionManager>(true);
 	player = CreateObject<Erina>();
 	cocoa = CreateObject<Cocoa>();
-	CreateObject<CatHelicopter>();
+	//CreateObject<CatHelicopter>();
 	//CreateObject<Rabbit>();
 	//CreateObject<Wizard>();
 	IMAGEMANAGER->LoadPng(L"테스트배경",L"forest3_a");
@@ -50,7 +48,7 @@ HRESULT PlayScene::Init()
 	Cast<Character>(player)->PlayerInputSetting(CreateObject<PlayerInput>(false));
 	projectileManager = CreateObject<ProjectileManager>();
 	collision->SettingActor(this);
-
+	hud = CreateObject<HUD>();
 
 	CAMERA->SetFocusActor(player);
 	return S_OK;

@@ -10,6 +10,6 @@ public:
 	void Update(ImageInfo& imageInfo) override;
 	void Release(ImageInfo& imageInfo) override;
 
-
+	HRESULT  SetValue(UINT index, const void* data) override { return S_OK; };
 };
 

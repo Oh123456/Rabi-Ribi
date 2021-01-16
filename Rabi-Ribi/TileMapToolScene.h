@@ -32,14 +32,6 @@ enum class SizeKind
 };
 
 
-enum class TERRAIN
-{
-	NOAML,
-	BREAKING,
-	SPAWN,
-	END
-};
-
 
 
 struct TILE

@@ -33,8 +33,12 @@ HRESULT CatHelicopter::Init()
 void CatHelicopter::Update()
 {
 	Object::Update();
+
 	if ((worldLocation.x == 0.0f) & (worldLocation.y == 0.0f))
 		worldLocation = location;
+	else
+		worldLocation = { geomtryLocation.x + cameraLocation.x , geomtryLocation.y + cameraLocation.y };
+	
 	cameraLocation = CAMERA->GetLocation();
 	location.x = { worldLocation.x - cameraLocation.x };
 	location.y = { worldLocation.y - cameraLocation.y };
@@ -100,7 +104,7 @@ void CatHelicopter::NomalAttack(float ratio)
 			projectile->MoveSetting(DegreeToRadian(i * 20.0f), speed, MovePatten::Angle);
 			projectile->SetWorldLocation(worldLocation);
 			projectile->SetGeomtryLocation(worldLocation);
-			projectile->SetOwner(this);
+			projectile->SetOwner(Cast<Actor>(GetParentsObject()));
 			projectile->CreateEffect();
 			projectile->GetEffect()->SetOwner(projectile);
 			projectile->GetEffect()->SetEffect(EffectKinds::Blue_Projectlie);
@@ -108,7 +112,7 @@ void CatHelicopter::NomalAttack(float ratio)
 	}
 }
 
-void CatHelicopter::Attack()
+void CatHelicopter::TunMoveAttack()
 {
 	PlayScene* playScene = Cast<PlayScene>(SceneManager::currScene);
 	if (playScene)
@@ -122,17 +126,93 @@ void CatHelicopter::Attack()
 			projectile = projectileManager->SpawnProjectile();
 			projectile->SetIsValid(true);
 			ImageInfo* projectileImageinfo = Cast<ImageInfo>(projectile->GetImageInfo_ptr());
-			projectileImageinfo->imageName = L"effect_a";
-			projectileImageinfo->atlasInfo.frameSize = { 31.0f,31.0f };
-			projectileImageinfo->atlasInfo.frame = { 24,1 };
-			projectileImageinfo->affineMatrix = Matrix3x2F::Scale({ 1.8f,1.0f }, { 15.5f,15.5f }) *
-				Matrix3x2F::Rotation((i * 36.0f), { projectileImageinfo->atlasInfo.frameSize.width / 2.0f , projectileImageinfo->atlasInfo.frameSize.height / 2.0f });
-			projectileImageinfo->exposureEffectInfo = 1.0f;
+			//projectileImageinfo->imageName = L"effect_a";
+			//projectileImageinfo->atlasInfo.frameSize = { 31.0f,31.0f };
+			//projectileImageinfo->atlasInfo.frame = { 24,1 };
+			//projectileImageinfo->affineMatrix = Matrix3x2F::Scale({ 1.8f,1.0f }, { 15.5f,15.5f }) *
+			//	Matrix3x2F::Rotation((i * 36.0f), { projectileImageinfo->atlasInfo.frameSize.width / 2.0f , projectileImageinfo->atlasInfo.frameSize.height / 2.0f });
+			//projectileImageinfo->exposureEffectInfo = 1.0f;
+			projectileImageinfo->imageEffect = D2DIE_NOIMAGE;
 			projectile->MoveSetting(DegreeToRadian(i * 36.0f), speed, MovePatten::AngleTun);
 			projectile->SetWorldLocation(worldLocation);
 			projectile->SetGeomtryLocation(worldLocation);
-			projectile->SetOwner(this);
+			projectile->SetOwner(Cast<Actor>(GetParentsObject()));
 			projectile->SetProjectileAnimationKinds(ProjectileAnimationKinds::None);
+			projectile->CreateEffect();
+			projectile->GetEffect()->SetOwner(projectile);
+			projectile->GetEffect()->SetEffect(EffectKinds::Red_Projectlie);
 		}
+	}
+}
+
+void CatHelicopter::TunMove_8Attack()
+{
+	PlayScene* playScene = Cast<PlayScene>(SceneManager::currScene);
+	if (playScene)
+	{
+		ProjectileManager* projectileManager = playScene->GetProjectileManager();
+		Projectile* projectile;
+		Vector2_F speed = { 3.0f ,3.0f };
+
+		for (int i = 0; i < 10; i++)
+		{
+			projectile = projectileManager->SpawnProjectile();
+			projectile->SetIsValid(true);
+			ImageInfo* projectileImageinfo = Cast<ImageInfo>(projectile->GetImageInfo_ptr());
+			//projectileImageinfo->imageName = L"effect_a";
+			//projectileImageinfo->atlasInfo.frameSize = { 31.0f,31.0f };
+			//projectileImageinfo->atlasInfo.frame = { 24,1 };
+			//projectileImageinfo->affineMatrix = Matrix3x2F::Scale({ 1.8f,1.0f }, { 15.5f,15.5f }) *
+			//	Matrix3x2F::Rotation((i * 36.0f), { projectileImageinfo->atlasInfo.frameSize.width / 2.0f , projectileImageinfo->atlasInfo.frameSize.height / 2.0f });
+			//projectileImageinfo->exposureEffectInfo = 1.0f;
+			projectileImageinfo->imageEffect = D2DIE_NOIMAGE;
+			float angle = (-30.0f + ((360.0f / 5.0f) * (i /2))) + (15.0f * (i % 2 ));
+			projectile->MoveSetting(DegreeToRadian(angle), speed, MovePatten::AngleTunAngle);
+			projectile->SetaddAngle(DegreeToRadian(15.0f) * powf(-1.0f, (i % 2) + 1.0f));
+			projectile->SetWorldLocation(worldLocation);
+			projectile->SetGeomtryLocation(worldLocation);
+			projectile->SetOwner(Cast<Actor>(GetParentsObject()));
+			projectile->SetProjectileAnimationKinds(ProjectileAnimationKinds::None);
+			projectile->CreateEffect();
+			projectile->GetEffect()->SetOwner(projectile);
+			projectile->GetEffect()->SetEffect(EffectKinds::Red_Projectlie);
+		}
+	}
+}
+
+void CatHelicopter::TagetAttack()
+{
+	PlayScene* playScene = Cast<PlayScene>(SceneManager::currScene);
+	if (playScene)
+	{
+		ProjectileManager* projectileManager = playScene->GetProjectileManager();
+		Projectile* projectile;
+		Vector2_F speed = { 3.0f ,5.0f };
+		{
+			projectile = projectileManager->SpawnProjectile();
+			projectile->SetIsValid(true);
+			ImageInfo* projectileImageinfo = Cast<ImageInfo>(projectile->GetImageInfo_ptr());
+			projectileImageinfo->imageEffect = D2DIE_NOIMAGE;
+			projectile->MoveSetting(DegreeToRadian(90.0f), speed, MovePatten::Angle);
+			projectile->SetWorldLocation(worldLocation);
+			projectile->SetGeomtryLocation(worldLocation);
+			projectile->SetOwner(Cast<Actor>(GetParentsObject()));
+			projectile->SetProjectileAnimationKinds(ProjectileAnimationKinds::None);
+			projectile->CreateEffect();
+			projectile->GetEffect()->SetOwner(projectile);
+			projectile->GetEffect()->SetEffect(EffectKinds::Flashing_Rotation_Effect);
+			projectile->GetEffect()->SetEffectFrame(EffectBody::EffectFrame::Blue_EllipseProjectlie_Frame);
+		}
+	}
+}
+
+void CatHelicopter::TagetMove()
+{
+	PlayScene* playScene = Cast<PlayScene>(SceneManager::currScene);
+	if (playScene)
+	{
+		Vector2_F playerLocation = playScene->GetPlayer()->GetWorldLocation();
+		AIController->MoveToLocation({ playerLocation.x ,location.y });
+
 	}
 }

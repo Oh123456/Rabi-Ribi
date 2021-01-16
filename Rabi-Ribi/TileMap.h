@@ -11,6 +11,8 @@ public:
 	TILE_F() {};
 	~TILE_F() override  {} ;
 	D2D_RECT_F rc;
+	TERRAIN  terrain;
+	POINT index;
 	int frameX;
 	int frameY;
 	float rotation;
@@ -54,6 +56,8 @@ public:
 
 	const list<TILE_F*>& GetRenderList() const { return renderList; }
 	const map<CollisionIndexInfo, class GeometryCollision*>& GetcollisionList() const { return collisionList; }
+	const list<TILE_F*>& GetSpawnTileList() const {return spawnTileList; }
+	const list<TILE_F*>& GetMoveTileList() const {return moveTileList; }
 private:
 	void GetGeomrtyPoint(ID2D1PathGeometry* const geometry, const GeometryInfo& geomrtyinfo, D2D_RECT_F rect);
 private:
@@ -63,9 +67,12 @@ private:
 	UINT tile_Y;
 	//Location startLocation;
 	list<TILE_F*> renderList;
+	list<TILE_F*> spawnTileList;
+	list<TILE_F*> moveTileList;
 	//list<class GeometryCollision*> collisionList;
 	map<CollisionIndexInfo, class GeometryCollision*> collisionList;
 	const wstring DefaultStagePath = L"\\Save\\";
+	float maxXSize;
 #ifdef _DEBUG
 	ID2D1PathGeometry** debug_Tilesgeometry;
 	

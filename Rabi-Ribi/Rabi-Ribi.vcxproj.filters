@@ -40,12 +40,6 @@
     <Filter Include="Manager\Timer">
       <UniqueIdentifier>{2905c1f8-20a0-4cf4-b7d3-0fa206bfcac5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Map">
-      <UniqueIdentifier>{062fdc76-9b0a-4b4b-9936-54d611096969}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Object\Map\Tile">
-      <UniqueIdentifier>{dd3ca6f3-5eea-4ea6-b465-1db031531861}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object\MainGame">
       <UniqueIdentifier>{39df88dd-aaf8-482f-89a3-f1c98dfbf9f4}</UniqueIdentifier>
     </Filter>
@@ -154,6 +148,39 @@
     <Filter Include="Object\Actor\Projectile\Bomb\Carrot">
       <UniqueIdentifier>{b54a5e62-5f6d-4e07-b968-b89cc021318d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HUD">
+      <UniqueIdentifier>{5efce7a3-7cbb-47c0-96c2-b03a983c9119}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HUD\HPBar">
+      <UniqueIdentifier>{ccccf87c-edb0-4d8c-8a68-8836066b9454}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AI\Cat">
+      <UniqueIdentifier>{35668d5c-fb14-4226-9dff-cbbfb096dd11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect\Wizard">
+      <UniqueIdentifier>{1c33a943-df08-495c-8861-669bb5a18f10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect\Flash">
+      <UniqueIdentifier>{ee7de4e5-df99-44fd-8b49-2c1953ba1735}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect\Explosion">
+      <UniqueIdentifier>{923ff51c-2ca1-4d56-9ade-45a5a180476f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect\Gradation">
+      <UniqueIdentifier>{20804e62-5eaf-4182-a6de-bfdefa75b6af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect\Pulsate">
+      <UniqueIdentifier>{bc48db30-c73f-445f-be2b-7c93fad99d5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Actor\CatHelicopter">
+      <UniqueIdentifier>{27b9f39e-e37d-4a2e-9b16-4007883fa852}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{062fdc76-9b0a-4b4b-9936-54d611096969}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\Tile">
+      <UniqueIdentifier>{dd3ca6f3-5eea-4ea6-b465-1db031531861}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -190,7 +217,7 @@
       <Filter>Manager\Timer</Filter>
     </ClCompile>
     <ClCompile Include="TileMap.cpp">
-      <Filter>Object\Map\Tile</Filter>
+      <Filter>Map\Tile</Filter>
     </ClCompile>
     <ClCompile Include="MainGame.cpp">
       <Filter>Object\MainGame</Filter>
@@ -271,7 +298,7 @@
       <Filter>Object\Actor\Projectile</Filter>
     </ClCompile>
     <ClCompile Include="PlayScene.cpp">
-      <Filter>Object\Map</Filter>
+      <Filter>Map</Filter>
     </ClCompile>
     <ClCompile Include="Rabbit.cpp">
       <Filter>Object\Actor\Character\Enemy\Rabbit</Filter>
@@ -287,9 +314,6 @@
     </ClCompile>
     <ClCompile Include="ProjectileManager.cpp">
       <Filter>Manager\Projectile</Filter>
-    </ClCompile>
-    <ClCompile Include="WizardProjectileEffect.cpp">
-      <Filter>Effect</Filter>
     </ClCompile>
     <ClCompile Include="Effect.cpp">
       <Filter>Effect</Filter>
@@ -321,9 +345,6 @@
     <ClCompile Include="Bomb.cpp">
       <Filter>Object\Actor\Projectile\Bomb</Filter>
     </ClCompile>
-    <ClCompile Include="ExplosionEffect.cpp">
-      <Filter>Effect</Filter>
-    </ClCompile>
     <ClCompile Include="BlackBombEffect.cpp">
       <Filter>Effect\Boomb\Black</Filter>
     </ClCompile>
@@ -342,16 +363,46 @@
     <ClCompile Include="CarrotBomb.cpp">
       <Filter>Object\Actor\Projectile\Bomb\Carrot</Filter>
     </ClCompile>
-    <ClCompile Include="CatHelicopter.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="HUD.cpp">
+      <Filter>HUD</Filter>
     </ClCompile>
-    <ClCompile Include="CatHelicopterAnimInstance.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="HPBar.cpp">
+      <Filter>HUD\HPBar</Filter>
+    </ClCompile>
+    <ClCompile Include="BossHPBar.cpp">
+      <Filter>HUD\HPBar</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerHPBar.cpp">
+      <Filter>HUD\HPBar</Filter>
     </ClCompile>
     <ClCompile Include="CatAIController.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>AI\Cat</Filter>
+    </ClCompile>
+    <ClCompile Include="WizardProjectileEffect.cpp">
+      <Filter>Effect\Wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="FlashingRotationEffect.cpp">
+      <Filter>Effect\Flash</Filter>
+    </ClCompile>
+    <ClCompile Include="ExplosionEffect.cpp">
+      <Filter>Effect\Explosion</Filter>
+    </ClCompile>
+    <ClCompile Include="GradationEffect.cpp">
+      <Filter>Effect\Gradation</Filter>
     </ClCompile>
     <ClCompile Include="PulsateEffect.cpp">
+      <Filter>Effect\Pulsate</Filter>
+    </ClCompile>
+    <ClCompile Include="CatHelicopterAnimInstance.cpp">
+      <Filter>Object\Actor\CatHelicopter</Filter>
+    </ClCompile>
+    <ClCompile Include="CatHelicopter.cpp">
+      <Filter>Object\Actor\CatHelicopter</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="StartStage.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -393,7 +444,7 @@
       <Filter>Manager\Timer</Filter>
     </ClInclude>
     <ClInclude Include="TileMap.h">
-      <Filter>Object\Map\Tile</Filter>
+      <Filter>Map\Tile</Filter>
     </ClInclude>
     <ClInclude Include="MainGame.h">
       <Filter>Object\MainGame</Filter>
@@ -492,7 +543,7 @@
       <Filter>Object\Actor\Projectile</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene.h">
-      <Filter>Object\Map</Filter>
+      <Filter>Map</Filter>
     </ClInclude>
     <ClInclude Include="RabbitAnimInstance.h">
       <Filter>Object\Actor\Character\Enemy\Rabbit</Filter>
@@ -508,9 +559,6 @@
     </ClInclude>
     <ClInclude Include="ProjectileManager.h">
       <Filter>Manager\Projectile</Filter>
-    </ClInclude>
-    <ClInclude Include="WizardProjectileEffect.h">
-      <Filter>Effect</Filter>
     </ClInclude>
     <ClInclude Include="Effect.h">
       <Filter>Effect</Filter>
@@ -542,9 +590,6 @@
     <ClInclude Include="Bomb.h">
       <Filter>Object\Actor\Projectile\Bomb</Filter>
     </ClInclude>
-    <ClInclude Include="ExplosionEffect.h">
-      <Filter>Effect</Filter>
-    </ClInclude>
     <ClInclude Include="BlackBombExplosionEffect.h">
       <Filter>Effect\Boomb\Black</Filter>
     </ClInclude>
@@ -563,16 +608,49 @@
     <ClInclude Include="CarrotBomb.h">
       <Filter>Object\Actor\Projectile\Bomb\Carrot</Filter>
     </ClInclude>
-    <ClInclude Include="CatHelicopter.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="HUD.h">
+      <Filter>HUD</Filter>
     </ClInclude>
-    <ClInclude Include="CatHelicopterAnimInstance.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="HPBar.h">
+      <Filter>HUD\HPBar</Filter>
+    </ClInclude>
+    <ClInclude Include="BossHPBar.h">
+      <Filter>HUD\HPBar</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerHPBar.h">
+      <Filter>HUD\HPBar</Filter>
     </ClInclude>
     <ClInclude Include="CatAIController.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>AI\Cat</Filter>
+    </ClInclude>
+    <ClInclude Include="WizardProjectileEffect.h">
+      <Filter>Effect\Wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="FlashingRotationEffect.h">
+      <Filter>Effect\Flash</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectIndex.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="ExplosionEffect.h">
+      <Filter>Effect\Explosion</Filter>
+    </ClInclude>
+    <ClInclude Include="GradationEffect.h">
+      <Filter>Effect\Gradation</Filter>
     </ClInclude>
     <ClInclude Include="PulsateEffect.h">
+      <Filter>Effect\Pulsate</Filter>
+    </ClInclude>
+    <ClInclude Include="CatHelicopterAnimInstance.h">
+      <Filter>Object\Actor\CatHelicopter</Filter>
+    </ClInclude>
+    <ClInclude Include="CatHelicopter.h">
+      <Filter>Object\Actor\CatHelicopter</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="StartStage.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

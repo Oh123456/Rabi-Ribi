@@ -13,6 +13,9 @@ public:
 	void Update()	override;
 	void Render()	override;
 
-
+private:
+	void AnimationEnd();
+private:
+	TimerHandle timer;
 };
 

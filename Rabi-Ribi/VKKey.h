@@ -15,3 +15,4 @@
 #define _1Key	0x31
 #define _2Key	0x32
 #define _3Key	0x33
+#define _4Key	0x34

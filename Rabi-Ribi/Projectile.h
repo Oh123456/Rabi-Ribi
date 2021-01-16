@@ -18,6 +18,7 @@ enum class MovePatten : int
 	Nomal,
 	Angle,
 	AngleTun,
+	AngleTunAngle,
 	End,
 };
 
@@ -54,13 +55,18 @@ public:
 	 void CreateEffect();
 	 _INTERFACE IEffect* GetEffect() { return effect; }
 
+	 GetSetFunction(addAngle, float, addAngle);
 private:
 	void OnHit(Object* object);
 	void MoveMent() override;
 	void NomalMovePatten();
 	void AngleMovePatten();
 	void AngleTunMovePatten();
+	void AngleTunMoveAngleChangePatten();
 	void AngleTun();
+	void AngleTunAngleChange();
+
+	void DeleteEffect();
 protected:
 	ProjectileAnimationKinds animKinds;
 	//float angle;
@@ -74,5 +80,6 @@ protected:
 
 	ImageInfo defaultImageInfo;
 	TimerHandle angleTunTimer;
+	float addAngle;
 };
 
