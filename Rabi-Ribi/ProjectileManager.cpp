@@ -13,7 +13,7 @@ ProjectileManager::~ProjectileManager()
 
 HRESULT ProjectileManager::Init()
 {
-	for (int i = 0; i < 600; i++)
+	for (int i = 0; i < 1600; i++)
 	{
 		Projectile* projectile = CreateObject<Projectile>();// ->SetIsValid(true);
 		projectile->SetIsValid(false);
