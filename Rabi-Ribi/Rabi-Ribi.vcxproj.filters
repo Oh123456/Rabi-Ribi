@@ -181,11 +181,17 @@
     <Filter Include="Map\Tile">
       <UniqueIdentifier>{dd3ca6f3-5eea-4ea6-b465-1db031531861}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map\Map">
+      <UniqueIdentifier>{74a43baa-f415-4f42-8063-c0ad0578986e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\Scene">
+      <UniqueIdentifier>{41d5eac1-a1c9-493d-97b2-852ade65e606}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\stage">
+      <UniqueIdentifier>{1a1adf70-bd26-42c9-9fb1-537fdfb6d803}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="D2DGraphic.cpp">
       <Filter>Direct2D</Filter>
     </ClCompile>
@@ -297,9 +303,6 @@
     <ClCompile Include="ProjectileAnimInstance.cpp">
       <Filter>Object\Actor\Projectile</Filter>
     </ClCompile>
-    <ClCompile Include="PlayScene.cpp">
-      <Filter>Map</Filter>
-    </ClCompile>
     <ClCompile Include="Rabbit.cpp">
       <Filter>Object\Actor\Character\Enemy\Rabbit</Filter>
     </ClCompile>
@@ -399,28 +402,34 @@
     <ClCompile Include="CatHelicopter.cpp">
       <Filter>Object\Actor\CatHelicopter</Filter>
     </ClCompile>
-    <ClCompile Include="Stage.cpp">
-      <Filter>Map</Filter>
-    </ClCompile>
-    <ClCompile Include="StartStage.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TestStage.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="MoveActor.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="BossMapScene.cpp">
+      <Filter>Map\Map</Filter>
     </ClCompile>
     <ClCompile Include="StartMapScene.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Map\Map</Filter>
     </ClCompile>
-    <ClCompile Include="BossMapScene.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>Map\Scene</Filter>
     </ClCompile>
     <ClCompile Include="LoadingScene.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Map\Scene</Filter>
     </ClCompile>
     <ClCompile Include="TitleScene.cpp">
+      <Filter>Map\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>Map\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="StartStage.cpp">
+      <Filter>Map\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="TestStage.cpp">
+      <Filter>Map\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveActor.cpp">
+      <Filter>Object\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -560,9 +569,6 @@
     <ClInclude Include="ProjectileAnimInstance.h">
       <Filter>Object\Actor\Projectile</Filter>
     </ClInclude>
-    <ClInclude Include="PlayScene.h">
-      <Filter>Map</Filter>
-    </ClInclude>
     <ClInclude Include="RabbitAnimInstance.h">
       <Filter>Object\Actor\Character\Enemy\Rabbit</Filter>
     </ClInclude>
@@ -665,33 +671,37 @@
     <ClInclude Include="CatHelicopter.h">
       <Filter>Object\Actor\CatHelicopter</Filter>
     </ClInclude>
-    <ClInclude Include="Stage.h">
-      <Filter>Map</Filter>
-    </ClInclude>
-    <ClInclude Include="StartStage.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TestStage.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="MoveActor.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="StartMapScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="BossMapScene.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Map\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="StartMapScene.h">
+      <Filter>Map\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>Map\Scene</Filter>
     </ClInclude>
     <ClInclude Include="LoadingScene.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Map\Scene</Filter>
     </ClInclude>
     <ClInclude Include="TitleScene.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Map\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="TestStage.h">
+      <Filter>Map\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>Map\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="StartStage.h">
+      <Filter>Map\stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
     <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

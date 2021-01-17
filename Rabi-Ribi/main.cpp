@@ -7,7 +7,7 @@ using namespace D2D1;
 // 전역번수
 HINSTANCE	g_hInstance;			// 프로그램 인스턴스 핸들  (메모리상의 객체 == 인스턴스)
 HWND		g_hWnd;				// 윈도우 핸들 
-LPSTR		g_lpszClass = (LPSTR)(TEXT("과거의 나여 잘했다"));//const_cast<LPSTR>			// 윈도의 이름
+LPSTR		g_lpszClass = (LPSTR)(TEXT("RABI-RIBI"));//const_cast<LPSTR>			// 윈도의 이름
 POINT		g_ptMouse;
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 D2D_SIZE_U	g_defaultWindowSize;

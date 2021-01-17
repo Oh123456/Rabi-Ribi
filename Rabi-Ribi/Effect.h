@@ -3,7 +3,6 @@
 #include "EffectIndex.h"
 
 #define EFFECTKINDS(x,y) ((x << 16)|(y))
-// HIWORD xÃà , LOWORD yÃà
 enum class EffectKinds : DWORD
 {
 	Small_Blue_Effect,
@@ -64,12 +63,7 @@ _INTERFACE IEffect
 	virtual void SetSocketLocation(Location location) = 0;
 	virtual void SetEffect(EffectKinds effectKinds) = 0;
 	virtual void SetEffectFrame(EffectBody::EffectFrame frame) = 0;
-	template<typename T>
-	HRESULT SetValue(UINT index, T& data)
-	{
-		this->SetValue(index,&data);
-	}
-private:
+
 	virtual HRESULT SetValue(UINT index, const void* data) = 0;
 };
 
