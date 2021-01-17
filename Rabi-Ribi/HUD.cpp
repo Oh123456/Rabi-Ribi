@@ -16,7 +16,7 @@ HRESULT HUD::Init()
 {
 	SetZOrder(1);
 	playerHPBar = CreateObject<PlayerHPBar>();
-	bossHPBar = CreateObject<BossHPBar>();
+	bossHPBar = nullptr;
 	return S_OK;
 }
 
@@ -32,7 +32,12 @@ void HUD::Update()
 	if (playScene)
 	{
 		playerHPBar->BindCharacter(Cast<Character>(playScene->GetPlayer()));
-		bossHPBar->BindCharacter(Cast<Character>(playScene->GetPlayer()));
+		if (playScene->GetBoss())
+		{
+			if (bossHPBar == nullptr)
+				bossHPBar = CreateObject<BossHPBar>();
+			bossHPBar->BindCharacter(Cast<Character>(playScene->GetBoss()));
+		}
 	}
 
 

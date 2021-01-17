@@ -21,6 +21,7 @@ CatHelicopter::~CatHelicopter()
 
 HRESULT CatHelicopter::Init()
 {
+	Super::Init();
 	IMAGEMANAGER->LoadPng(L"effect_a", L"Effect/effect_a");
 	imageInfo.imageName = L"effect_a";
 	imageInfo.imageEffect = D2DIE_DEFAULT;

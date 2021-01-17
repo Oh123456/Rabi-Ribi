@@ -60,6 +60,10 @@ void ExplosionEffect::CreateExplosionImage()
 	float width = ownerImageInfo.atlasInfo.frameSize.width;
 	float height = ownerImageInfo.atlasInfo.frameSize.height;
 
+	if (width == 0.0f)
+		width = 1.0f;
+	if (height == 0.0f)
+		height = 1.0f;
 	int rnad_X = (int)(rand() % (int)(width)) - (int)(width / 2.0f);
 	int rnad_Y = (int)(rand() % (int)(height)) - (int)(height / 2.0f);
 

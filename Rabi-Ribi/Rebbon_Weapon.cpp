@@ -3,6 +3,7 @@
 #include "PlayScene.h"
 #include "ProjectileManager.h"
 #include "Projectile.h"
+#include "Character.h"
 
 Rebbon_Weapon::Rebbon_Weapon() : 
 	isAttack(false)
@@ -179,6 +180,7 @@ void Rebbon_Weapon::OnFire()
 		{
 			projectile->SetProjectileAnimationKinds(ProjectileAnimationKinds::Circle_Blue);
 			scaleValue = { 1.5f,1.5f };
+			Cast<Character>(owner)->SetDamage(30);
 			isChargeAttack = false;
 		}
 		else

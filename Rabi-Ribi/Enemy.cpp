@@ -94,6 +94,7 @@ void Enemy::See(Object * object)
 		{
 			EnemyAIController* eAIController = Cast<EnemyAIController>(AIController);
 			eAIController->SetTaget(Cast<Actor>(object));
+			isSee = true;
 		}
 	}
 }

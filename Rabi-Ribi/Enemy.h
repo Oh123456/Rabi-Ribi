@@ -29,7 +29,8 @@ private:
 public:
 	OnSee onSee;
 protected:
-
+	// 임시
+	bool isSee;
 
 	// 적이 플레이어를 볼수있는 영역
 	GeometryCollision* seeArea;

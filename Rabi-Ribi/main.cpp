@@ -47,7 +47,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpsz
 		CW_USEDEFAULT, CW_USEDEFAULT, WINSIZE_X, WINSIZE_Y,
 		NULL, (HMENU)NULL, g_hInstance, NULL);
 #else
-	g_hWnd = CreateWindow(g_lpszClass, g_lpszClass, WS_POPUPWINDOW, //WS_SYSMENU | WS_CAPTION,
+	g_hWnd = CreateWindow(g_lpszClass, g_lpszClass, WS_OVERLAPPEDWINDOW, //WS_SYSMENU | WS_CAPTION,
 		CW_USEDEFAULT, CW_USEDEFAULT, WINSIZE_X, WINSIZE_Y,
 		NULL, (HMENU)NULL, g_hInstance, NULL);
 #endif // _DEBUG

@@ -132,6 +132,7 @@
     <ClCompile Include="BlackBombExplosionEffect.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="BossHPBar.cpp" />
+    <ClCompile Include="BossMapScene.cpp" />
     <ClCompile Include="BunnyBand.cpp" />
     <ClCompile Include="BunnyBandAnimInstance.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -164,8 +165,10 @@
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="ImageManager.cpp" />
     <ClCompile Include="KeyManager.cpp" />
+    <ClCompile Include="LoadingScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="MoveActor.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectBase.cpp" />
     <ClCompile Include="PlayerHPBar.cpp" />
@@ -184,11 +187,14 @@
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="StartMapScene.cpp" />
     <ClCompile Include="StartStage.cpp" />
+    <ClCompile Include="TestStage.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="TileMapToolScene.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TimerManager.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector2F.cpp" />
     <ClCompile Include="Volume.cpp" />
@@ -208,6 +214,7 @@
     <ClInclude Include="BlackBombExplosionEffect.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="BossHPBar.h" />
+    <ClInclude Include="BossMapScene.h" />
     <ClInclude Include="BunnyBand.h" />
     <ClInclude Include="BunnyBandAnimInstance.h" />
     <ClInclude Include="Camera.h" />
@@ -244,7 +251,9 @@
     <ClInclude Include="HUD.h" />
     <ClInclude Include="ImageManager.h" />
     <ClInclude Include="KeyManager.h" />
+    <ClInclude Include="LoadingScene.h" />
     <ClInclude Include="MainGame.h" />
+    <ClInclude Include="MoveActor.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="pch.h" />
@@ -266,11 +275,14 @@
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Stage.h" />
+    <ClInclude Include="StartMapScene.h" />
     <ClInclude Include="StartStage.h" />
+    <ClInclude Include="TestStage.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="TileMapToolScene.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TimerManager.h" />
+    <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector2F.h" />

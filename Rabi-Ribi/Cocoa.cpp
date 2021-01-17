@@ -32,7 +32,9 @@ HRESULT Cocoa::Init()
 	imageInfo.affineMatrix = AFFINEMATRIX_3X2_SCALE(1.5f,24.0f);
 	imageInfo.imageLocation = location;
 	imageInfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE;
-	hp = 2000;
+	hp = 1000;
+	maxHP = hp;
+	damage = 80;
 	size = { 48.0f,48.0f};
 
 	SetGeomtryCollsion();

@@ -64,6 +64,7 @@ void RabbitAnimInstance::Update()
 		//}
 		break;
 	case AnimationKinds::Jump:
+		rabbit->SetFalling(true);
 	case AnimationKinds::Falling:
 	case AnimationKinds::Attack1:
 	case AnimationKinds::Attack2:

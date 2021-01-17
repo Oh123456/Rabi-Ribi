@@ -76,6 +76,7 @@ public:
 	void SetKeyLock(bool value) { isKeyLock = value; }
 	bool GetKeyLock() const		{ return isKeyLock; }
 
+	void SetDamage(int value) { damage = value; }
 	int GetDamage() { return damage; }
 
 	GetSetFunction(JumpPower,float, jumpPower);

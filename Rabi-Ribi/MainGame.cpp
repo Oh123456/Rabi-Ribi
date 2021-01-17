@@ -1,7 +1,11 @@
 #include "MainGame.h"
 #include "D2DGraphic.h"
 #include "TileMapToolScene.h"
-#include "PlayScene.h"
+#include "StartMapScene.h"
+#include "BossMapScene.h"
+#include "Character.h"
+#include "LoadingScene.h"
+#include "TitleScene.h"
 #include <ctime>
 
 HRESULT MainGame::Init()
@@ -20,9 +24,12 @@ HRESULT MainGame::Init()
 	imageManager->LoadPng(L"»ùÇÃÅ¸ÀÏ", L"Tile/tile1_a");
 	
 	scenManager->AddScene("¸ÊÅø¾À", CreateScene<TileMapToolScene>());
-	scenManager->AddScene("Å×½ºÆ®·ë", CreateScene<PlayScene>());
+	scenManager->AddScene("½ÃÀÛ¸Ê", CreateScene<StartMapScene>());
+	scenManager->AddScene("Å×½ºÆ®¸Ê", CreateScene<BossMapScene>());
+	scenManager->AddScene("Å¸ÀÌÆ²", CreateScene<TitleScene>());
+	//scenManager->AddLoadingScene("·Îµù", CreateScene<LoadingScene>());
 
-	scenManager->ChangeScene("¸ÊÅø¾À");
+	scenManager->ChangeScene("Å¸ÀÌÆ²");
 
 
 	
@@ -54,12 +61,23 @@ void MainGame::Update()
 	TIMERMANAGER->Update();
 	if (KEYMANAGER->IsOnceKeyUP(VK_F1))
 		isFPS = !isFPS;
-//#ifdef _DEBUG
-	if (KEYMANAGER->IsOnceKeyUP(VK_F2))
-		SCENEMANAGER->ChangeScene("¸ÊÅø¾À");
-	if (KEYMANAGER->IsOnceKeyUP(VK_F3))
-		SCENEMANAGER->ChangeScene("Å×½ºÆ®·ë");
-//#endif // _DEBUG
+	PlayScene* playScene = Cast<PlayScene>(SCENEMANAGER->currScene);
+	if (playScene)
+	{
+		if (playScene->GetIsChage())
+		{
+			int HP = Cast<Character>(playScene->GetPlayer())->GetHP();
+			SCENEMANAGER->ChangeScene(playScene->GetNextSceneName());
+			PlayScene* newPlayScene = Cast<PlayScene>(SCENEMANAGER->currScene);
+			if (newPlayScene)
+			{
+				Cast<Character>(newPlayScene->GetPlayer())->SetHP(HP);
+			}
+		}
+	}
+
+
+
 }
 
 

@@ -10,12 +10,14 @@ Character::Character() :
 	isKeyLock(false) , jumpPower(0.5f) , isCanFly(false)
 { 
 	timerInterval = (1.0f / 60.0f);
-	TIMERMANAGER->SetTimer(movementTimer, this, &Character::CharaterMove, timerInterval, false);
+	
 	imageInfo.exposureEffectInfo = 0.7f;
 };
 
 HRESULT Character::Init()
 {
+	movementTimer.timerName = "캐릭터이동";
+	TIMERMANAGER->SetTimer(movementTimer, this, &Character::CharaterMove, timerInterval, false);
 	return S_OK;
 }
 

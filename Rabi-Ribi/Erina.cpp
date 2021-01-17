@@ -22,7 +22,7 @@ Erina::Erina() :
 	rebbon->SetOwner(this);
 
 	moveSpeed = 180.0f;
-	damage = 10;
+	damage = 15;
 	onHit.BindObject(this,&Erina::OnHit);
 
 	actorType = ActorType::Player;
@@ -49,7 +49,7 @@ HRESULT Erina::Init()
 	imageInfo.contrasteInfo.contrast = 1.0f;
 	imageInfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE| D2DIE_CONTRASTEFFECT;
 	hp = 600;//(int)pow(2,7 * 4);
-	maxHP = 600;
+	maxHP = hp;
 	SetGeomtryCollsion();
 	if (rebbon)
 	{

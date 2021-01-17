@@ -4,6 +4,7 @@
 #include "Effect.h"
 #include "D2DGraphic.h"
 #include "TileMap.h"
+#include "Erina.h"
 
 Projectile::Projectile() :
 	speed(0.0f, 0.0f), animKinds(ProjectileAnimationKinds::Circle_Red), addAngle(0.261799f)
@@ -69,6 +70,10 @@ void Projectile::SetIsValid(bool value)
 		imageInfo = defaultImageInfo;
 		DeleteChild(Cast<Effect>(effect));
 		effect = nullptr;
+
+		// 임시
+		if (Cast<Erina>(owner))
+			Cast<Erina>(owner)->SetDamage(15);
 	}
 	angle = 0.0f;
 	//:
@@ -102,12 +107,17 @@ void Projectile::OnHit(Object* object)
 		this->SetIsValid(false);
 	else
 	{
-		if ((this != object) & (owner != object) & (Cast<Actor>(object)->GetActorType() != ActorType::Weapone))
+		if ((this != object) & (owner != object) & (Cast<Actor>(object)->GetActorType() != ActorType::Weapone) & (owner->GetActorType() != Cast<Actor>(object)->GetActorType()))
 		{
 			this->SetIsValid(false);
 			Character* character = Cast<Character>(object);
 			if (character)
-				character->TakeDamage(100);
+			{
+				// 임시
+				if (Cast<Erina>(owner))
+					Cast<Erina>(owner)->SetDamage(15);
+				character->TakeDamage(Cast<Character>(owner)->GetDamage());
+			}
 		}
 	}
 
@@ -171,6 +181,15 @@ void Projectile::AngleTunAngleChange()
 	TIMERMANAGER->SetTimer(angleTunTimer, this, &Projectile::AngleTun, 6000.0f);
 	speed.x *= 1.5f;
 	speed.y *= 1.5f;
+}
+
+void Projectile::TagetMove()
+{
+	Vector2_F _location = location;
+	Vector2_F goalLocation = _location - tagetLocation;
+	float angle = atan2f(goalLocation.y, goalLocation.x);
+	geomtryLocation.x += cosf(this->angle) * speed.x;
+	geomtryLocation.y += sinf(this->angle) * speed.y;
 }
 
 void Projectile::DeleteEffect()

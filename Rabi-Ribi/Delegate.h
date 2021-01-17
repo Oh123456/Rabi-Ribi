@@ -52,8 +52,11 @@ class Delegate
 
 		RetType Execute(ParamTypes... param) override
 		{
-			if (methodPtr)
-				return (object->*methodPtr)(param...);
+			if (object)
+			{
+				if (methodPtr)
+					return (object->*methodPtr)(param...);
+			}
 		}
 
 		MethodPtr methodPtr;

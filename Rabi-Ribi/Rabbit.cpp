@@ -34,14 +34,14 @@ HRESULT Rabbit::Init()
 	size = { 20.0f * 1.5f,20.0f * 1.5f};
 	hitBoxSize = size;
 	imageInfo.imageName = L"enemy1";
-	imageInfo.imageLocation = { location.x ,location.y - 20.0f };
+	imageInfo.imageLocation = { location.x ,location.y - 15.0f };
 	imageInfo.atlasInfo.frameSize = { 48.0f,48.0f };
 	imageInfo.atlasInfo.frame = { 0,0 };
 	imageInfo.affineMatrix = Matrix3x2F::Scale({ 1.5f,1.5f }, { 48.0f,48.0f });
 	imageInfo.imageEffect = D2DIE_ATLAS | D2DIE_AFFINE;
-	hp = 100;
+	hp = 30;
 	damage = 10;
-
+	isSee = false;
 	SetGeomtryCollsion();
 
 	return S_OK;
@@ -55,9 +55,12 @@ void Rabbit::Release()
 void Rabbit::Update()
 {
 	Super::Update();
-	imageInfo.imageLocation = { location.x ,location.y - 15.0f };
+	if (isSee)
+		imageInfo.imageLocation = { location.x ,location.y - 15.0f };
+	else
+		imageInfo.imageLocation = { location.x + 10.0f,location.y - 4.5f };
 	//if (!isMoveLock)
-	//	geomtryLocation.x += moveSpeed;
+	//	geomtryLocation.y += acceleration;
 	noAnimChange = true;
 }
 
@@ -138,6 +141,7 @@ void Rabbit::Jum()
 {
 	TimerManager* tiemrManager = TIMERMANAGER;
 	jumTimerCount++;
+	
 	acceleration = (-98.0f * tiemrManager->GetTimeElapsed() * 1.8f);
 	if (jumTimerCount >= 3)
 	{

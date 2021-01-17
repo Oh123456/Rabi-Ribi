@@ -56,6 +56,7 @@ public:
 	 _INTERFACE IEffect* GetEffect() { return effect; }
 
 	 GetSetFunction(addAngle, float, addAngle);
+	 GetSetFunction(TagetLocation,Vector2_F, tagetLocation);
 private:
 	void OnHit(Object* object);
 	void MoveMent() override;
@@ -65,12 +66,14 @@ private:
 	void AngleTunMoveAngleChangePatten();
 	void AngleTun();
 	void AngleTunAngleChange();
+	void TagetMove();
 
 	void DeleteEffect();
 protected:
 	ProjectileAnimationKinds animKinds;
 	//float angle;
 	Vector2_F speed;
+	Vector2_F tagetLocation;
 
 	MovePatten movePatten;
 

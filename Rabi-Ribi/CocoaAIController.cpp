@@ -140,6 +140,7 @@ void CocoaAIController::BackJumpShot()
 void CocoaAIController::Patten()
 {
 	int randNum = rand() % 12;
+	randNum = 8;
 	Cocoa* cocoa = Cast<Cocoa>(owner);
 	switch (randNum)
 	{
@@ -161,6 +162,21 @@ void CocoaAIController::Patten()
 		isMoveLocation = false;
 		break;
 	case 8:
+	{
+		float maxHP = (float)cocoa->GetMaxHP();
+		float HP = (float)cocoa->GetHP();
+		//if ((HP / maxHP) < 0.5f)
+		{
+			if ((cocoa->GetCatHelicopter()[0] == nullptr) & (cocoa->GetAnimKinds() != AnimationKinds::Falling))
+			{
+				cocoa->SetAnimKinds(AnimationKinds::Attack2);
+				cocoa->SetNoAnimChange(true);
+				isMoveLocation = false;
+				break;
+			}
+				
+		}
+	}
 	case 9:
 		cocoa->BoomAttack();
 		isMoveLocation = false;

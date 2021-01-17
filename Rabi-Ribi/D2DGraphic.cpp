@@ -60,7 +60,7 @@ ID2D1Bitmap* D2DGraphic::LoadImage_Png(LPCWSTR Name)
 	// 이미지 로드
 	// Png파일은 압축되어 있기에 비트맵형식으로 압출을 해제하는 디코더;
 	ID2D1Bitmap* Result = nullptr;
-	IWICImagingFactory* WICImagingFactory;
+	IWICImagingFactory* WICImagingFactory = nullptr;
 	// WIC 객체를 생성하기 위한 Factory 객체를 생성
 	CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&WICImagingFactory));
 	IWICBitmapDecoder* bitmapDecoder;

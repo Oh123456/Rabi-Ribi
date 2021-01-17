@@ -28,45 +28,23 @@ PlayScene::~PlayScene()
 
 HRESULT PlayScene::Init()
 {
-	stage = CreateObject<StartStage>();
-	mainTile = stage->GetMainTile();
-	CollisionManager* collision = CreateObject<CollisionManager>(true);
-	player = CreateObject<Erina>();
-	cocoa = CreateObject<Cocoa>();
-	//CreateObject<CatHelicopter>();
-	//CreateObject<Rabbit>();
-	//CreateObject<Wizard>();
-	IMAGEMANAGER->LoadPng(L"테스트배경",L"forest3_a");
-	IMAGEMANAGER->LoadPng(L"Erina", L"Chacter/player_a");
 
-	testbg.imageName = L"테스트배경";
-	testbg.imageLocation = { 0.0f,0.0f };
-	testbg.scaleInfo.scaleSize = { 3.0f,3.0f };
-	testbg.imageEffect = D2DIE_SCALE;
-	CAMERA->SetZoom({ 2.0f,2.2f });
-	//D2D::GetSingleton()->GetD2DRenderTarget()->SetTransform(Matrix3x2F::Scale({ 2.0f,2.2f }));
-	Cast<Character>(player)->PlayerInputSetting(CreateObject<PlayerInput>(false));
-	projectileManager = CreateObject<ProjectileManager>();
-	collision->SettingActor(this);
-	hud = CreateObject<HUD>();
-
-	CAMERA->SetFocusActor(player);
 	return S_OK;
 }
 
 void PlayScene::Release()
 {
 	Super::Release();
-	CAMERA->SetZoom({1.0f,1.0f});
+	isChage = false;
+	nextSceneName = "";
+	//CAMERA->SetZoom({1.0f,1.0f});
 	//D2D::GetSingleton()->GetD2DRenderTarget()->SetTransform(Matrix3x2F::Scale({ 1.0f,1.0f }));
 }
 
 void PlayScene::Update()
 {
 	Super::Update();
-	EnemyAIController* ai = Cast<EnemyAIController>(Cast<Enemy>(cocoa)->GetAIController());
-	if (ai->GetTaget() == nullptr)
-		ai->SetTaget(player);
+
 }
 
 
@@ -148,10 +126,10 @@ void PlayScene::Render()
 {
 	IMAGEMANAGER->ImageRander(testbg);
 	Super::Render();
-	static float a = 1.0f;
-	const Location& playerLocation = player->GetLocation();
-	const SIZE_F& playerSize = player->GetSize();
-	D2D_POINT_2F playrLT = { (playerLocation.x - (playerSize.width / 2)) ,(playerLocation.y - (playerSize.height / 2)) };
+	//static float a = 1.0f;
+	//const Location& playerLocation = player->GetLocation();
+	//const SIZE_F& playerSize = player->GetSize();
+	//D2D_POINT_2F playrLT = { (playerLocation.x - (playerSize.width / 2)) ,(playerLocation.y - (playerSize.height / 2)) };
 	//D2D::GetSingleton()->GetD2DRenderTarget()->DrawRectangle({ playrLT.x,playrLT.y,playrLT.x + (playerSize.width ),playrLT.y + (playerSize.height) }, D2D::GetSingleton()->GetBrush());
 
 	//list<GeometryCollision*> collisionlist = test->GetcollisionList();

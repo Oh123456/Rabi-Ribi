@@ -81,14 +81,14 @@ HRESULT SceneManager::ChangeScene(string name)
 	Object* scene = it->second;
 	if (scene)
 	{
+		if (currScene)
+		{
+			currScene->Release();
+			currScene->SetIsValid(false);
+		}
 		TimerManager::GetSingleton()->AllDeleteTimer();
 		if (SUCCEEDED(scene->Init()))
 		{
-			if (currScene)
-			{
-				currScene->Release();
-				currScene->SetIsValid(false);
-			}
 			currScene = scene;
 			currScene->SetIsValid(true);
 

@@ -40,7 +40,8 @@ HRESULT Wizard::Init()
 	imageInfo.imageLocation = location;
 	size = { 20.0f,50.0f };
 	SetGeomtryCollsion();
-
+	hp = 50;
+	damage = 60;
 	return S_OK;
 }
 
@@ -115,6 +116,7 @@ void Wizard::Attack()
 		{
 
 			Projectile* projectile = playScene->GetProjectileManager()->SpawnProjectile();
+			projectile->SetIsValid(true);
 			if (i < 5)
 			{
 				float angle = 30.0f - (15.0f * (float)(i));
@@ -131,7 +133,6 @@ void Wizard::Attack()
 				spawnLocation = { worldLocation.x + 18.0f, worldLocation.y - 30.0f };
 			projectile->SetWorldLocation(spawnLocation);
 			projectile->SetGeomtryLocation(spawnLocation);
-			projectile->SetIsValid(true);
 			projectile->SetOwner(this);
 			projectile->SetSize({31.0f, 31.0f});
 			ImageInfo* projectileInageinfo = Cast<ImageInfo>(projectile->GetImageInfo_ptr());

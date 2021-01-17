@@ -310,7 +310,7 @@ bool CollisionManager::TerrainSideCollision(Actor * actor, UINT tileX_Size, Loca
 						isFalling = false;
 						while (battomCollosion[i]->CollisionHitCheck(Cast<ID2D1PathGeometry>(actor->GetCollisionPathGeomtry()), player_LTLocation))
 							player_LTLocation.y -= 0.1f;
-						player_LTLocation.y += 0.1f;
+						//player_LTLocation.y += 0.1f;
 					}
 				}
 				if (weapon)

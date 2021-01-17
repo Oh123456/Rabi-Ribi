@@ -21,5 +21,6 @@ private:
 private:
 	TimerHandle jumTimer;
 	int jumTimerCount;
+
 };
 

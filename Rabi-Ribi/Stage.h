@@ -6,6 +6,7 @@ class Stage : public Object
 public:
 	Stage() : mainTile(nullptr), middleTile(nullptr), backTile(nullptr) {};
 	~Stage() {};
+
 	class TileMap* GetMainTile() { return mainTile; }
 protected:
 	class TileMap* mainTile;

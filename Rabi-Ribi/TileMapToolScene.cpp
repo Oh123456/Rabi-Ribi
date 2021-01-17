@@ -13,6 +13,7 @@ TileMapToolScene::~TileMapToolScene()
 
 HRESULT TileMapToolScene::Init()
 {
+	CAMERA->SetZoom({1.0f, 1.0f});
 	// 랜더 타겟 리사이즈
 	SetWindowSize(0, 0, WINSIZE_TILE_MAP_X, WINSIZE_TILE_MAP_Y);
 	RECT rect;
@@ -211,7 +212,7 @@ void TileMapToolScene::Update()
 		if (key->IsOnceKeyDown(_1Key))
 			selectTile.terrain = TERRAIN::NOAML;
 		if (key->IsOnceKeyDown(_2Key))
-			selectTile.terrain = TERRAIN::BREAKING;
+			selectTile.terrain = TERRAIN::MOVE;
 		if (key->IsOnceKeyDown(_3Key))
 			selectTile.terrain = TERRAIN::SPAWN;
 	}
@@ -449,6 +450,8 @@ void TileMapToolScene::Update()
 	if (PtInRect(&rcExit, g_ptMouse))
 	{
 		// 난중에 추가
+		if (key->IsOnceKeyUP(VK_LBUTTON))
+			SCENEMANAGER->ChangeScene("타이틀");
 		exitButtoninfo.atlasInfo.frame.y = 1;
 	}
 	else
@@ -599,7 +602,7 @@ void TileMapToolScene::Render()
 						brush->SetColor(D2D1::ColorF(0xffffff));
 						rectWidth = 1.0f;
 						break;
-					case TERRAIN::BREAKING:
+					case TERRAIN::MOVE:
 						brush->SetColor(D2D1::ColorF(0xff0000));
 						rectWidth = 3.0f;
 						break;
@@ -660,7 +663,7 @@ void TileMapToolScene::Render()
 			case TERRAIN::NOAML:
 				brush->SetColor(D2D1::ColorF(0xffffff));
 				break;
-			case TERRAIN::BREAKING:
+			case TERRAIN::MOVE:
 				brush->SetColor(D2D1::ColorF(0xff0000));
 				break;
 			case TERRAIN::SPAWN:
